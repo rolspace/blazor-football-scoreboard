@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - /path/data:/var/lib/mysql
+      - /path/conf:/etc/mysql/conf.d
+    networks:
+      - db
+
+  web:
+    build: ../src/Dashboard/Dashboard.Server
+    image: dashboard:latest
+    ports:
+      - 5001:80
+    networks:
+      - app
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - db
+
+  worker:
+    build: ../src/Games/Games.Worker
+    image: worker:latest
+    networks:
+      - app
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+    depends_on:
+      - db
+      - web
+
+networks:
+  app:
+    driver: bridge

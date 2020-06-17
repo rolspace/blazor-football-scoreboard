@@ -1,0 +1,50 @@
+﻿@page "/"
+
+@using Dashboard.Shared
+@using Microsoft.AspNetCore.SignalR.Client
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h1>Hello, world!</h1>
+
+<div>
+    @foreach (var game in games)
+    {
+        <div>
+            <div style="display:inline-block">@game.HomeTeam</div>
+            <div style="display:inline-block">@game.HomeScore</div>
+        </div>
+        <div>
+            <div style="display:inline-block">@game.AwayTeam</div>
+            <div style="display:inline-block">@game.AwayScore</div>
+        </div>
+    }
+    <div>
+        <h4>Messages</h4>
+        @foreach (var message in messages)
+        {
+            <div>@message</div>
+        }
+    </div>
+</div>
+
+@code {
+    private HubConnection hubConnection;
+    private IList<string> messages = new List<string>();
+    private IReadOnlyList<Game> games = new List<Game>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        games = await Http.GetJsonAsync<Game[]>("api/schedule/week/1");
+
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub")).Build();
+        hubConnection.On<string>("ReceivePlay", (message) => {
+            messages.Add(message);
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+}
