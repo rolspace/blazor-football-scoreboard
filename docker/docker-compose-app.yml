@@ -14,7 +14,7 @@ services:
       - /path/data:/var/lib/mysql
       - /path/conf:/etc/mysql/conf.d
     networks:
-      - db
+      - app
 
   web:
     build: ../src/Dashboard/Dashboard.Server

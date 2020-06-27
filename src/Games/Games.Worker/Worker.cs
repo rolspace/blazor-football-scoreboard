@@ -8,14 +8,15 @@ using Games.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace Games.Worker
 {
     public class Worker : IHostedService, IDisposable
     {
+        private readonly IAsyncRepository<Play> _playRepository;
         private readonly ILogger<Worker> _logger;
-        private IAsyncRepository<Play> _playRepository;
-        private HubConnection _hubConnection;
+        private readonly HubConnection _hubConnection;
         private Timer _gameTimer;
 
         class GameTime
@@ -23,12 +24,14 @@ namespace Games.Worker
             public int Current = 3600;
         } 
 
-        public Worker(ILogger<Worker> logger, IAsyncRepository<Play> playRepository)
+        public Worker(IAsyncRepository<Play> playRepository, ILogger<Worker> logger, IConfiguration config)
         {
             _logger = logger;
             _playRepository = playRepository;
+
+            string hubEndpoint = config["HubEndpoint"];
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:5001/gamehub").Build();
+                .WithUrl(hubEndpoint).Build();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
