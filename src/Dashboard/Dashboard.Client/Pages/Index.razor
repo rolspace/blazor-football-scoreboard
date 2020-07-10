@@ -39,7 +39,7 @@
         games = await Http.GetJsonAsync<Game[]>("api/schedule/week/1");
 
         hubConnection = new HubConnectionBuilder()
-        .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub")).Build();
+            .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub")).Build();
         hubConnection.On<string>("ReceivePlay", (message) => {
             messages.Add(message);
             StateHasChanged();
