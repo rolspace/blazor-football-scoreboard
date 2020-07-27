@@ -1,6 +1,6 @@
-using Games.Entities;
-using Games.Services.Interfaces;
-using Games.Services.Repositories;
+using Core.Entities;
+using Core.Services.Interfaces;
+using Core.Services.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -48,11 +48,11 @@ namespace Dashboard.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBlazorDebugging();
+                app.UseWebAssemblyDebugging();
             }
 
             app.UseStaticFiles();
-            app.UseClientSideBlazorFiles<Client.Program>();
+            app.UseBlazorFrameworkFiles();
 
             app.UseRouting();
 
@@ -60,7 +60,7 @@ namespace Dashboard.Server
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapHub<GameHub>("/gamehub");
-                endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
+                endpoints.MapFallbackToFile("index.html");
             });
         }
     }

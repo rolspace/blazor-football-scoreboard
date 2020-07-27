@@ -1,18 +1,20 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Games.Entities;
-using Games.Services.Interfaces;
+using Core.Entities;
+using Core.Services.Interfaces;
+using Core.Shared;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Games.Worker
+namespace Worker.Game
 {
     public class Worker : IHostedService, IDisposable
     {
-        private readonly IAsyncRepository<Play> _playRepository;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<Worker> _logger;
         private readonly HubConnection _hubConnection;
         private bool _isHubActive;
@@ -23,12 +25,12 @@ namespace Games.Worker
             public int Current = 3600;
         } 
 
-        public Worker(IAsyncRepository<Play> playRepository, ILogger<Worker> logger, IConfiguration config)
+        public Worker(IServiceScopeFactory scopeFactory, ILogger<Worker> logger, IConfiguration config)
         {
             try
             {
                 _logger = logger;
-                _playRepository = playRepository;
+                _scopeFactory = scopeFactory;
 
                 string hubEndpoint = config["HubEndpoint"];
                 _hubConnection = new HubConnectionBuilder()
@@ -83,16 +85,22 @@ namespace Games.Worker
             var pastGameTime = gameState.Current;
             Interlocked.Decrement(ref gameState.Current);
 
-            var plays = await _playRepository
-                .ListAsync(p => p.GameSecondsRemaining < pastGameTime && p.GameSecondsRemaining >= gameState.Current);
-
-            foreach (var play in plays)
+            using (var scope = _scopeFactory.CreateScope())
             {
-                _logger.LogInformation(play.Desc);
+                IAsyncRepository<Play> playRepository = scope.ServiceProvider.GetRequiredService<IAsyncRepository<Play>>();
 
-                if (_isHubActive)
+                var plays = await playRepository
+                    .ListAsync(p => p.GameSecondsRemaining < pastGameTime && p.GameSecondsRemaining >= gameState.Current);
+
+                foreach (var play in plays)
                 {
-                    await _hubConnection.SendAsync("SendPlay", play.Desc);
+                    var gamePlay = new GamePlay(play.GameId, play.Desc, play.TotalHomeScore, play.TotalAwayScore);
+                    _logger.LogInformation(gamePlay.ToString());
+
+                    if (_isHubActive)
+                    {
+                        await _hubConnection.SendAsync("SendPlay", gamePlay);
+                    }
                 }
             }
         }

@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Games.Entities;
-using Games.Services.Interfaces;
-using Games.Services.Repositories;
+using Core.Entities;
+using Core.Services.Interfaces;
+using Core.Services.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace Games.Worker
+namespace Worker.Game
 {
     public class Program
     {
@@ -26,8 +26,8 @@ namespace Games.Worker
                     services.AddHostedService<Worker>();
                     services.AddDbContext<GamesContext>(options =>
                         options.UseMySQL(hostContext.Configuration.GetConnectionString("GamesContext")),
-                        ServiceLifetime.Singleton);
-                    services.AddSingleton<IAsyncRepository<Play>, Repository<Play>>();
+                        ServiceLifetime.Scoped);
+                    services.AddScoped<IAsyncRepository<Play>, Repository<Play>>();
                 });
     }
 }

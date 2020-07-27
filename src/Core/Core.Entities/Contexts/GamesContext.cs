@@ -3,7 +3,7 @@ using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Games.Entities
+namespace Core.Entities
 {
     public partial class GamesContext : DbContext
     {

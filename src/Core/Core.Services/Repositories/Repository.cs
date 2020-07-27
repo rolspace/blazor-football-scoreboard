@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Games.Entities;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using Games.Services.Interfaces;
+using Core.Services.Interfaces;
 
-namespace Games.Services.Repositories
+namespace Core.Services.Repositories
 {
     public class Repository<T> : IAsyncRepository<T> where T: BaseEntity
     {

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Games.Entities;
-using Games.Services.Interfaces;
+using Core.Entities;
+using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,11 +12,11 @@ namespace Dashboard.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ScheduleController : ControllerBase
+    public class GameController : ControllerBase
     {
         IAsyncRepository<Game> _gameRepository;
 
-        public ScheduleController(IAsyncRepository<Game> gameRepository)
+        public GameController(IAsyncRepository<Game> gameRepository)
         {
             _gameRepository = gameRepository;
         }

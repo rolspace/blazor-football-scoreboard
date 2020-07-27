@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Games.Worker": {
+    "Worker.Game": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

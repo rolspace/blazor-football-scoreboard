@@ -1,10 +1,13 @@
 ﻿@page "/"
 
-@using Dashboard.Shared
+@using Core.Shared
+@using System.Net.Http
 @using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Logging
 
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+@inject ILoggerProvider LoggerProvider
 
 <h1>Hello, world!</h1>
 
@@ -20,13 +23,6 @@
             <div style="display:inline-block">@game.AwayScore</div>
         </div>
     }
-    <div>
-        <h4>Messages</h4>
-        @foreach (var message in messages)
-        {
-            <div>@message</div>
-        }
-    </div>
 </div>
 
 @code {
@@ -36,12 +32,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        games = await Http.GetJsonAsync<Game[]>("api/schedule/week/1");
+        games = await Http.GetFromJsonAsync<Game[]>("api/game/week/1");
 
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub")).Build();
-        hubConnection.On<string>("ReceivePlay", (message) => {
-            messages.Add(message);
+            .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub"))
+            .ConfigureLogging(logging => logging.AddProvider(LoggerProvider))
+            .Build();
+
+        hubConnection.On<GamePlay>("ReceivePlay", (gamePlay) => {
+            var game = games.Single(game => game.Id == gamePlay.GameId);
+            game.HomeScore = (int)gamePlay.HomeScore;
+            game.AwayScore = (int)gamePlay.AwayScore;
+
             StateHasChanged();
         });
 

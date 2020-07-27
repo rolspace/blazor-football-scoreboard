@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
-using Microsoft.AspNetCore.Blazor.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Dashboard.Client;
+using Microsoft.Extensions.Logging;
+using System.Net.Http;
 
 namespace Dashboard.Client
 {
@@ -14,6 +16,10 @@ namespace Dashboard.Client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
+            builder.Services.AddTransient(sp =>
+                new HttpClient {
+                    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+                });
 
             await builder.Build().RunAsync();
         }

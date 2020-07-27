@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Games.Entities
+namespace Core.Entities
 {
     public partial class Play : BaseEntity
     {
