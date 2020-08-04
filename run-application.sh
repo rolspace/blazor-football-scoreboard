@@ -3,7 +3,7 @@
 cd src/Dashboard/Dashboard.Server
 dotnet publish -c Release
 
-cd ../../Games/Games.Worker
+cd ../../Worker/Worker.Game
 dotnet publish -c Release
 
 cd ../../../docker
