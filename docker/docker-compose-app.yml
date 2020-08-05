@@ -29,6 +29,7 @@ services:
 
   worker:
     build: ../src/Worker/Worker.Game
+    entrypoint: ["sh", "-c", "sleep 1m; dotnet Worker.Game.dll"]
     image: worker:latest
     networks:
       - app
