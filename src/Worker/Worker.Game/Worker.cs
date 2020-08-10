@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Services.Interfaces;
-using Core.Shared;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -81,25 +80,33 @@ namespace Worker.Game
 
         private async void DoWork(object state)
         {
-            var gameState = state as GameTime;
-            var pastGameTime = gameState.Current;
-            Interlocked.Decrement(ref gameState.Current);
+            var gameTime = state as GameTime;
+            var pastGameTime = gameTime.Current;
+            Interlocked.Decrement(ref gameTime.Current);
 
             using (var scope = _scopeFactory.CreateScope())
             {
                 IAsyncRepository<Play> playRepository = scope.ServiceProvider.GetRequiredService<IAsyncRepository<Play>>();
 
                 var plays = await playRepository
-                    .ListAsync(p => p.GameSecondsRemaining < pastGameTime && p.GameSecondsRemaining >= gameState.Current);
+                    .ListAsync(p => p.GameSecondsRemaining < pastGameTime && p.GameSecondsRemaining >= gameTime.Current);
 
                 foreach (var play in plays)
                 {
-                    var gamePlay = new GamePlay(play.GameId, play.Desc, play.TotalHomeScore, play.TotalAwayScore);
-                    _logger.LogInformation(gamePlay.ToString());
+                    var game = new Core.Entities.Game
+                    {
+                        Id = play.GameId,
+                        Week = play.Week,
+                        HomeTeam = play.HomeTeam,
+                        AwayTeam = play.AwayTeam
+                    };
+
+                    var gameState = new GameState(game, play.Desc, play.TotalHomeScore, play.TotalAwayScore);
+                    _logger.LogInformation(gameState.ToString());
 
                     if (_isHubActive)
                     {
-                        await _hubConnection.SendAsync("SendPlay", gamePlay);
+                        await _hubConnection.SendAsync("SendPlay", gameState);
                     }
                 }
             }

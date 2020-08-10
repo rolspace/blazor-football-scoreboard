@@ -1,6 +1,6 @@
 ﻿@page "/"
 
-@using Core.Shared
+@using Core.Entities
 @using System.Net.Http
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Logging
@@ -12,37 +12,37 @@
 <h1>Hello, world!</h1>
 
 <div>
-    @foreach (var game in games)
+    @foreach (var gameState in gameStates)
     {
         <div>
-            <div style="display:inline-block">@game.HomeTeam</div>
-            <div style="display:inline-block">@game.HomeScore</div>
+            <div style="display:inline-block">@gameState.Game.HomeTeam</div>
+            <div style="display:inline-block">@gameState.HomeScore</div>
         </div>
         <div>
-            <div style="display:inline-block">@game.AwayTeam</div>
-            <div style="display:inline-block">@game.AwayScore</div>
+            <div style="display:inline-block">@gameState.Game.AwayTeam</div>
+            <div style="display:inline-block">@gameState.AwayScore</div>
         </div>
     }
 </div>
 
 @code {
     private HubConnection hubConnection;
-    private IList<string> messages = new List<string>();
-    private IReadOnlyList<Game> games = new List<Game>();
+    private IReadOnlyList<GameState> gameStates = new List<GameState>();
 
     protected override async Task OnInitializedAsync()
     {
-        games = await Http.GetFromJsonAsync<Game[]>("api/game/week/1");
+        var weekGames = await Http.GetFromJsonAsync<Game[]>("api/game/week/1");
+        gameStates = weekGames.Select(g => new GameState { Game = g }).ToList();
 
         hubConnection = new HubConnectionBuilder()
             .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub"))
             .ConfigureLogging(logging => logging.AddProvider(LoggerProvider))
             .Build();
 
-        hubConnection.On<GamePlay>("ReceivePlay", (gamePlay) => {
-            var game = games.Single(game => game.Id == gamePlay.GameId);
-            game.HomeScore = (int)gamePlay.HomeScore;
-            game.AwayScore = (int)gamePlay.AwayScore;
+        hubConnection.On<GameState>("ReceivePlay", (gameStateMessage) => {
+            var game = gameStates.Single(game => game.Game.Id == gameStateMessage.Game.Id);
+            game.HomeScore = (int)gameStateMessage.HomeScore;
+            game.AwayScore = (int)gameStateMessage.AwayScore;
 
             StateHasChanged();
         });
