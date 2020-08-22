@@ -6,13 +6,13 @@
 
         public string PlayDescription { get; set; }
 
-        public int? HomeScore { get; set; }
+        public int HomeScore { get; set; }
 
-        public int? AwayScore { get; set; }
+        public int AwayScore { get; set; }
 
         public GameState() { }
 
-        public GameState(Game game, string playDescription, int? homeScore, int? awayScore)
+        public GameState(Game game, string playDescription = "", int homeScore = 0, int awayScore = 0)
         {
             Game = game;
             PlayDescription = playDescription;
