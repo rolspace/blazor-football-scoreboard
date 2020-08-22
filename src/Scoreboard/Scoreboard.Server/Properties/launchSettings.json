@@ -4,7 +4,7 @@
     "anonymousAuthentication": true
   },
   "profiles": {
-    "Dashboard.Server": {
+    "Scoreboard.Server": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

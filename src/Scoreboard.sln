@@ -4,11 +4,11 @@ VisualStudioVersion = 16.0.0.0
 MinimumVisualStudioVersion = 16.0.0.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{728E3CBD-C114-4965-9474-30168C19A3D0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dashboard", "Dashboard", "{99741ECD-55F5-4B34-83F8-82C9630FCFF8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scoreboard", "Scoreboard", "{99741ECD-55F5-4B34-83F8-82C9630FCFF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashboard.Client", "Dashboard\Dashboard.Client\Dashboard.Client.csproj", "{71D1B1E8-8509-493C-90B2-F8CA82EA2C25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scoreboard.Client", "Scoreboard\Scoreboard.Client\Scoreboard.Client.csproj", "{71D1B1E8-8509-493C-90B2-F8CA82EA2C25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dashboard.Server", "Dashboard\Dashboard.Server\Dashboard.Server.csproj", "{C2BD5E07-3627-48D0-8BCD-9F33B4703731}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scoreboard.Server", "Scoreboard\Scoreboard.Server\Scoreboard.Server.csproj", "{C2BD5E07-3627-48D0-8BCD-9F33B4703731}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{19C6E7D7-CDF1-4938-8138-023F1B8FE027}"
 EndProject

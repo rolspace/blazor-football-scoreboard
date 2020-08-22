@@ -101,7 +101,7 @@ namespace Worker.Game
                         AwayTeam = play.AwayTeam
                     };
 
-                    var gameState = new GameState(game, play.Desc, play.TotalHomeScore, play.TotalAwayScore);
+                    var gameState = new GameState(game, play.Desc, (int)play.TotalHomeScore, (int)play.TotalAwayScore);
                     _logger.LogInformation(gameState.ToString());
 
                     if (_isHubActive)

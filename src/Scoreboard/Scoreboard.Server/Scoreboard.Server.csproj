@@ -16,7 +16,7 @@
     <Folder Include="Hubs\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dashboard.Client\Dashboard.Client.csproj">
+    <ProjectReference Include="..\Scoreboard.Client\Scoreboard.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Core.Entities\Core.Entities.csproj">

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace Dashboard.Server
+namespace Scoreboard.Server
 {
     public class Program
     {

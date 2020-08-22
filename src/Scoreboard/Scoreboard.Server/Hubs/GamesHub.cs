@@ -2,7 +2,7 @@
 using Core.Entities;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Dashboard.Server.Hubs
+namespace Scoreboard.Server.Hubs
 {
     public class GameHub : Hub
     {
