@@ -1,5 +1,6 @@
-﻿html, body {
+﻿body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
 }
 
 app {
@@ -8,10 +9,18 @@ app {
     flex-direction: column;
 }
 
+.score-grid {
+    margin: 0 auto;
+    width: 70%;
+}
+
+.score-card {
+    padding: 0.625rem;
+}
+
 #root {
     width: 100%;
 }
-
 
 #blazor-error-ui {
     background: lightyellow;

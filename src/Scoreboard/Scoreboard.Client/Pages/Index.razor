@@ -15,22 +15,25 @@
             <h1>Scoreboard</h1>
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-            <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__inner score-grid">
                 @foreach (var gameState in gameStates)
                 {
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <div>
-                            <div style="display:inline-block">@gameState.Game.HomeTeam</div>
-                            <div style="display:inline-block">@gameState.HomeScore</div>
-                        </div>
-                        <div>
-                            <div style="display:inline-block">@gameState.Game.AwayTeam</div>
-                            <div style="display:inline-block">@gameState.AwayScore</div>
+                        <div class="mdc-card score-card">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.HomeTeam</div>
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10" style="display:inline-block">@gameState.HomeScore</div>
+                            </div>
+                            <div class="mdc-layout-grid__inner">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.AwayTeam</div>
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10" style="display:inline-block">@gameState.AwayScore</div>
+                            </div>
                         </div>
                     </div>
                 }
             </div>
         </div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1"></div>
     </div>
 </div>
 
