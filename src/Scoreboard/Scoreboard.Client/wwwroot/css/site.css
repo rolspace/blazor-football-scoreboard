@@ -11,11 +11,15 @@ app {
 
 .score-grid {
     margin: 0 auto;
-    width: 70%;
+    width: 50%;
 }
 
 .score-card {
     padding: 0.625rem;
+}
+
+.score-card__score {
+    text-align: right;
 }
 
 #root {
