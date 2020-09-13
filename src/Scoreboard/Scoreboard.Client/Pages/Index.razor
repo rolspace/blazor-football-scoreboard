@@ -20,15 +20,22 @@
                 {
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
                         <div class="mdc-card score-card">
-                            <div class="mdc-layout-grid__inner">
-                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.HomeTeam</div>
-                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10" style="display:inline-block">@gameState.HomeScore</div>
+                            <div class="mdc-card__primary">
+                                <div class="mdc-layout-grid__inner">
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.HomeTeam</div>
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10 score-card__score" style="display:inline-block">@gameState.HomeScore</div>
+                                </div>
+                                <div class="mdc-layout-grid__inner">
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.AwayTeam</div>
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10 score-card__score" style="display:inline-block">@gameState.AwayScore</div>
+                                </div>
                             </div>
-                            <div class="mdc-layout-grid__inner">
-                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.AwayTeam</div>
-                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10" style="display:inline-block">@gameState.AwayScore</div>
+                            <div class="mdc-card__secondary">
+                                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                                    @gameState.QuarterTimeRemaining
+                                </div>
                             </div>
-                        </div>
+                            </div>
                     </div>
                 }
             </div>
@@ -46,7 +53,11 @@
         try
         {
             var weekGames = await Http.GetFromJsonAsync<Game[]>("api/game/week/1");
-            gameStates = weekGames.Select(g => new GameState { Game = g }).ToList();
+            gameStates = weekGames.Select(g => new GameState {
+                Game = g,
+                Quarter = 1,
+                QuarterTimeRemaining = "15:00"
+            }).ToList();
 
             hubConnection = new HubConnectionBuilder()
                 .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub"))
@@ -58,6 +69,7 @@
                 var game = gameStates.Single(game => game.Game.Id == gameStateMessage.Game.Id);
                 game.HomeScore = (int)gameStateMessage.HomeScore;
                 game.AwayScore = (int)gameStateMessage.AwayScore;
+                game.QuarterTimeRemaining = gameStateMessage.QuarterTimeRemaining;
 
                 StateHasChanged();
             });
