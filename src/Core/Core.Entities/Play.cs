@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Core.Entities
+﻿namespace Core.Entities
 {
     public partial class Play : BaseEntity
     {

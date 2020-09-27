@@ -6,9 +6,9 @@ namespace Scoreboard.Server.Hubs
 {
     public class GameHub : Hub
     {
-        public async Task SendPlay(GameState gameState)
+        public async Task SendPlay(Play play)
         {
-            await Clients.All.SendAsync("ReceivePlay", gameState);
+            await Clients.All.SendAsync("ReceivePlay", play);
         }
     }
 }

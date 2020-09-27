@@ -4,6 +4,7 @@
 @using Core.Entities
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Logging
+@using Scoreboard.Client.ViewModels
 
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
@@ -22,11 +23,11 @@
                         <div class="mdc-card score-card">
                             <div class="mdc-card__primary">
                                 <div class="mdc-layout-grid__inner">
-                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.HomeTeam</div>
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.HomeTeam</div>
                                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10 score-card__score" style="display:inline-block">@gameState.HomeScore</div>
                                 </div>
                                 <div class="mdc-layout-grid__inner">
-                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.Game.AwayTeam</div>
+                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.AwayTeam</div>
                                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10 score-card__score" style="display:inline-block">@gameState.AwayScore</div>
                                 </div>
                             </div>
@@ -54,9 +55,14 @@
         {
             var weekGames = await Http.GetFromJsonAsync<Game[]>("api/game/week/1");
             gameStates = weekGames.Select(g => new GameState {
-                Game = g,
+                Id = g.Id,
+                Week = g.Week,
                 Quarter = 1,
-                QuarterTimeRemaining = "15:00"
+                QuarterSecondsRemaining = 900,
+                HomeTeam = g.HomeTeam,
+                HomeScore = 0,
+                AwayTeam = g.AwayTeam,
+                AwayScore = 0
             }).ToList();
 
             hubConnection = new HubConnectionBuilder()
@@ -64,12 +70,14 @@
                 .ConfigureLogging(logging => logging.AddProvider(LoggerProvider))
                 .Build();
 
-            hubConnection.On<GameState>("ReceivePlay", (gameStateMessage) =>
+            hubConnection.On<Play>("ReceivePlay", (play) =>
             {
-                var game = gameStates.Single(game => game.Game.Id == gameStateMessage.Game.Id);
-                game.HomeScore = (int)gameStateMessage.HomeScore;
-                game.AwayScore = (int)gameStateMessage.AwayScore;
-                game.QuarterTimeRemaining = gameStateMessage.QuarterTimeRemaining;
+                var game = gameStates.Single(game => game.Id == play.GameId);
+                game.HomeScore = play.TotalHomeScore ?? game.HomeScore;
+                game.AwayScore = play.TotalAwayScore ?? game.AwayScore;
+                game.Quarter = play.Qtr;
+                game.QuarterSecondsRemaining = play.QuarterSecondsRemaining ?? game.QuarterSecondsRemaining;
+                game.Description = play.Desc;
 
                 StateHasChanged();
             });
