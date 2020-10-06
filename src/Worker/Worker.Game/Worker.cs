@@ -93,22 +93,11 @@ namespace Worker.Game
 
                 foreach (var play in plays)
                 {
-                    var game = new Core.Entities.Game
-                    {
-                        Id = play.GameId,
-                        Week = play.Week,
-                        HomeTeam = play.HomeTeam,
-                        AwayTeam = play.AwayTeam
-                    };
-
-                    var gameState = new GameState(game, play.Qtr, (int)play.QuarterSecondsRemaining,
-                        (int)play.TotalHomeScore, (int)play.TotalAwayScore, play.Desc);
-
-                    _logger.LogInformation(gameState.ToString());
+                    _logger.LogInformation($"{play.HomeTeam}-{play.AwayTeam}-{play.Desc}");
 
                     if (_isHubActive)
                     {
-                        await _hubConnection.SendAsync("SendPlay", gameState);
+                        await _hubConnection.SendAsync("SendPlay", play);
                     }
                 }
             }
