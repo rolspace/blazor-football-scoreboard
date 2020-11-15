@@ -91,6 +91,7 @@ namespace Worker.Game
                 var plays = await playRepository
                     .ListAsync(p => p.GameSecondsRemaining < pastGameTime && p.GameSecondsRemaining >= gameTime.Current);
 
+                //TODO: change this to tasks?
                 foreach (var play in plays)
                 {
                     _logger.LogInformation($"{play.HomeTeam}-{play.AwayTeam}-{play.Desc}");
@@ -100,6 +101,8 @@ namespace Worker.Game
                         await _hubConnection.SendAsync("SendPlay", play);
                     }
                 }
+
+                //TODO: send to stats processing
             }
         }
     }

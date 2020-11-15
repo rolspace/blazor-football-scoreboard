@@ -53,6 +53,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // TODO: check best practice for error handling in this method
         try
         {
             var weekGames = await Http.GetFromJsonAsync<Game[]>("api/game/week/1");
