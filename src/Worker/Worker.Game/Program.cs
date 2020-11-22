@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Core.Entities;
-using Core.Services.Interfaces;
-using Core.Services.Repositories;
+using Core.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +22,7 @@ namespace Worker.Game
                     services.AddDbContext<GamesContext>(options =>
                         options.UseMySQL(hostContext.Configuration.GetConnectionString("GamesContext")),
                         ServiceLifetime.Scoped);
-                    services.AddScoped<IAsyncRepository<Play>, Repository<Play>>();
+                    services.AddScoped<IRepository<Play>, Repository<Play>>();
                 });
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Entities;
-using Core.Services.Interfaces;
+using Core.Infrastructure.Repositories;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -86,7 +86,7 @@ namespace Worker.Game
 
             using (var scope = _scopeFactory.CreateScope())
             {
-                IAsyncRepository<Play> playRepository = scope.ServiceProvider.GetRequiredService<IAsyncRepository<Play>>();
+                IRepository<Play> playRepository = scope.ServiceProvider.GetRequiredService<IRepository<Play>>();
 
                 var plays = await playRepository
                     .ListAsync(p => p.GameSecondsRemaining < pastGameTime && p.GameSecondsRemaining >= gameTime.Current);

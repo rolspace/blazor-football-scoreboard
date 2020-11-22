@@ -1,7 +1,6 @@
 using System.Linq;
 using Core.Entities;
-using Core.Services.Interfaces;
-using Core.Services.Repositories;
+using Core.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -37,7 +36,7 @@ namespace Scoreboard.Server
             services.AddDbContext<GamesContext>(options =>
                 options.UseMySQL(Configuration.GetConnectionString("GamesContext")));
 
-            services.AddScoped<IAsyncRepository<Game>, Repository<Game>>();
+            services.AddScoped<IRepository<Game>, Repository<Game>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

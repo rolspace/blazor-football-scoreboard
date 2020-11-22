@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Entities;
-using Core.Services.Interfaces;
+using Core.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Scoreboard.Server.Controllers
@@ -10,9 +10,9 @@ namespace Scoreboard.Server.Controllers
     [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
-        IAsyncRepository<Game> _gameRepository;
+        IRepository<Game> _gameRepository;
 
-        public GameController(IAsyncRepository<Game> gameRepository)
+        public GameController(IRepository<Game> gameRepository)
         {
             _gameRepository = gameRepository;
         }
