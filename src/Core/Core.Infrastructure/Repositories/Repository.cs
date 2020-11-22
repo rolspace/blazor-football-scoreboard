@@ -5,11 +5,10 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using Core.Services.Interfaces;
 
-namespace Core.Services.Repositories
+namespace Core.Infrastructure.Repositories
 {
-    public class Repository<T> : IAsyncRepository<T> where T: BaseEntity
+    public class Repository<T> : IRepository<T> where T: BaseEntity
     {
         protected readonly GamesContext _dbContext;
 

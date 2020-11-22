@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Repositories\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core.Entities\Core.Entities.csproj" />
