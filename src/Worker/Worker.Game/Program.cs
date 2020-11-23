@@ -19,8 +19,8 @@ namespace Worker.Game
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
-                    services.AddDbContext<SeasonDbContext>(options =>
-                        options.UseMySQL(hostContext.Configuration.GetConnectionString("SeasonDbContext")),
+                    services.AddDbContext<FootballDbContext>(options =>
+                        options.UseMySQL(hostContext.Configuration.GetConnectionString("FootballDbContext")),
                         ServiceLifetime.Scoped);
                     services.AddScoped<IRepository<Play>, Repository<Play>>();
                 });

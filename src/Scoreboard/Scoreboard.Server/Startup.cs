@@ -33,8 +33,8 @@ namespace Scoreboard.Server
                     new[] { "application/octet-stream" });
             });
 
-            services.AddDbContext<SeasonDbContext>(options =>
-                options.UseMySQL(Configuration.GetConnectionString("SeasonDbContext")));
+            services.AddDbContext<FootballDbContext>(options =>
+                options.UseMySQL(Configuration.GetConnectionString("FootballDbContext")));
 
             services.AddScoped<IRepository<Game>, Repository<Game>>();
         }
