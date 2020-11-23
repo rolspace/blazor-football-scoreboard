@@ -10,12 +10,12 @@ namespace Core.Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T: BaseEntity
     {
-        protected readonly GamesContext _dbContext;
+        protected readonly SeasonDbContext _dbContext;
 
         public Repository()
-            : this(new GamesContext()) { }
+            : this(new SeasonDbContext()) { }
 
-        public Repository(GamesContext dbContext)
+        public Repository(SeasonDbContext dbContext)
         {
             _dbContext = dbContext;
         }

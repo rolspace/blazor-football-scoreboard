@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Core.Entities
 {
-    public partial class GamesContext : DbContext
+    public partial class SeasonDbContext : DbContext
     {
-        public GamesContext()
+        public SeasonDbContext()
         {
         }
 
-        public GamesContext(DbContextOptions<GamesContext> options)
+        public SeasonDbContext(DbContextOptions<SeasonDbContext> options)
             : base(options)
         {
         }
