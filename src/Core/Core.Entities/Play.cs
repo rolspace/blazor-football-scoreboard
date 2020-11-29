@@ -1,8 +1,7 @@
 ﻿namespace Core.Entities
 {
-    public partial class Play : BaseEntity
+    public partial class Play : Entity
     {
-        public int Id { get; set; }
         public int Week { get; set; }
         public int PlayId { get; set; }
         public int GameId { get; set; }

@@ -1,23 +1,17 @@
-﻿using System;
-using System.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Core.Entities
 {
     public partial class FootballDbContext : DbContext
     {
-        public FootballDbContext()
-        {
-        }
+        public FootballDbContext() { }
 
         public FootballDbContext(DbContextOptions<FootballDbContext> options)
-            : base(options)
-        {
-        }
+            : base(options) { }
 
         public virtual DbSet<Play> Play { get; set; }
-
+        
+        public virtual DbSet<Game> Game { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -655,7 +649,7 @@ namespace Core.Entities
             });
 
             modelBuilder.Entity<Game>(entity => {
-                entity.ToTable("game", "gamestats");
+                entity.ToTable("game", "footballdb");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id");

@@ -6,7 +6,7 @@ using Core.Entities;
 
 namespace Core.Infrastructure.Repositories
 {
-    public interface IRepository<T> where T : BaseEntity
+    public interface IRepository<T> where T : Entity
     {
         Task<IReadOnlyList<T>> ListAsync(Expression<Func<T, bool>> query);
     }
