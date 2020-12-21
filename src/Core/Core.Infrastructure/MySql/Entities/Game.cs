@@ -1,4 +1,4 @@
-﻿namespace Core.Entities
+﻿namespace Core.Infrastructure.MySql.Entities
 {
     public class Game : Entity
     {

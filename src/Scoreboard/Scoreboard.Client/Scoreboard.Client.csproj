@@ -14,7 +14,4 @@
   <ItemGroup>
     <Folder Include="ViewModels\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\Core.Entities\Core.Entities.csproj" />
-  </ItemGroup>
 </Project>

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Entities;
+using Core.Infrastructure.MySql.Contexts;
+using Core.Infrastructure.MySql.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Infrastructure.Repositories
+namespace Core.Infrastructure.MySql.Repositories
 {
     public class Repository<T> : IRepository<T> where T: Entity
     {

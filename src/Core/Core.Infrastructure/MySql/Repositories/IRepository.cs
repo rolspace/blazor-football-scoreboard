@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Core.Entities;
+using Core.Infrastructure.MySql.Entities;
 
-namespace Core.Infrastructure.Repositories
+namespace Core.Infrastructure.MySql.Repositories
 {
     public interface IRepository<T> where T : Entity
     {
