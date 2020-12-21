@@ -14,11 +14,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Infrastructure", "Core
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{2E0B777C-C6D1-441B-841F-CA0E58A8A6DF}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "GameWorker", "Worker\GameWorker\GameWorker.csproj", "{E78CCA3C-9F1E-4020-93FC-3AA4FB58F879}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameWorker", "Worker\GameWorker\GameWorker.csproj", "{E78CCA3C-9F1E-4020-93FC-3AA4FB58F879}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "Scoreboard.Server", "Scoreboard\Scoreboard.Server\Scoreboard.Server.csproj", "{30468899-B65F-4E61-8002-64E0F60E6EF5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scoreboard.Server", "Scoreboard\Scoreboard.Server\Scoreboard.Server.csproj", "{30468899-B65F-4E61-8002-64E0F60E6EF5}"
 EndProject
-Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "GameService", "Services\GameService\GameService.csproj", "{F2BEEB05-FDA8-4936-96C1-29419AE842CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameService", "Services\GameService\GameService.csproj", "{F2BEEB05-FDA8-4936-96C1-29419AE842CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
