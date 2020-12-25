@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Core.Infrastructure.MySql.Contexts;
+using Core.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using Core.Entities;
-using Core.Infrastructure.Repositories;
 
 namespace GameService
 {
@@ -35,7 +28,7 @@ namespace GameService
             services.AddDbContext<FootballDbContext>(options =>
                 options.UseMySQL(Configuration.GetConnectionString("FootballDbContext")));
 
-            services.AddScoped<IRepository<Game>, Repository<Game>>();
+            services.AddScoped<IRepository, Repository>();
 
             services.AddSwaggerGen(c =>
             {

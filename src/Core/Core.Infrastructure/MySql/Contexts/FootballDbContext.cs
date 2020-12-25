@@ -10,13 +10,13 @@ namespace Core.Infrastructure.MySql.Contexts
         public FootballDbContext(DbContextOptions<FootballDbContext> options)
             : base(options) { }
 
-        public virtual DbSet<Play> Play { get; set; }
+        public virtual DbSet<PlayEntity> Play { get; set; }
         
-        public virtual DbSet<Game> Game { get; set; }
+        public virtual DbSet<GameEntity> Game { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Play>(entity =>
+            modelBuilder.Entity<PlayEntity>(entity =>
             {
                 entity.ToTable("play", "footballdb");
 
@@ -649,7 +649,7 @@ namespace Core.Infrastructure.MySql.Contexts
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Game>(entity => {
+            modelBuilder.Entity<GameEntity>(entity => {
                 entity.ToTable("game", "footballdb");
 
                 entity.Property(e => e.Id)
