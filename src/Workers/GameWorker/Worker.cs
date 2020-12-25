@@ -1,15 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Entities;
-using Core.Infrastructure.Repositories;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace GameWorker
+namespace Workers.GameWorker
 {
     public class Worker : IHostedService, IDisposable
     {

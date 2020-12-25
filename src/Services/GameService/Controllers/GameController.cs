@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace GameService.Controllers
+namespace Services.GameService.Controllers
 {
     [Route("api/games")]
     public class GameController : Controller
