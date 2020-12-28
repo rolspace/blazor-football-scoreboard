@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -16,6 +18,8 @@ namespace Workers.GameWorker
         private readonly HubConnection _hubConnection;
         private bool _isHubActive;
         private Timer _gameTimer;
+        private HttpClient _httpClient;
+
 
         class GameTime
         {
@@ -28,6 +32,8 @@ namespace Workers.GameWorker
             {
                 _logger = logger;
                 _scopeFactory = scopeFactory;
+                _httpClient = new HttpClient();
+                _httpClient.Timeout = TimeSpan.FromSeconds(1);
 
                 string hubEndpoint = config["HubEndpoint"];
                 _hubConnection = new HubConnectionBuilder()
@@ -35,7 +41,7 @@ namespace Workers.GameWorker
             }
             catch (Exception e)
             {
-                logger.LogError(e, "An error occurred initializing the worker service");
+                logger.LogError(e, "An error occurred initializing the GameWorker service");
             }
         }
 
@@ -51,7 +57,7 @@ namespace Workers.GameWorker
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "An error occurred starting the SignalR Hub");
+                _logger.LogError(e, "An error occurred starting the SignalR connection hub");
                 _isHubActive = false;
             }
             
@@ -82,7 +88,9 @@ namespace Workers.GameWorker
             var pastGameTime = gameTime.Current;
             Interlocked.Decrement(ref gameTime.Current);
 
-            using (var scope = _scopeFactory.CreateScope())
+            HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:11517/api/games/week/1");
+
+            /*using (var scope = _scopeFactory.CreateScope())
             {
                 IRepository<Play> playRepository = scope.ServiceProvider.GetRequiredService<IRepository<Play>>();
 
@@ -98,7 +106,7 @@ namespace Workers.GameWorker
                     {
                         await _hubConnection.SendAsync("SendPlay", play);
                     }
-                }
+                }*/
 
                 //TODO: send to stats processing
             }
