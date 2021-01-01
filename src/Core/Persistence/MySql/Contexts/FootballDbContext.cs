@@ -1,7 +1,7 @@
-﻿using Core.Infrastructure.MySql.Entities;
+﻿using Football.Core.Persistence.MySql.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Infrastructure.MySql.Contexts
+namespace Football.Core.Persistence.MySql.Contexts
 {
     public partial class FootballDbContext : DbContext
     {

@@ -1,5 +1,5 @@
-using Core.Infrastructure.MySql.Contexts;
-using Core.Infrastructure.Repositories;
+using Football.Core.Persistence.MySql.Contexts;
+using Football.Core.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace Services.GameService
+namespace Football.Services.GameService
 {
     public class Startup
     {

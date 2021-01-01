@@ -1,11 +1,11 @@
-﻿using Core.Infrastructure.Models;
-using Core.Infrastructure.Repositories;
+﻿using Football.Core.Models;
+using Football.Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Services.GameService.Controllers
+namespace Football.Services.GameService.Controllers
 {
     [Route("api/games")]
     public class GameController : Controller

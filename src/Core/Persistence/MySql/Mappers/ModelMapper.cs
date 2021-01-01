@@ -1,7 +1,7 @@
-﻿using Core.Infrastructure.Models;
-using Core.Infrastructure.MySql.Entities;
+﻿using Football.Core.Models;
+using Football.Core.Persistence.MySql.Entities;
 
-namespace Core.Infrastructure.MySql.Mappers
+namespace Football.Core.Persistence.MySql.Mappers
 {
     public class ModelMapper
     {

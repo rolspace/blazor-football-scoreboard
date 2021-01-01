@@ -1,4 +1,4 @@
-﻿namespace Core.Infrastructure.MySql.Entities
+﻿namespace Football.Core.Persistence.MySql.Entities
 {
     public class GameEntity
     {

@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Workers.GameWorker
+namespace Football.Workers.GameWorker
 {
     public class Program
     {

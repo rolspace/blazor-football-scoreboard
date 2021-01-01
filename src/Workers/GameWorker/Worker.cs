@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Workers.GameWorker
+namespace Football.Workers.GameWorker
 {
-    public class Worker : IHostedService, IDisposable
+    public class Worker : IHostedService, IAsyncDisposable
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<Worker> _logger;
@@ -45,14 +44,14 @@ namespace Workers.GameWorker
             }
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             var gameTime = new GameTime();
             _gameTimer = new Timer(new TimerCallback(DoWork), gameTime, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 
             try
             {
-                _hubConnection.StartAsync().Wait();
+                await _hubConnection.StartAsync();
                 _isHubActive = true;
             }
             catch (Exception e)
@@ -60,25 +59,21 @@ namespace Workers.GameWorker
                 _logger.LogError(e, "An error occurred starting the SignalR connection hub");
                 _isHubActive = false;
             }
-            
-            return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             if (_isHubActive)
             {
-                _hubConnection.StopAsync().Wait();
+                await _hubConnection.StopAsync();
             }
-
-            return Task.CompletedTask;
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             if (_isHubActive)
             {
-                _hubConnection.DisposeAsync().Wait();
+                await _hubConnection.DisposeAsync();
             }
         }
 
@@ -109,7 +104,7 @@ namespace Workers.GameWorker
                 }*/
 
                 //TODO: send to stats processing
-            }
+            // }
         }
     }
 }

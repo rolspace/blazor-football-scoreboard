@@ -1,13 +1,13 @@
-﻿using Core.Infrastructure.Models;
-using Core.Infrastructure.MySql.Contexts;
-using Core.Infrastructure.MySql.Entities;
-using Core.Infrastructure.MySql.Mappers;
+﻿using Football.Core.Models;
+using Football.Core.Persistence.MySql.Contexts;
+using Football.Core.Persistence.MySql.Entities;
+using Football.Core.Persistence.MySql.Mappers;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.Infrastructure.Repositories
+namespace Football.Core.Repositories
 {
     public class Repository : IRepository
     {

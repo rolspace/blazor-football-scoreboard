@@ -1,8 +1,8 @@
-﻿using Core.Infrastructure.Models;
+﻿using Football.Core.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Core.Infrastructure.Repositories
+namespace Football.Core.Repositories
 {
     public interface IRepository
     {

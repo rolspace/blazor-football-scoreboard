@@ -5,12 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="MySql\" />
-    <Folder Include="MySql\Contexts\" />
     <Folder Include="Repositories\" />
-    <Folder Include="MySql\Entities\" />
     <Folder Include="Models\" />
-    <Folder Include="MySql\Mappers\" />
+    <Folder Include="Persistence\" />
+    <Folder Include="Persistence\MySql\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
