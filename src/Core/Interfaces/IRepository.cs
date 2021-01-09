@@ -1,5 +1,4 @@
-﻿using Football.Core.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Football.Core.Interfaces
@@ -8,6 +7,6 @@ namespace Football.Core.Interfaces
     {
         Task<ReadOnlyCollection<IGame>> GetGamesByWeek(int week);
 
-        Task<ReadOnlyCollection<IPlay>> GetPlaysByGameTime(int gameSecondsRemainingStart, int gameSecondsRemainingEnd);
+        Task<ReadOnlyCollection<IPlay>> GetPlaysByGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd);
     }
 }
