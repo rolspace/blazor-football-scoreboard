@@ -1,4 +1,4 @@
-﻿namespace Football.Core.Models
+﻿namespace Football.Core.Interfaces
 {
     public interface IGame
     {

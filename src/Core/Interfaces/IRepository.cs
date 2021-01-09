@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Football.Core.Repositories
+namespace Football.Core.Interfaces
 {
     public interface IRepository
     {

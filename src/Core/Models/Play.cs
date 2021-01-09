@@ -1,4 +1,6 @@
-﻿namespace Football.Core.Models
+﻿using Football.Core.Interfaces;
+
+namespace Football.Core.Models
 {
     public class Play : IPlay
     {

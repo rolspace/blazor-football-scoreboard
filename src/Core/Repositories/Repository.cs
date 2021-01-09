@@ -1,4 +1,4 @@
-﻿using Football.Core.Models;
+﻿using Football.Core.Interfaces;
 using Football.Core.Persistence.MySql.Contexts;
 using Football.Core.Persistence.MySql.Entities;
 using Football.Core.Persistence.MySql.Mappers;

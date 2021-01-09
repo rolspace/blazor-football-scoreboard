@@ -1,4 +1,5 @@
-﻿using Football.Core.Models;
+﻿using Football.Core.Interfaces;
+using Football.Core.Models;
 using Football.Core.Persistence.MySql.Entities;
 
 namespace Football.Core.Persistence.MySql.Mappers
