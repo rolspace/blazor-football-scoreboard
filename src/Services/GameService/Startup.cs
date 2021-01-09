@@ -1,6 +1,6 @@
 using Football.Core.Interfaces;
+using Football.Core.Persistence.MySql;
 using Football.Core.Persistence.MySql.Contexts;
-using Football.Core.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
