@@ -3,19 +3,15 @@ using Football.Core.Persistence.MySql.Contexts;
 using Football.Core.Persistence.MySql.Entities;
 using Football.Core.Persistence.MySql.Mappers;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Football.Core.Repositories
+namespace Football.Core.Persistence.MySql
 {
     public class Repository : IRepository
     {
         protected readonly FootballDbContext _dbContext;
-
-        public Repository()
-            : this(new FootballDbContext()) { }
 
         public Repository(FootballDbContext dbContext)
         {

@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
     <Folder Include="Models\" />
     <Folder Include="Persistence\" />
     <Folder Include="Persistence\MySql\" />
