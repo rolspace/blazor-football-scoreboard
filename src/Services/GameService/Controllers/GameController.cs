@@ -1,5 +1,4 @@
-﻿using Football.Core.Models;
-using Football.Core.Repositories;
+﻿using Football.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
