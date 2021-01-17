@@ -31,12 +31,14 @@ namespace Football.Workers.GameWorker
             {
                 _logger = logger;
                 _scopeFactory = scopeFactory;
-                _httpClient = new HttpClient();
-                _httpClient.Timeout = TimeSpan.FromSeconds(1);
 
-                string hubEndpoint = config["HubEndpoint"];
+                _httpClient = new HttpClient
+                {
+                    Timeout = TimeSpan.FromSeconds(1)
+                };
+
                 _hubConnection = new HubConnectionBuilder()
-                    .WithUrl(hubEndpoint).Build();
+                    .WithUrl(config["HubEndpoint"]).Build();
             }
             catch (Exception e)
             {
@@ -83,7 +85,21 @@ namespace Football.Workers.GameWorker
             var pastGameTime = gameTime.Current;
             Interlocked.Decrement(ref gameTime.Current);
 
-            HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:11517/api/games/week/1");
+            try
+            {
+                var requestUrl = $"http://localhost:2500/api/football/plays/week/1/{pastGameTime}/{gameTime.Current}";
+                HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
+
+                string data = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation(data);
+
+                await _hubConnection.SendAsync("SendPlay", data);
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
 
             /*using (var scope = _scopeFactory.CreateScope())
             {
