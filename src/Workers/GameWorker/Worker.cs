@@ -2,11 +2,15 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Football.Core.Models;
+using System.Collections.Generic;
 
 namespace Football.Workers.GameWorker
 {
@@ -90,37 +94,19 @@ namespace Football.Workers.GameWorker
                 var requestUrl = $"http://localhost:2500/api/football/plays/week/1/{pastGameTime}/{gameTime.Current}";
                 HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
-                string data = await response.Content.ReadAsStringAsync();
-                _logger.LogInformation(data);
+                string jsonResponse = await response.Content.ReadAsStringAsync();
+                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse);
 
-                await _hubConnection.SendAsync("SendPlay", data);
-                
+                foreach (var play in plays)
+                {
+                    //_logger.LogInformation(play);
+                    await _hubConnection.SendAsync("SendPlay", play);
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-
-            /*using (var scope = _scopeFactory.CreateScope())
-            {
-                IRepository<Play> playRepository = scope.ServiceProvider.GetRequiredService<IRepository<Play>>();
-
-                var plays = await playRepository
-                    .ListAsync(p => p.GameSecondsRemaining < pastGameTime && p.GameSecondsRemaining >= gameTime.Current);
-
-                //TODO: change this to tasks?
-                foreach (var play in plays)
-                {
-                    _logger.LogInformation($"{play.HomeTeam}-{play.AwayTeam}-{play.Desc}");
-
-                    if (_isHubActive)
-                    {
-                        await _hubConnection.SendAsync("SendPlay", play);
-                    }
-                }*/
-
-                //TODO: send to stats processing
-            // }
         }
     }
 }
