@@ -1,10 +1,7 @@
 using System.Linq;
-using Core.Entities;
-using Core.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,11 +29,6 @@ namespace Scoreboard.Server
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] { "application/octet-stream" });
             });
-
-            services.AddDbContext<FootballDbContext>(options =>
-                options.UseMySQL(Configuration.GetConnectionString("FootballDbContext")));
-
-            services.AddScoped<IRepository<Game>, Repository<Game>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

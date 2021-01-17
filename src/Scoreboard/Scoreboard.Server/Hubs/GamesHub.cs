@@ -1,5 +1,6 @@
-﻿using System.Threading.Tasks;
-using Core.Entities;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Football.Core.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Scoreboard.Server.Hubs
