@@ -1,4 +1,5 @@
 ﻿using Football.Core.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,7 @@ namespace Football.Services.GameService.Controllers
             _repository = repository;
         }
 
+        [EnableCors("CorsPolicy")]
         [HttpGet("week/{weekId}")]
         public async Task<ActionResult> GetGamesByWeek(int weekId)
         {

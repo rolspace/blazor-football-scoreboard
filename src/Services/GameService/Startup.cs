@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace Football.Services.GameService
 {
@@ -23,14 +25,22 @@ namespace Football.Services.GameService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllers();
-
             services.AddDbContext<FootballDbContext>(options =>
                 options.UseMySQL(Configuration.GetConnectionString("FootballDbContext")));
 
             services.AddScoped<IRepository, Repository>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "CorsPolicy", (builder) =>
+                {
+                    builder.WithOrigins("http://localhost:5001")
+                        .AllowAnyMethod()
+                        .WithHeaders(HeaderNames.ContentType);
+                });
+            });
+
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Service.Game", Version = "v1" });
@@ -48,9 +58,8 @@ namespace Football.Services.GameService
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
