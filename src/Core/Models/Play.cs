@@ -25,5 +25,10 @@ namespace Football.Core.Models
         public Play()
         {
         }
+
+        public override string ToString()
+        {
+            return $"{GameId} - {HomeTeam}:{HomeScore} - {AwayTeam}:{AwayScore} - {Description}";
+        }
     }
 }
