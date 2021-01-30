@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -97,10 +96,13 @@ namespace Football.Workers.GameWorker
                 string jsonResponse = await response.Content.ReadAsStringAsync();
                 List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse);
 
-                foreach (var play in plays)
+                if (plays.Count > 0)
                 {
-                    //_logger.LogInformation(play);
-                    await _hubConnection.SendAsync("SendPlay", play);
+                    foreach (var play in plays)
+                    {
+                        _logger.LogInformation(play.ToString());
+                        await _hubConnection.SendAsync("SendPlay", play);
+                    }
                 }
             }
             catch (Exception ex)
