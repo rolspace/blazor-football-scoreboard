@@ -94,7 +94,10 @@ namespace Football.Workers.GameWorker
                 HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse);
+                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
                 if (plays.Count > 0)
                 {
