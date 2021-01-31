@@ -1,7 +1,7 @@
 ﻿@page "/"
 
 @using System.Net.Http
-@using Core.Entities
+@using Football.Core.Models
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Logging
 @using Scoreboard.Client.ViewModels
@@ -56,7 +56,7 @@
         // TODO: check best practice for error handling in this method
         try
         {
-            var weekGames = await Http.GetFromJsonAsync<Game[]>("api/game/week/1");
+            var weekGames = await Http.GetFromJsonAsync<Game[]>("https://localhost:11517/api/football/games/week/1");
             gameStates = weekGames.Select(g => new GameState {
                 Id = g.Id,
                 Week = g.Week,
@@ -76,11 +76,11 @@
             hubConnection.On<Play>("ReceivePlay", (play) =>
             {
                 var game = gameStates.Single(game => game.Id == play.GameId);
-                game.HomeScore = play.TotalHomeScore ?? game.HomeScore;
-                game.AwayScore = play.TotalAwayScore ?? game.AwayScore;
-                game.Quarter = play.Qtr;
-                game.QuarterSecondsRemaining = play.QuarterSecondsRemaining ?? game.QuarterSecondsRemaining;
-                game.Description = play.Desc;
+                game.HomeScore = play.HomeScore;
+                game.AwayScore = play.AwayScore;
+                game.Quarter = play.Quarter;
+                game.QuarterSecondsRemaining = play.QuarterSecondsRemaining;
+                game.Description = play.Description;
 
                 StateHasChanged();
             });
