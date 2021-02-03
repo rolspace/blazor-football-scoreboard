@@ -14,6 +14,8 @@ namespace Football.Core.Persistence.MySql.Contexts
         
         public virtual DbSet<GameEntity> Game { get; set; }
 
+        public virtual DbSet<StatEntity> Stat { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PlayEntity>(entity =>
@@ -667,6 +669,14 @@ namespace Football.Core.Persistence.MySql.Contexts
                     .IsRequired()
                     .HasColumnName("away_team")
                     .HasMaxLength(3);
+            });
+
+            modelBuilder.Entity<StatEntity>(entity => {
+                entity.Property(e => e.GameId).HasColumnName("game_id");
+
+                entity.Property(e => e.Team).HasColumnName("team");
+
+                entity.Property(e => e.AirYards).HasColumnName("air_yards");
             });
         }
     }
