@@ -37,5 +37,15 @@ namespace Football.Core.Persistence.MySql
 
             return (await plays.ToListAsync()).AsReadOnly();
         }
+
+        public async Task<ReadOnlyCollection<IStat>> GetStatsByGameAndTeam(int gameId, string team)
+        {
+            IQueryable<IStat> stats = _dbContext.Set<StatEntity>()
+                .AsQueryable()
+                .Where(s => s.GameId == gameId && s.Team == team)
+                .Select(s => ModelMapper.MapStatModel(s));
+
+            return (await stats.ToListAsync()).AsReadOnly();
+        }
     }
 }

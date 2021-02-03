@@ -40,5 +40,17 @@ namespace Football.Core.Persistence.MySql.Mappers
 
             return play;
         }
+
+        public static IStat MapStatModel(StatEntity statEntity)
+        {
+            var stat = new Stat
+            {
+                GameId = statEntity.GameId,
+                Team = statEntity.Team,
+                AirYards = statEntity.AirYards
+            };
+
+            return stat;
+        }
     }
 }

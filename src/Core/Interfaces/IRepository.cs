@@ -8,5 +8,7 @@ namespace Football.Core.Interfaces
         Task<ReadOnlyCollection<IGame>> GetGamesByWeek(int week);
 
         Task<ReadOnlyCollection<IPlay>> GetPlaysByGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd);
+
+        Task<ReadOnlyCollection<IStat>> GetStatsByGameAndTeam(int gameId, string team);
     }
 }
