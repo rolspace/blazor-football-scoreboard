@@ -15,13 +15,11 @@ namespace Football.Workers.GameWorker
 {
     public class Worker : IHostedService, IAsyncDisposable
     {
-        private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<Worker> _logger;
         private readonly HubConnection _hubConnection;
         private bool _isHubActive;
         private Timer _gameTimer;
         private HttpClient _httpClient;
-
 
         class GameTime
         {
@@ -33,7 +31,6 @@ namespace Football.Workers.GameWorker
             try
             {
                 _logger = logger;
-                _scopeFactory = scopeFactory;
 
                 _httpClient = new HttpClient
                 {

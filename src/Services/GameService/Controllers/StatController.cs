@@ -23,5 +23,7 @@ namespace Football.Services.GameService.Controllers
 
             return Ok(stats);
         }
+
+        // WRITE PATCH METHOD
     }
 }
