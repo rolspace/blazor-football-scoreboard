@@ -1,4 +1,6 @@
-﻿namespace Football.Core.Persistence.MySql.Entities
+﻿using System.Collections.Generic;
+
+namespace Football.Core.Persistence.MySql.Entities
 {
     public class GameEntity
     {
@@ -9,5 +11,9 @@
         public string HomeTeam { get; set; }
 
         public string AwayTeam { get; set; }
+
+        public virtual ICollection<PlayEntity> Play { get; set; }
+
+        public virtual ICollection<StatEntity> Stat { get; set; }
     }
 }

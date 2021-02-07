@@ -3,24 +3,46 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Football.Core.Persistence.MySql.Contexts
 {
-    public partial class FootballDbContext : DbContext
+    public class FootballDbContext : DbContext
     {
+        public virtual DbSet<PlayEntity> Play { get; set; }
+
+        public virtual DbSet<GameEntity> Game { get; set; }
+
+        public virtual DbSet<StatEntity> Stat { get; set; }
+
         public FootballDbContext() { }
 
         public FootballDbContext(DbContextOptions<FootballDbContext> options)
             : base(options) { }
 
-        public virtual DbSet<PlayEntity> Play { get; set; }
-        
-        public virtual DbSet<GameEntity> Game { get; set; }
-
-        public virtual DbSet<StatEntity> Stat { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<GameEntity>(entity =>
+            {
+                entity.ToTable("game");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.AwayTeam)
+                    .HasColumnName("away_team")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.HomeTeam)
+                    .HasColumnName("home_team")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Week).HasColumnName("week");
+            });
+
             modelBuilder.Entity<PlayEntity>(entity =>
             {
-                entity.ToTable("play", "footballdb");
+                entity.ToTable("play");
+
+                entity.HasIndex(e => e.GameId)
+                    .HasName("game_id");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -84,7 +106,7 @@ namespace Football.Core.Persistence.MySql.Contexts
 
                 entity.Property(e => e.ExtraPointResult)
                     .HasColumnName("extra_point_result")
-                    .HasMaxLength(6)
+                    .HasMaxLength(7)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FieldGoalAttempt)
@@ -93,7 +115,7 @@ namespace Football.Core.Persistence.MySql.Contexts
 
                 entity.Property(e => e.FieldGoalResult)
                     .HasColumnName("field_goal_result")
-                    .HasMaxLength(6)
+                    .HasMaxLength(7)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FirstDownPass)
@@ -649,34 +671,35 @@ namespace Football.Core.Persistence.MySql.Contexts
                     .HasColumnName("yrdln")
                     .HasMaxLength(6)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.Play)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("play_ibfk_1");
             });
 
-            modelBuilder.Entity<GameEntity>(entity => {
-                entity.ToTable("game", "footballdb");
+            modelBuilder.Entity<StatEntity>(entity =>
+            {
+                entity.HasKey(e => new { e.GameId, e.Team })
+                    .HasName("PRIMARY");
 
-                entity.Property(e => e.Id)
-                    .HasColumnName("id");
+                entity.ToTable("stat");
 
-                entity.Property(e => e.Week)
-                    .HasColumnName("week");
-
-                entity.Property(e => e.HomeTeam)
-                    .IsRequired()
-                    .HasColumnName("home_team")
-                    .HasMaxLength(3);
-
-                entity.Property(e => e.AwayTeam)
-                    .IsRequired()
-                    .HasColumnName("away_team")
-                    .HasMaxLength(3);
-            });
-
-            modelBuilder.Entity<StatEntity>(entity => {
                 entity.Property(e => e.GameId).HasColumnName("game_id");
 
-                entity.Property(e => e.Team).HasColumnName("team");
+                entity.Property(e => e.Team)
+                    .HasColumnName("team")
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.AirYards).HasColumnName("air_yards");
+
+                entity.HasOne(d => d.Game)
+                    .WithMany(p => p.Stat)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("stat_ibfk_1");
             });
         }
     }
