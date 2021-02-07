@@ -73,6 +73,8 @@ namespace Football.Workers.GameWorker
 
         public async ValueTask DisposeAsync()
         {
+            _gameTimer.Dispose();
+
             if (_isHubActive)
             {
                 await _hubConnection.DisposeAsync();
