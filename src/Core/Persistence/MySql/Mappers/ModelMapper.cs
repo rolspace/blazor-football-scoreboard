@@ -12,6 +12,8 @@ namespace Football.Core.Persistence.MySql.Mappers
 
         public static IGame MapGameModel(GameEntity gameEntity)
         {
+            if (gameEntity == null) return null;
+
             var game = new Game
             {
                 Id = gameEntity.Id,
@@ -25,6 +27,8 @@ namespace Football.Core.Persistence.MySql.Mappers
 
         public static IPlay MapPlayModel(PlayEntity playEntity)
         {
+            if (playEntity == null) return null;
+            
             var play = new Play
             {
                 Id = playEntity.Id,
@@ -43,6 +47,8 @@ namespace Football.Core.Persistence.MySql.Mappers
 
         public static IStat MapStatModel(StatEntity statEntity)
         {
+            if (statEntity == null) return null;
+
             var stat = new Stat
             {
                 GameId = statEntity.GameId,
