@@ -1,4 +1,4 @@
-﻿using Football.Core.Interfaces;
+﻿using Football.Core.Interfaces.Models;
 
 namespace Football.Core.Models
 {
@@ -9,9 +9,5 @@ namespace Football.Core.Models
         public string Team { get; set; }
 
         public int AirYards { get; set; }
-
-        public Stat()
-        {
-        }
     }
 }

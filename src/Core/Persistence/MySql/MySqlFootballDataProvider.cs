@@ -1,7 +1,8 @@
-﻿using Football.Core.Interfaces;
+﻿using Football.Core.Interfaces.Models;
+using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql.Contexts;
 using Football.Core.Persistence.MySql.Entities;
-using Football.Core.Persistence.MySql.Mappers;
+using Football.Core.Persistence.MySql.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Football.Core.Persistence.MySql
 {
-    public class Repository : IRepository
+    public class MySqlFootballDataProvider : IFootballDataProvider
     {
         protected readonly FootballDbContext _dbContext;
 
-        public Repository(FootballDbContext dbContext)
+        public MySqlFootballDataProvider(FootballDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -38,14 +39,23 @@ namespace Football.Core.Persistence.MySql
             return (await plays.ToListAsync()).AsReadOnly();
         }
 
-        public async Task<ReadOnlyCollection<IStat>> GetStatsByGameAndTeam(int gameId, string team)
+        public async Task SaveStat(IStat stat)
         {
-            IQueryable<IStat> stats = _dbContext.Set<StatEntity>()
+            StatEntity statEntity = await _dbContext.Set<StatEntity>()
                 .AsQueryable()
-                .Where(s => s.GameId == gameId && s.Team == team)
-                .Select(s => ModelMapper.MapStatModel(s));
+                .FirstOrDefaultAsync(s => s.GameId == stat.GameId && s.Team == stat.Team);
 
-            return (await stats.ToListAsync()).AsReadOnly();
+            if (statEntity == null)
+            {
+                statEntity = new StatEntity();
+                statEntity.GameId = stat.GameId;
+                statEntity.Team = stat.Team;
+            }
+
+            statEntity.AirYards += stat.AirYards;
+
+            _dbContext.Update(statEntity);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -9,6 +9,9 @@
     <Folder Include="Persistence\" />
     <Folder Include="Persistence\MySql\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="Interfaces\Models\" />
+    <Folder Include="Persistence\Interfaces\" />
+    <Folder Include="Persistence\Interfaces\DataProviders\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />

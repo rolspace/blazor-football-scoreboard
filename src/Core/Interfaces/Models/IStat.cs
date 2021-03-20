@@ -1,4 +1,4 @@
-﻿namespace Football.Core.Interfaces
+﻿namespace Football.Core.Interfaces.Models
 {
     public interface IStat
     {

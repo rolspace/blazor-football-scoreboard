@@ -1,8 +1,9 @@
-﻿using Football.Core.Interfaces;
+﻿using Football.Core.Interfaces.Models;
 using Football.Core.Models;
 using Football.Core.Persistence.MySql.Entities;
+using System;
 
-namespace Football.Core.Persistence.MySql.Mappers
+namespace Football.Core.Persistence.MySql.Utilities
 {
     public class ModelMapper
     {
@@ -28,18 +29,37 @@ namespace Football.Core.Persistence.MySql.Mappers
         public static IPlay MapPlayModel(PlayEntity playEntity)
         {
             if (playEntity == null) return null;
-            
+
             var play = new Play
             {
                 Id = playEntity.Id,
-                GameId = playEntity.GameId,
-                HomeTeam = playEntity.HomeTeam,
                 HomeScore = playEntity.TotalHomeScore ?? 0,
-                AwayTeam = playEntity.AwayTeam,
                 AwayScore = playEntity.TotalAwayScore ?? 0,
                 Description = playEntity.Desc,
                 Quarter = playEntity.Qtr,
-                QuarterSecondsRemaining = playEntity.QuarterSecondsRemaining ?? 0
+                QuarterSecondsRemaining = playEntity.QuarterSecondsRemaining ?? 0,
+                Game = new Game() {
+                    Id = playEntity.GameId,
+                    HomeTeam = playEntity.HomeTeam,
+                    AwayTeam = playEntity.AwayTeam,
+                    Week = playEntity.Week,
+                },
+                PlayStats = new PlayStats()
+                {
+                    Home = new TeamStats()
+                    {
+                        Team = playEntity.HomeTeam,
+                        Score = playEntity.TotalHomeScore ?? 0,
+                        DefenseStats = new DefenseStats()
+                        {
+                            Sacks = playEntity.Defteam == playEntity.HomeTeam ? (Convert.ToBoolean(playEntity.Sack) ? 1 : 0) : 0,
+                        },
+                        OffenseStats = new OffenseStats()
+                        {
+                            AirYards = playEntity.Posteam == playEntity.HomeTeam ? playEntity.AirYards ?? 0 : 0,
+                        }
+                    }
+                }
             };
 
             return play;

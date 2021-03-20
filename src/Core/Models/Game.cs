@@ -1,4 +1,4 @@
-﻿using Football.Core.Interfaces;
+﻿using Football.Core.Interfaces.Models;
 
 namespace Football.Core.Models
 {
@@ -11,9 +11,5 @@ namespace Football.Core.Models
         public string HomeTeam { get; set; }
 
         public string AwayTeam { get; set; }
-
-        public Game()
-        {
-        }
     }
 }

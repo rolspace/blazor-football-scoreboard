@@ -1,14 +1,15 @@
-﻿using System.Collections.ObjectModel;
+﻿using Football.Core.Interfaces.Models;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Football.Core.Interfaces
+namespace Football.Core.Persistence.Interfaces.DataProviders
 {
-    public interface IRepository
+    public interface IFootballDataProvider
     {
         Task<ReadOnlyCollection<IGame>> GetGamesByWeek(int week);
 
         Task<ReadOnlyCollection<IPlay>> GetPlaysByGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd);
 
-        Task<ReadOnlyCollection<IStat>> GetStatsByGameAndTeam(int gameId, string team);
+        Task SaveStat(IStat stat);
     }
 }
