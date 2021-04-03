@@ -18,7 +18,9 @@ namespace Football.Core.Models
 
         public IGame Game { get; set; }
 
-        public PlayStats PlayStats { get; set; }
+        public IPlayData HomePlayData { get; set; }
+
+        public IPlayData AwayPlayData { get; set; }
 
         public override string ToString()
         {
@@ -26,32 +28,26 @@ namespace Football.Core.Models
         }
     }
 
-    public class PlayStats
+    public class PlayData : IPlayData
     {
-        public TeamStats Home { get; set; }
-        public TeamStats Away { get; set; }
+        public IOffensivePlayData OffensivePlayData { get; set; }
+
+        public IDefensivePlayData DefensivePlayData { get; set; }
+
+        public ISpecialPlayData SpecialPlayData { get; set; }
     }
 
-    public class TeamStats
-    {
-        public string Team { get; set; }
-        public int Score { get; set; }
-        public OffenseStats OffenseStats { get; set; }
-        public DefenseStats DefenseStats { get; set; }
-        public SpecialStats SpecialStats { get; set; }
-    }
-
-    public class OffenseStats
+    public class OffensivePlayData : IOffensivePlayData
     {
         public int AirYards { get; set; }
     }
 
-    public class DefenseStats
+    public class DefensivePlayData : IDefensivePlayData
     {
         public int Sacks { get; set; }
     }
 
-    public class SpecialStats
+    public class SpecialPlayData : ISpecialPlayData
     {
         public int Punts { get; set; }
     }

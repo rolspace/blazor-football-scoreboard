@@ -29,7 +29,7 @@ namespace Football.Core.Persistence.MySql
             return (await games.ToListAsync()).AsReadOnly();
         }
 
-        public async Task<ReadOnlyCollection<IPlay>> GetPlaysByGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd)
+        public async Task<ReadOnlyCollection<IPlay>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd)
         {
              IQueryable<IPlay> plays = _dbContext.Set<PlayEntity>()
                 .AsQueryable()

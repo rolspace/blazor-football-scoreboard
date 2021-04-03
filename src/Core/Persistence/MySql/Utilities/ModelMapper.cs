@@ -7,10 +7,6 @@ namespace Football.Core.Persistence.MySql.Utilities
 {
     public class ModelMapper
     {
-        public ModelMapper()
-        {
-        }
-
         public static IGame MapGameModel(GameEntity gameEntity)
         {
             if (gameEntity == null) return null;
@@ -30,6 +26,8 @@ namespace Football.Core.Persistence.MySql.Utilities
         {
             if (playEntity == null) return null;
 
+            bool isOffense = playEntity.Posteam == playEntity.HomeTeam;
+
             var play = new Play
             {
                 Id = playEntity.Id,
@@ -44,22 +42,8 @@ namespace Football.Core.Persistence.MySql.Utilities
                     AwayTeam = playEntity.AwayTeam,
                     Week = playEntity.Week,
                 },
-                PlayStats = new PlayStats()
-                {
-                    Home = new TeamStats()
-                    {
-                        Team = playEntity.HomeTeam,
-                        Score = playEntity.TotalHomeScore ?? 0,
-                        DefenseStats = new DefenseStats()
-                        {
-                            Sacks = playEntity.Defteam == playEntity.HomeTeam ? (Convert.ToBoolean(playEntity.Sack) ? 1 : 0) : 0,
-                        },
-                        OffenseStats = new OffenseStats()
-                        {
-                            AirYards = playEntity.Posteam == playEntity.HomeTeam ? playEntity.AirYards ?? 0 : 0,
-                        }
-                    }
-                }
+                HomePlayData = MapPlayData(playEntity, isOffense),
+                AwayPlayData = MapPlayData(playEntity, isOffense),
             };
 
             return play;
@@ -77,6 +61,25 @@ namespace Football.Core.Persistence.MySql.Utilities
             };
 
             return stat;
+        }
+
+        private static PlayData MapPlayData(PlayEntity playEntity, bool isOffense)
+        {
+            return new PlayData()
+            {
+                OffensivePlayData = isOffense ? new OffensivePlayData()
+                {
+                    AirYards = playEntity.AirYards ?? 0
+                }
+                :
+                null,
+                DefensivePlayData = !isOffense ? new DefensivePlayData()
+                {
+                    Sacks = playEntity.Sack ?? 0
+                }
+                :
+                null
+            };
         }
     }
 }
