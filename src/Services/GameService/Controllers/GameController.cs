@@ -1,7 +1,7 @@
-﻿using Football.Core.Interfaces;
+﻿using Football.Core.Interfaces.Models;
+using Football.Core.Persistence.Interfaces.DataProviders;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -10,18 +10,18 @@ namespace Football.Services.GameService.Controllers
     [Route("api/football/games")]
     public class GameController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly IFootballDataProvider _dataProvider;
 
-        public GameController(IRepository repository)
+        public GameController(IFootballDataProvider repository)
         {
-            _repository = repository;
+            _dataProvider = repository;
         }
 
         [EnableCors("CorsPolicy")]
         [HttpGet("week/{weekId}")]
         public async Task<ActionResult> GetGamesByWeek(int weekId)
         {
-            ReadOnlyCollection<IGame> games = await _repository.GetGamesByWeek(weekId);
+            ReadOnlyCollection<IGame> games = await _dataProvider.GetGamesByWeek(weekId);
 
             return Ok(games);
         }

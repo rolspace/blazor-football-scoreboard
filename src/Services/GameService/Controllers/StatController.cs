@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Football.Core.Interfaces;
+﻿using Football.Core.Models;
+using Football.Core.Persistence.Interfaces.DataProviders;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Football.Services.GameService.Controllers
@@ -9,21 +7,19 @@ namespace Football.Services.GameService.Controllers
     [Route("api/football/stats")]
     public class StatController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly IFootballDataProvider _dataProvider;
 
-        public StatController(IRepository repository)
+        public StatController(IFootballDataProvider repository)
         {
-            _repository = repository;
+            _dataProvider = repository;
         }
 
-        [HttpGet("{gameId}/{team}")]
-        public async Task<ActionResult> GetStatsByGameAndTeam(int gameId, string team)
+        [HttpPatch]
+        public ActionResult Patch([FromBody] Play play)
         {
-            ReadOnlyCollection<IStat> stats = await _repository.GetStatsByGameAndTeam(gameId, team);
+            // await _dataProvider.SaveStat(currentStat);
 
-            return Ok(stats);
+            return Ok();
         }
-
-        // WRITE PATCH METHOD
     }
 }

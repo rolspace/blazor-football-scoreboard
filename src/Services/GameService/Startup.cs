@@ -1,4 +1,4 @@
-using Football.Core.Interfaces;
+using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql;
 using Football.Core.Persistence.MySql.Contexts;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace Football.Services.GameService
 {
@@ -28,7 +27,7 @@ namespace Football.Services.GameService
             services.AddDbContext<FootballDbContext>(options =>
                 options.UseMySQL(Configuration.GetConnectionString("FootballDbContext")));
 
-            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
 
             services.AddCors(options =>
             {
