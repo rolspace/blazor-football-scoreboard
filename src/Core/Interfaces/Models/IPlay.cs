@@ -42,6 +42,8 @@
 
     public interface ISpecialPlayData
     {
+        int ReturnYards { get; set; }
+
         int Punts { get; set; }
     }
 }

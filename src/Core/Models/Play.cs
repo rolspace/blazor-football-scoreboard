@@ -49,6 +49,8 @@ namespace Football.Core.Models
 
     public class SpecialPlayData : ISpecialPlayData
     {
+        public int ReturnYards { get; set; }
+
         public int Punts { get; set; }
     }
 }
