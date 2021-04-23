@@ -23,7 +23,7 @@ namespace Football.Workers.GameWorker
 
         class GameTime
         {
-            public int Current = 3600;
+            public int Counter = 3600;
         } 
 
         public Worker(IServiceScopeFactory scopeFactory, ILogger<Worker> logger, IConfiguration config)
@@ -84,12 +84,12 @@ namespace Football.Workers.GameWorker
         private async void DoWork(object state)
         {
             var gameTime = state as GameTime;
-            var pastGameTime = gameTime.Current;
-            Interlocked.Decrement(ref gameTime.Current);
+            var pastGameTime = gameTime.Counter;
+            Interlocked.Decrement(ref gameTime.Counter);
 
             try
             {
-                var requestUrl = $"http://localhost:2500/api/football/plays/week/1/{pastGameTime}/{gameTime.Current}";
+                var requestUrl = $"http://localhost:2500/api/football/plays/week/1/{pastGameTime}/{gameTime.Counter}";
                 HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
@@ -98,13 +98,10 @@ namespace Football.Workers.GameWorker
                     PropertyNameCaseInsensitive = true
                 });
 
-                if (plays.Count > 0)
+                foreach (var play in plays)
                 {
-                    foreach (var play in plays)
-                    {
-                        _logger.LogInformation(play.ToString());
-                        await _hubConnection.SendAsync("SendPlay", play);
-                    }
+                    _logger.LogInformation(play.ToString());
+                    await _hubConnection.SendAsync("SendPlay", play);
                 }
             }
             catch (Exception ex)
