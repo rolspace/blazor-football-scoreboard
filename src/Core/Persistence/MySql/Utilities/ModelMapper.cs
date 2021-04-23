@@ -26,8 +26,6 @@ namespace Football.Core.Persistence.MySql.Utilities
         {
             if (playEntity == null) return null;
 
-            bool isOffense = playEntity.Posteam == playEntity.HomeTeam;
-
             var play = new Play
             {
                 Id = playEntity.Id,
@@ -42,8 +40,8 @@ namespace Football.Core.Persistence.MySql.Utilities
                     AwayTeam = playEntity.AwayTeam,
                     Week = playEntity.Week,
                 },
-                HomePlayData = MapPlayData(playEntity, isOffense),
-                AwayPlayData = MapPlayData(playEntity, isOffense),
+                HomePlayLog = MapPlayStats(playEntity, playEntity.IsHomeTeamOnOffense, playEntity.IsHomeTeamReceiving, playEntity.IsSpecialTeamsPlay),
+                AwayPlayLog = MapPlayStats(playEntity, playEntity.IsAwayTeamOnOffense, playEntity.IsAwayTeamReceiving, playEntity.IsSpecialTeamsPlay),
             };
 
             return play;
@@ -63,19 +61,26 @@ namespace Football.Core.Persistence.MySql.Utilities
             return stat;
         }
 
-        private static PlayData MapPlayData(PlayEntity playEntity, bool isOffense)
+        private static PlayLog MapPlayStats(PlayEntity playEntity, bool isOffense, bool isReceiving, bool isSpecialTeamsPlay)
         {
-            return new PlayData()
+            return new PlayLog()
             {
-                OffensivePlayData = isOffense ? new OffensivePlayData()
+                OffensePlayLog = isOffense && !isSpecialTeamsPlay ? new OffensePlayLog()
                 {
                     AirYards = playEntity.AirYards ?? 0
                 }
                 :
                 null,
-                DefensivePlayData = !isOffense ? new DefensivePlayData()
+                DefensePlayLog = !isOffense && !isSpecialTeamsPlay ? new DefensePlayLog()
                 {
                     Sacks = playEntity.Sack ?? 0
+                }
+                :
+                null,
+                SpecialPlayLog = isSpecialTeamsPlay ? new SpecialPlayLog()
+                {
+                    ReturnYards = isReceiving ? playEntity.ReturnYards ?? 0 : 0,
+                    Punts = !isReceiving && Convert.ToBoolean(playEntity.PuntAttempt) ? 1 : 0
                 }
                 :
                 null

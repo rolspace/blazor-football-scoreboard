@@ -16,31 +16,31 @@
 
         IGame Game { get; set; }
 
-        IPlayData HomePlayData { get; set; }
+        IPlayLog HomePlayLog { get; set; }
 
-        IPlayData AwayPlayData { get; set; }
+        IPlayLog AwayPlayLog { get; set; }
     }
 
-    public interface IPlayData
+    public interface IPlayLog
     {
-        IOffensivePlayData OffensivePlayData { get; set; }
+        IOffensePlayLog OffensePlayLog { get; set; }
 
-        IDefensivePlayData DefensivePlayData { get; set; }
+        IDefensePlayLog DefensePlayLog { get; set; }
 
-        ISpecialPlayData SpecialPlayData { get; set; }
+        ISpecialPlayLog SpecialPlayLog { get; set; }
     }
 
-    public interface IOffensivePlayData
+    public interface IOffensePlayLog
     {
         int AirYards { get; set; }
     }
 
-    public interface IDefensivePlayData
+    public interface IDefensePlayLog
     {
         int Sacks { get; set; }
     }
 
-    public interface ISpecialPlayData
+    public interface ISpecialPlayLog
     {
         int ReturnYards { get; set; }
 

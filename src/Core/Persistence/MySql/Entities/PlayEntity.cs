@@ -1,6 +1,6 @@
 ﻿namespace Football.Core.Persistence.MySql.Entities
 {
-    public class PlayEntity
+    public partial class PlayEntity
     {
         public virtual GameEntity Game { get; set; }
 
