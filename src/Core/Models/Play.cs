@@ -30,11 +30,11 @@ namespace Football.Core.Models
 
     public class PlayLog : IPlayLog
     {
-        public IOffensePlayLog OffensePlayLog { get; set; }
+        public OffensePlayLog OffensePlayLog { get; set; }
 
-        public IDefensePlayLog DefensePlayLog { get; set; }
+        public DefensePlayLog DefensePlayLog { get; set; }
 
-        public ISpecialPlayLog SpecialPlayLog { get; set; }
+        public SpecialPlayLog SpecialPlayLog { get; set; }
     }
 
     public class OffensePlayLog : IOffensePlayLog

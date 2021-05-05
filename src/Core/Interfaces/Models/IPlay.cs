@@ -1,4 +1,6 @@
-﻿namespace Football.Core.Interfaces.Models
+﻿using Football.Core.Models;
+
+namespace Football.Core.Interfaces.Models
 {
     public interface IPlay
     {
@@ -23,11 +25,6 @@
 
     public interface IPlayLog
     {
-        IOffensePlayLog OffensePlayLog { get; set; }
-
-        IDefensePlayLog DefensePlayLog { get; set; }
-
-        ISpecialPlayLog SpecialPlayLog { get; set; }
     }
 
     public interface IOffensePlayLog
