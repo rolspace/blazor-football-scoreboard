@@ -695,6 +695,12 @@ namespace Football.Core.Persistence.MySql.Contexts
 
                 entity.Property(e => e.AirYards).HasColumnName("air_yards");
 
+                entity.Property(e => e.Punts).HasColumnName("punts");
+
+                entity.Property(e => e.ReturnYards).HasColumnName("return_yards");
+
+                entity.Property(e => e.Sacks).HasColumnName("sacks");
+
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.Stat)
                     .HasForeignKey(d => d.GameId)

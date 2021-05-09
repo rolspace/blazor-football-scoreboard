@@ -9,5 +9,11 @@ namespace Football.Core.Models
         public string Team { get; set; }
 
         public int AirYards { get; set; }
+
+        public int Sacks { get; set; }
+
+        public int Punts { get; set; }
+
+        public int ReturnYards { get; set; }
     }
 }

@@ -7,5 +7,11 @@
         string Team { get; set; }
 
         int AirYards { get; set; }
+
+        int Sacks { get; set; }
+
+        int Punts { get; set; }
+
+        int ReturnYards { get; set; }
     }
 }
