@@ -1,23 +1,50 @@
 ﻿using Football.Core.Models;
 using Football.Core.Persistence.Interfaces.DataProviders;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Football.Services.GameService.Controllers
 {
-    [Route("api/football/stats")]
+    [Route("api/football/stat")]
     public class StatController : Controller
     {
+        private readonly ILogger<StatController> _logger;
         private readonly IFootballDataProvider _dataProvider;
 
-        public StatController(IFootballDataProvider repository)
+        public StatController(IFootballDataProvider dataProvider, ILogger<StatController> logger)
         {
-            _dataProvider = repository;
+            _dataProvider = dataProvider;
+            _logger = logger;
         }
 
-        [HttpPatch]
-        public ActionResult Patch([FromBody] Play play)
+        [EnableCors("CorsPolicy")]
+        [HttpPut("{gameId}/{team}")]
+        public ActionResult PutStat(int gameId, string team, [FromBody] PlayLog playLog)
         {
-            // await _dataProvider.SaveStat(currentStat);
+            var stat = new Stat
+            {
+                GameId = gameId,
+                Team = team
+            };
+
+            if (playLog.OffensePlayLog != null)
+            {
+                stat.AirYards = playLog.OffensePlayLog.AirYards;
+            }
+
+            if (playLog.DefensePlayLog != null)
+            {
+                stat.Sacks = playLog.DefensePlayLog.Sacks;
+            }
+
+            if (playLog.SpecialPlayLog != null)
+            {
+                stat.Punts = playLog.SpecialPlayLog.Punts;
+                stat.ReturnYards = playLog.SpecialPlayLog.ReturnYards;
+            }
+
+            _dataProvider.SaveStat(stat);
 
             return Ok();
         }
