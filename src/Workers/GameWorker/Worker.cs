@@ -1,17 +1,17 @@
-using System;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Text.Json;
+using Football.Core.Converters;
+using Football.Core.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Football.Core.Models;
+using System;
 using System.Collections.Generic;
-using Football.Workers.GameWorker.Converters;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Football.Workers.GameWorker
 {
@@ -23,7 +23,7 @@ namespace Football.Workers.GameWorker
         private Timer _gameTimer;
         private HttpClient _httpClient;
 
-        private static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
+        private static JsonSerializerOptions jsonSerializerOptions = new()
         {
             Converters =
             {

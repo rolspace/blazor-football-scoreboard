@@ -4,7 +4,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Football.Workers.GameWorker.Converters
+namespace Football.Core.Converters
 {
     public class GameConverter : JsonConverter<IGame>
     {
@@ -13,7 +13,7 @@ namespace Football.Workers.GameWorker.Converters
             if (reader.TokenType != JsonTokenType.StartObject) throw new JsonException();
             if (reader.TokenType == JsonTokenType.Null) return null;
 
-            Game game = new();
+            var game = new Game();
 
             while (reader.Read())
             {
