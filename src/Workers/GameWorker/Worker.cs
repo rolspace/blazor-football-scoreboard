@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Football.Core.Models;
 using System.Collections.Generic;
+using Football.Workers.GameWorker.Converters;
 
 namespace Football.Workers.GameWorker
 {
@@ -21,7 +23,16 @@ namespace Football.Workers.GameWorker
         private Timer _gameTimer;
         private HttpClient _httpClient;
 
-        class GameTime
+        private static JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
+        {
+            Converters =
+            {
+                new GameConverter()
+            },
+            PropertyNameCaseInsensitive = true
+        };
+
+        internal class GameTime
         {
             public int Counter = 3600;
         } 
@@ -84,23 +95,25 @@ namespace Football.Workers.GameWorker
         private async void DoWork(object state)
         {
             var gameTime = state as GameTime;
-            var pastGameTime = gameTime.Counter;
+            int pastGameTime = gameTime.Counter;
             Interlocked.Decrement(ref gameTime.Counter);
 
             try
             {
-                var requestUrl = $"http://localhost:2500/api/football/plays/week/1/{pastGameTime}/{gameTime.Counter}";
+                string requestUrl = $"http://localhost:2500/api/football/plays/1/{pastGameTime}/{gameTime.Counter}";
                 HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
-                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
 
-                foreach (var play in plays)
+                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse, new JsonSerializerOptions(jsonSerializerOptions));
+
+                foreach (Play play in plays)
                 {
                     _logger.LogInformation(play.ToString());
+
+                    await _httpClient.PutAsJsonAsync($"http://localhost:2500/api/football/stat/{play.Game.Id}/{play.Game.HomeTeam}", play.HomePlayLog);
+                    await _httpClient.PutAsJsonAsync($"http://localhost:2500/api/football/stat/{play.Game.Id}/{play.Game.AwayTeam}", play.AwayPlayLog);
+
                     await _hubConnection.SendAsync("SendPlay", play);
                 }
             }
