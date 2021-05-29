@@ -3,20 +3,20 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Football.Services.GameService.Converters
+namespace Football.Core.Converters
 {
-    public class SpecialPlayLogConverter : JsonConverter<SpecialPlayLog>
+    public class OffensePlayLogConverter : JsonConverter<OffensePlayLog>
     {
-        public override SpecialPlayLog Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override OffensePlayLog Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject) throw new JsonException();
             if (reader.TokenType == JsonTokenType.Null) return null;
 
-            SpecialPlayLog specialPlayLog = new();
+            var offensePlayLog = new OffensePlayLog();
 
             while (reader.Read())
             {
-                if (reader.TokenType == JsonTokenType.EndObject) return specialPlayLog;
+                if (reader.TokenType == JsonTokenType.EndObject) return offensePlayLog;
 
                 if (reader.TokenType == JsonTokenType.PropertyName)
                 {
@@ -25,11 +25,10 @@ namespace Football.Services.GameService.Converters
 
                     switch (propertyName)
                     {
-                        case "punts":
-                            specialPlayLog.Punts = reader.GetInt32();
+                        case "airYards":
+                            offensePlayLog.AirYards = reader.GetInt32();
                             break;
-                        case "returnYards":
-                            specialPlayLog.ReturnYards = reader.GetInt32();
+                        default:
                             break;
                     }
                 }
@@ -38,7 +37,7 @@ namespace Football.Services.GameService.Converters
             throw new JsonException();
         }
 
-        public override void Write(Utf8JsonWriter writer, SpecialPlayLog value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, OffensePlayLog value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }

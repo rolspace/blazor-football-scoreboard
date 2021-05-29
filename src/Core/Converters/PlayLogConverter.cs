@@ -3,7 +3,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Football.Services.GameService.Converters
+namespace Football.Core.Converters
 {
     public class PlayLogConverter : JsonConverter<PlayLog>
     {
@@ -22,7 +22,7 @@ namespace Football.Services.GameService.Converters
             if (reader.TokenType != JsonTokenType.StartObject) throw new JsonException();
             if (reader.TokenType == JsonTokenType.Null) return null;
 
-            PlayLog playLog = new();
+            var playLog = new PlayLog();
 
             while (reader.Read())
             {

@@ -3,20 +3,20 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Football.Services.GameService.Converters
+namespace Football.Core.Converters
 {
-    public class OffensePlayLogConverter : JsonConverter<OffensePlayLog>
+    public class DefensePlayLogConverter : JsonConverter<DefensePlayLog>
     {
-        public override OffensePlayLog Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override DefensePlayLog Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject) throw new JsonException();
             if (reader.TokenType == JsonTokenType.Null) return null;
 
-            OffensePlayLog offensePlayLog = new();
+            var defensePlayLog = new DefensePlayLog();
 
             while (reader.Read())
             {
-                if (reader.TokenType == JsonTokenType.EndObject) return offensePlayLog;
+                if (reader.TokenType == JsonTokenType.EndObject) return defensePlayLog;
 
                 if (reader.TokenType == JsonTokenType.PropertyName)
                 {
@@ -25,8 +25,8 @@ namespace Football.Services.GameService.Converters
 
                     switch (propertyName)
                     {
-                        case "airYards":
-                            offensePlayLog.AirYards = reader.GetInt32();
+                        case "sacks":
+                            defensePlayLog.Sacks = reader.GetInt32();
                             break;
                         default:
                             break;
@@ -37,7 +37,7 @@ namespace Football.Services.GameService.Converters
             throw new JsonException();
         }
 
-        public override void Write(Utf8JsonWriter writer, OffensePlayLog value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, DefensePlayLog value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }

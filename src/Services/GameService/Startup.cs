@@ -1,7 +1,7 @@
+using Football.Core.Converters;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql;
 using Football.Core.Persistence.MySql.Contexts;
-using Football.Services.GameService.Converters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
