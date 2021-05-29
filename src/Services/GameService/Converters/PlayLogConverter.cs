@@ -7,7 +7,7 @@ namespace Football.Services.GameService.Converters
 {
     public class PlayLogConverter : JsonConverter<PlayLog>
     {
-        private readonly JsonSerializerOptions serializerOptions = new JsonSerializerOptions
+        private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
         {
             Converters =
             {
@@ -36,13 +36,13 @@ namespace Football.Services.GameService.Converters
                     switch (propertyName)
                     {
                         case "offensePlayLog":
-                            playLog.OffensePlayLog = JsonSerializer.Deserialize<OffensePlayLog>(ref reader, serializerOptions);
+                            playLog.OffensePlayLog = JsonSerializer.Deserialize<OffensePlayLog>(ref reader, jsonSerializerOptions);
                             break;
                         case "defensePlayLog":
-                            playLog.DefensePlayLog = JsonSerializer.Deserialize<DefensePlayLog>(ref reader, serializerOptions);
+                            playLog.DefensePlayLog = JsonSerializer.Deserialize<DefensePlayLog>(ref reader, jsonSerializerOptions);
                             break;
                         case "specialPlayLog":
-                            playLog.SpecialPlayLog = JsonSerializer.Deserialize<SpecialPlayLog>(ref reader, serializerOptions);
+                            playLog.SpecialPlayLog = JsonSerializer.Deserialize<SpecialPlayLog>(ref reader, jsonSerializerOptions);
                             break;
                     }
                 }
