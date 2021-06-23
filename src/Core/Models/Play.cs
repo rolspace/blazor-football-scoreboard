@@ -1,8 +1,6 @@
-﻿using Football.Core.Interfaces.Models;
-
-namespace Football.Core.Models
+﻿namespace Football.Core.Models
 {
-    public class Play : IPlay
+    public class Play
     {
         public int Id { get; set; }
 
@@ -16,11 +14,11 @@ namespace Football.Core.Models
 
         public string Description { get; set; }
 
-        public IGame Game { get; set; }
+        public Game Game { get; set; }
 
-        public IPlayLog HomePlayLog { get; set; }
+        public PlayLog HomePlayLog { get; set; }
 
-        public IPlayLog AwayPlayLog { get; set; }
+        public PlayLog AwayPlayLog { get; set; }
 
         public override string ToString()
         {
@@ -28,7 +26,7 @@ namespace Football.Core.Models
         }
     }
 
-    public class PlayLog : IPlayLog
+    public class PlayLog
     {
         public OffensePlayLog OffensePlayLog { get; set; }
 
@@ -37,17 +35,17 @@ namespace Football.Core.Models
         public SpecialPlayLog SpecialPlayLog { get; set; }
     }
 
-    public class OffensePlayLog : IOffensePlayLog
+    public class OffensePlayLog
     {
         public int AirYards { get; set; }
     }
 
-    public class DefensePlayLog : IDefensePlayLog
+    public class DefensePlayLog
     {
         public int Sacks { get; set; }
     }
 
-    public class SpecialPlayLog : ISpecialPlayLog
+    public class SpecialPlayLog
     {
         public int ReturnYards { get; set; }
 

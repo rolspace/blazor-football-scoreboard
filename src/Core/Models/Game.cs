@@ -1,8 +1,8 @@
-﻿using Football.Core.Interfaces.Models;
+﻿using Football.Core.Models;
 
 namespace Football.Core.Models
 {
-    public class Game : IGame
+    public class Game
     {
         public int Id { get; set; }
 

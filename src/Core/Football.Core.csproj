@@ -8,16 +8,12 @@
     <Folder Include="Models\" />
     <Folder Include="Persistence\" />
     <Folder Include="Persistence\MySql\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Interfaces\Models\" />
     <Folder Include="Persistence\Interfaces\" />
     <Folder Include="Persistence\Interfaces\DataProviders\" />
-    <Folder Include="Converters\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.1" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.20" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
 </Project>

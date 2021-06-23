@@ -1,4 +1,4 @@
-﻿using Football.Core.Interfaces.Models;
+﻿using Football.Core.Models;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql.Contexts;
 using Football.Core.Persistence.MySql.Entities;
@@ -19,9 +19,9 @@ namespace Football.Core.Persistence.MySql
             _dbContext = dbContext;
         }
 
-        public async Task<ReadOnlyCollection<IGame>> GetGamesByWeek(int week)
+        public async Task<ReadOnlyCollection<Game>> GetGamesByWeek(int week)
         {
-            IQueryable<IGame> games = _dbContext.Set<GameEntity>()
+            IQueryable<Game> games = _dbContext.Set<GameEntity>()
                 .AsQueryable()
                 .Where(g => g.Week == week)
                 .Select(g => ModelMapper.MapGameModel(g));
@@ -29,9 +29,9 @@ namespace Football.Core.Persistence.MySql
             return (await games.ToListAsync()).AsReadOnly();
         }
 
-        public async Task<ReadOnlyCollection<IPlay>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd)
+        public async Task<ReadOnlyCollection<Play>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd)
         {
-             IQueryable<IPlay> plays = _dbContext.Set<PlayEntity>()
+             IQueryable<Play> plays = _dbContext.Set<PlayEntity>()
                 .AsQueryable()
                 .Where(p => p.Week == week && p.GameSecondsRemaining <= gameSecondsRemainingStart && p.GameSecondsRemaining > gameSecondsRemainingEnd)
                 .Select(p => ModelMapper.MapPlayModel(p));;
@@ -39,22 +39,30 @@ namespace Football.Core.Persistence.MySql
             return (await plays.ToListAsync()).AsReadOnly();
         }
 
-        public async Task SaveStat(IStat stat)
+        public async Task SaveStat(Stat stat)
         {
+            var isNew = false;
             StatEntity statEntity = await _dbContext.Set<StatEntity>()
                 .AsQueryable()
                 .FirstOrDefaultAsync(s => s.GameId == stat.GameId && s.Team == stat.Team);
 
             if (statEntity == null)
             {
+                isNew = true;
+
                 statEntity = new StatEntity();
                 statEntity.GameId = stat.GameId;
                 statEntity.Team = stat.Team;
             }
 
+            
             statEntity.AirYards += stat.AirYards;
 
-            _dbContext.Update(statEntity);
+            if (isNew)
+            {
+                await _dbContext.AddAsync(statEntity);
+            }
+            
             await _dbContext.SaveChangesAsync();
         }
     }

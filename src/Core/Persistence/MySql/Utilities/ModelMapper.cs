@@ -1,5 +1,4 @@
-﻿using Football.Core.Interfaces.Models;
-using Football.Core.Models;
+﻿using Football.Core.Models;
 using Football.Core.Persistence.MySql.Entities;
 using System;
 
@@ -7,7 +6,7 @@ namespace Football.Core.Persistence.MySql.Utilities
 {
     public class ModelMapper
     {
-        public static IGame MapGameModel(GameEntity gameEntity)
+        public static Game MapGameModel(GameEntity gameEntity)
         {
             if (gameEntity == null) return null;
 
@@ -22,7 +21,7 @@ namespace Football.Core.Persistence.MySql.Utilities
             return game;
         }
 
-        public static IPlay MapPlayModel(PlayEntity playEntity)
+        public static Play MapPlayModel(PlayEntity playEntity)
         {
             if (playEntity == null) return null;
 
@@ -47,7 +46,7 @@ namespace Football.Core.Persistence.MySql.Utilities
             return play;
         }
 
-        public static IStat MapStatModel(StatEntity statEntity)
+        public static Stat MapStatModel(StatEntity statEntity)
         {
             if (statEntity == null) return null;
 

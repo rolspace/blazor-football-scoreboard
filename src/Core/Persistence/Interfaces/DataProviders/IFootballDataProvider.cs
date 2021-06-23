@@ -1,4 +1,4 @@
-﻿using Football.Core.Interfaces.Models;
+﻿using Football.Core.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -6,10 +6,10 @@ namespace Football.Core.Persistence.Interfaces.DataProviders
 {
     public interface IFootballDataProvider
     {
-        Task<ReadOnlyCollection<IGame>> GetGamesByWeek(int week);
+        Task<ReadOnlyCollection<Game>> GetGamesByWeek(int week);
 
-        Task<ReadOnlyCollection<IPlay>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd);
+        Task<ReadOnlyCollection<Play>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd);
 
-        Task SaveStat(IStat stat);
+        Task SaveStat(Stat stat);
     }
 }

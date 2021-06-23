@@ -1,8 +1,6 @@
-﻿using Football.Core.Interfaces.Models;
-
-namespace Football.Core.Models
+﻿namespace Football.Core.Models
 {
-    public class Stat : IStat
+    public class Stat
     {
         public int GameId { get; set; }
 
