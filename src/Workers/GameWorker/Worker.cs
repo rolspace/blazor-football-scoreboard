@@ -18,11 +18,13 @@ namespace Football.Workers.GameWorker
     {
         private readonly ILogger<Worker> _logger;
         private readonly HubConnection _hubConnection;
+        private readonly string _serviceEndpoint;
+
+        private static JsonSerializerOptions jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
         private bool _isHubActive;
         private Timer _gameTimer;
         private HttpClient _httpClient;
-
-        private static JsonSerializerOptions jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         internal class GameTime
         {
@@ -34,6 +36,7 @@ namespace Football.Workers.GameWorker
             try
             {
                 _logger = logger;
+                _serviceEndpoint = config["ServiceEndpoint"];
 
                 _httpClient = new HttpClient
                 {
@@ -92,7 +95,7 @@ namespace Football.Workers.GameWorker
 
             try
             {
-                string requestUrl = $"http://localhost:2500/api/football/plays/1/{pastGameTime}/{gameTime.Counter}";
+                string requestUrl = $"{_serviceEndpoint}/plays/1/{pastGameTime}/{gameTime.Counter}";
                 HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
@@ -103,8 +106,8 @@ namespace Football.Workers.GameWorker
                 {
                     _logger.LogInformation(play.ToString());
 
-                    await _httpClient.PutAsJsonAsync($"http://localhost:2500/api/football/stat/{play.Game.Id}/{play.Game.HomeTeam}", play.HomePlayLog);
-                    await _httpClient.PutAsJsonAsync($"http://localhost:2500/api/football/stat/{play.Game.Id}/{play.Game.AwayTeam}", play.AwayPlayLog);
+                    await _httpClient.PutAsJsonAsync($"{_serviceEndpoint}/stat/{play.Game.Id}/{play.Game.HomeTeam}", play.HomePlayLog);
+                    await _httpClient.PutAsJsonAsync($"{_serviceEndpoint}/stat/{play.Game.Id}/{play.Game.AwayTeam}", play.AwayPlayLog);
 
                     if (_isHubActive)
                     {
