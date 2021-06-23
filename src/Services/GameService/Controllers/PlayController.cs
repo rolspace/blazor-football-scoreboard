@@ -1,8 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Football.Core.Models;
+﻿using Football.Core.Models;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Football.Services.GameService.Controllers
 {

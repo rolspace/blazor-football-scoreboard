@@ -1,6 +1,5 @@
 ﻿using Football.Core.Models;
 using Football.Core.Persistence.Interfaces.DataProviders;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
