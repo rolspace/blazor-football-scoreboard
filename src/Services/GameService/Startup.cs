@@ -1,4 +1,3 @@
-using Football.Core.Converters;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql;
 using Football.Core.Persistence.MySql.Contexts;
@@ -40,9 +39,7 @@ namespace Football.Services.GameService
                 });
             });
 
-            services.AddControllers().AddJsonOptions(options => {
-                options.JsonSerializerOptions.Converters.Add(new PlayLogConverter());
-            });
+            services.AddControllers();
 
             services.AddSwaggerGen(c =>
             {

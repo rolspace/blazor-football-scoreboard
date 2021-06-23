@@ -3,6 +3,7 @@ using Football.Core.Persistence.Interfaces.DataProviders;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Football.Services.GameService.Controllers
 {
@@ -18,9 +19,8 @@ namespace Football.Services.GameService.Controllers
             _logger = logger;
         }
 
-        [EnableCors("CorsPolicy")]
         [HttpPut("{gameId}/{team}")]
-        public ActionResult PutStat(int gameId, string team, [FromBody] PlayLog playLog)
+        public async Task<ActionResult> PutStat(int gameId, string team, [FromBody] PlayLog playLog)
         {
             var stat = new Stat
             {
@@ -44,7 +44,7 @@ namespace Football.Services.GameService.Controllers
                 stat.ReturnYards = playLog.SpecialPlayLog.ReturnYards;
             }
 
-            _dataProvider.SaveStat(stat);
+            await _dataProvider.SaveStat(stat);
 
             return Ok();
         }

@@ -1,4 +1,4 @@
-﻿using Football.Core.Interfaces.Models;
+﻿using Football.Core.Models;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,7 @@ namespace Football.Services.GameService.Controllers
         [HttpGet("week/{weekId}")]
         public async Task<ActionResult> GetGamesByWeek(int weekId)
         {
-            ReadOnlyCollection<IGame> games = await _dataProvider.GetGamesByWeek(weekId);
+            ReadOnlyCollection<Game> games = await _dataProvider.GetGamesByWeek(weekId);
 
             return Ok(games);
         }
