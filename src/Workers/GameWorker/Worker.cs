@@ -1,4 +1,3 @@
-using Football.Core.Converters;
 using Football.Core.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
@@ -23,14 +22,7 @@ namespace Football.Workers.GameWorker
         private Timer _gameTimer;
         private HttpClient _httpClient;
 
-        private static JsonSerializerOptions jsonSerializerOptions = new()
-        {
-            Converters =
-            {
-                new GameConverter()
-            },
-            PropertyNameCaseInsensitive = true
-        };
+        private static JsonSerializerOptions jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         internal class GameTime
         {
@@ -105,7 +97,7 @@ namespace Football.Workers.GameWorker
 
                 string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse, new JsonSerializerOptions(jsonSerializerOptions));
+                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse, jsonSerializerOptions);
 
                 foreach (Play play in plays)
                 {
@@ -114,7 +106,10 @@ namespace Football.Workers.GameWorker
                     await _httpClient.PutAsJsonAsync($"http://localhost:2500/api/football/stat/{play.Game.Id}/{play.Game.HomeTeam}", play.HomePlayLog);
                     await _httpClient.PutAsJsonAsync($"http://localhost:2500/api/football/stat/{play.Game.Id}/{play.Game.AwayTeam}", play.AwayPlayLog);
 
-                    await _hubConnection.SendAsync("SendPlay", play);
+                    if (_isHubActive)
+                    {
+                        await _hubConnection.SendAsync("SendPlay", play);
+                    }
                 }
             }
             catch (Exception ex)
