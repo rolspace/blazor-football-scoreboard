@@ -11,10 +11,7 @@ namespace Football.Core.Persistence.MySql.Entities
         protected internal bool IsAwayTeamOnOffense => !IsHomeTeamOnOffense;
 
         [NotMapped]
-        protected internal bool IsSpecialTeamsPlay => PlayType == "kickoff" || PlayType == "punt";
-
-        [NotMapped]
-        protected internal bool IsHomeTeamReceiving
+        protected internal bool IsHomeTeamReceivingKickoffOrPunt
         {
             get
             {
@@ -26,6 +23,6 @@ namespace Football.Core.Persistence.MySql.Entities
         }
 
         [NotMapped]
-        protected internal bool IsAwayTeamReceiving => !IsHomeTeamReceiving;
+        protected internal bool IsAwayTeamReceivingKickoffOrPunt => !IsHomeTeamReceivingKickoffOrPunt;
     }
 }
