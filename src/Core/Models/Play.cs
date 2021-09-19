@@ -28,6 +28,8 @@
 
     public class PlayLog
     {
+        public int Score { get; set; }
+
         public OffensePlayLog OffensePlayLog { get; set; }
 
         public DefensePlayLog DefensePlayLog { get; set; }

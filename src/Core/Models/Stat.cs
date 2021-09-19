@@ -6,6 +6,8 @@
 
         public string Team { get; set; }
 
+        public int Score { get; set; }
+
         public int AirYards { get; set; }
 
         public int Sacks { get; set; }

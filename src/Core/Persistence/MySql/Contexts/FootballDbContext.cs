@@ -693,6 +693,8 @@ namespace Football.Core.Persistence.MySql.Contexts
                     .HasMaxLength(3)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Score).HasColumnName("score");
+
                 entity.Property(e => e.AirYards).HasColumnName("air_yards");
 
                 entity.Property(e => e.Punts).HasColumnName("punts");

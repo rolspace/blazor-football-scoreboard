@@ -24,7 +24,8 @@ namespace Football.Services.GameService.Controllers
             var stat = new Stat
             {
                 GameId = gameId,
-                Team = team
+                Team = team,
+                Score = playLog.Score
             };
 
             if (playLog.OffensePlayLog != null)
