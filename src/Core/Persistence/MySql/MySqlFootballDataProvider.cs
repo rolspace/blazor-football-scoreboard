@@ -55,8 +55,11 @@ namespace Football.Core.Persistence.MySql
                 statEntity.Team = stat.Team;
             }
 
-            
+            statEntity.Score = stat.Score;
             statEntity.AirYards += stat.AirYards;
+            statEntity.ReturnYards += stat.ReturnYards;
+            statEntity.Punts += stat.Punts;
+            statEntity.Sacks += stat.Sacks;
 
             if (isNew)
             {
