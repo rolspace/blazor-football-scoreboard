@@ -11,9 +11,9 @@ namespace Football.Services.GameService.Controllers
     {
         private readonly IFootballDataProvider _dataProvider;
 
-        public PlayController(IFootballDataProvider repository)
+        public PlayController(IFootballDataProvider dataProvider)
         {
-            _dataProvider = repository;
+            _dataProvider = dataProvider;
         }
 
         [HttpGet("{weekId}/{start}/{end}")]

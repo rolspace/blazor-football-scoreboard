@@ -12,9 +12,9 @@ namespace Football.Services.GameService.Controllers
     {
         private readonly IFootballDataProvider _dataProvider;
 
-        public GameController(IFootballDataProvider repository)
+        public GameController(IFootballDataProvider dataProvider)
         {
-            _dataProvider = repository;
+            _dataProvider = dataProvider;
         }
 
         [EnableCors("CorsPolicy")]
