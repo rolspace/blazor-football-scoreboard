@@ -75,7 +75,7 @@
 
             hubConnection.On<Play>("ReceivePlay", (play) =>
             {
-                var game = gameStates.Single(game => game.Id == play.GameId);
+                var game = gameStates.Single(game => game.Id == play.Game.Id);
                 game.HomeScore = play.HomeScore;
                 game.AwayScore = play.AwayScore;
                 game.Quarter = play.Quarter;
