@@ -4,9 +4,9 @@ using System;
 
 namespace Football.Core.Persistence.MySql.Utilities
 {
-    public class ModelMapper
+    public class EntityMapper
     {
-        public static Game MapGameModel(GameEntity gameEntity)
+        public static Game MapToGameModel(GameEntity gameEntity)
         {
             if (gameEntity == null) return null;
 
@@ -21,35 +21,7 @@ namespace Football.Core.Persistence.MySql.Utilities
             return game;
         }
 
-        public static Play MapPlayModel(PlayEntity playEntity)
-        {
-            if (playEntity == null) return null;
-
-            bool isOffensivePlay = playEntity.IsHomeTeamOnOffense || playEntity.IsAwayTeamOnOffense;
-            bool isSpecialTeamsPlay = playEntity.PlayType == "kickoff" || playEntity.PlayType == "punt";
-
-            var play = new Play
-            {
-                Id = playEntity.Id,
-                HomeScore = playEntity.TotalHomeScore ?? 0,
-                AwayScore = playEntity.TotalAwayScore ?? 0,
-                Description = playEntity.Desc,
-                Quarter = playEntity.Qtr,
-                QuarterSecondsRemaining = playEntity.QuarterSecondsRemaining ?? 0,
-                Game = new Game() {
-                    Id = playEntity.GameId,
-                    HomeTeam = playEntity.HomeTeam,
-                    AwayTeam = playEntity.AwayTeam,
-                    Week = playEntity.Week,
-                },
-                HomePlayLog = MapPlayStats(playEntity, playEntity.TotalHomeScore, isOffensivePlay, isSpecialTeamsPlay, playEntity.IsHomeTeamReceivingKickoffOrPunt),
-                AwayPlayLog = MapPlayStats(playEntity, playEntity.TotalAwayScore, isOffensivePlay, isSpecialTeamsPlay, playEntity.IsAwayTeamReceivingKickoffOrPunt),
-            };
-
-            return play;
-        }
-
-        public static Stat MapStatModel(StatEntity statEntity)
+        public static Stat MapToStatModel(StatEntity statEntity)
         {
             if (statEntity == null) return null;
 
@@ -67,7 +39,36 @@ namespace Football.Core.Persistence.MySql.Utilities
             return stat;
         }
 
-        private static PlayLog MapPlayStats(PlayEntity playEntity, int? score, bool isOffensivePlay, bool isSpecialTeamsPlay, bool isReceivingKickoffOrPunt)
+        public static Play MapToPlayModel(PlayEntity playEntity)
+        {
+            if (playEntity == null) return null;
+
+            bool isOffensivePlay = playEntity.IsHomeTeamOnOffense || playEntity.IsAwayTeamOnOffense;
+            bool isSpecialTeamsPlay = playEntity.PlayType == "kickoff" || playEntity.PlayType == "punt";
+
+            var play = new Play
+            {
+                Id = playEntity.Id,
+                HomeScore = playEntity.TotalHomeScore ?? 0,
+                AwayScore = playEntity.TotalAwayScore ?? 0,
+                Description = playEntity.Desc,
+                Quarter = playEntity.Qtr,
+                QuarterSecondsRemaining = playEntity.QuarterSecondsRemaining ?? 0,
+                Game = new Game()
+                {
+                    Id = playEntity.GameId,
+                    HomeTeam = playEntity.HomeTeam,
+                    AwayTeam = playEntity.AwayTeam,
+                    Week = playEntity.Week,
+                },
+                HomePlayLog = MapToPlayLog(playEntity, playEntity.TotalHomeScore, isOffensivePlay, isSpecialTeamsPlay, playEntity.IsHomeTeamReceivingKickoffOrPunt),
+                AwayPlayLog = MapToPlayLog(playEntity, playEntity.TotalAwayScore, isOffensivePlay, isSpecialTeamsPlay, playEntity.IsAwayTeamReceivingKickoffOrPunt),
+            };
+
+            return play;
+        }
+
+        private static PlayLog MapToPlayLog(PlayEntity playEntity, int? score, bool isOffensivePlay, bool isSpecialTeamsPlay, bool isReceivingKickoffOrPunt)
         {
             return new PlayLog()
             {

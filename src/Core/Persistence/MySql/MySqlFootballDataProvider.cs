@@ -24,7 +24,7 @@ namespace Football.Core.Persistence.MySql
             IQueryable<Game> games = _dbContext.Set<GameEntity>()
                 .AsQueryable()
                 .Where(g => g.Week == week)
-                .Select(g => ModelMapper.MapGameModel(g));
+                .Select(g => EntityMapper.MapToGameModel(g));
 
             return (await games.ToListAsync()).AsReadOnly();
         }
@@ -34,7 +34,7 @@ namespace Football.Core.Persistence.MySql
              IQueryable<Play> plays = _dbContext.Set<PlayEntity>()
                 .AsQueryable()
                 .Where(p => p.Week == week && p.GameSecondsRemaining <= gameSecondsRemainingStart && p.GameSecondsRemaining > gameSecondsRemainingEnd)
-                .Select(p => ModelMapper.MapPlayModel(p));
+                .Select(p => EntityMapper.MapToPlayModel(p));
 
             return (await plays.ToListAsync()).AsReadOnly();
         }
@@ -44,7 +44,7 @@ namespace Football.Core.Persistence.MySql
             IQueryable<Stat> stats = _dbContext.Set<StatEntity>()
                 .AsQueryable()
                 .Where(s => s.GameId == gameId)
-                .Select(s => ModelMapper.MapStatModel(s));
+                .Select(s => EntityMapper.MapToStatModel(s));
 
             return (await stats.ToListAsync()).AsReadOnly();
         }
