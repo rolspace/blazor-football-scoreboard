@@ -34,9 +34,19 @@ namespace Football.Core.Persistence.MySql
              IQueryable<Play> plays = _dbContext.Set<PlayEntity>()
                 .AsQueryable()
                 .Where(p => p.Week == week && p.GameSecondsRemaining <= gameSecondsRemainingStart && p.GameSecondsRemaining > gameSecondsRemainingEnd)
-                .Select(p => ModelMapper.MapPlayModel(p));;
+                .Select(p => ModelMapper.MapPlayModel(p));
 
             return (await plays.ToListAsync()).AsReadOnly();
+        }
+
+        public async Task<ReadOnlyCollection<Stat>> GetGameStats(int gameId)
+        {
+            IQueryable<Stat> stats = _dbContext.Set<StatEntity>()
+                .AsQueryable()
+                .Where(s => s.GameId == gameId)
+                .Select(s => ModelMapper.MapStatModel(s));
+
+            return (await stats.ToListAsync()).AsReadOnly();
         }
 
         public async Task SaveStat(Stat stat)

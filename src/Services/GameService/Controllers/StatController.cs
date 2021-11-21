@@ -2,6 +2,7 @@
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Football.Services.GameService.Controllers
@@ -16,6 +17,14 @@ namespace Football.Services.GameService.Controllers
         {
             _dataProvider = dataProvider;
             _logger = logger;
+        }
+
+        [HttpGet("{gameId}")]
+        public async Task<ActionResult> GetGameStats(int gameId)
+        {
+            ReadOnlyCollection<Stat> stats = await _dataProvider.GetGameStats(gameId);
+
+            return Ok(stats);
         }
 
         [HttpPut("{gameId}/{team}")]

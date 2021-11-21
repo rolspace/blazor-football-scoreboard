@@ -10,6 +10,8 @@ namespace Football.Core.Persistence.Interfaces.DataProviders
 
         Task<ReadOnlyCollection<Play>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd);
 
+        Task<ReadOnlyCollection<Stat>> GetGameStats(int gameId);
+
         Task SaveStat(Stat stat);
     }
 }

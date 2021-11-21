@@ -57,7 +57,11 @@ namespace Football.Core.Persistence.MySql.Utilities
             {
                 GameId = statEntity.GameId,
                 Team = statEntity.Team,
-                AirYards = statEntity.AirYards
+                AirYards = statEntity.AirYards,
+                Sacks = statEntity.Sacks,
+                Score = statEntity.Score,
+                Punts = statEntity.Punts,
+                ReturnYards = statEntity.ReturnYards
             };
 
             return stat;
