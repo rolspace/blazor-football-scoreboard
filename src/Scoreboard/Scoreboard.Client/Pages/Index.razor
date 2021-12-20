@@ -20,16 +20,16 @@
                 @foreach (var gameState in gameStates)
                 {
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <a href="game/@gameState.Id">
+                        <a href="game/@gameState.Id/@gameState.AwayTeam/@gameState.HomeTeam">
                             <div class="mdc-card score-card">
                                 <div class="mdc-card__primary">
                                     <div class="mdc-layout-grid__inner">
-                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.HomeTeam</div>
-                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10 score-card__score" style="display:inline-block">@gameState.HomeScore</div>
-                                    </div>
-                                    <div class="mdc-layout-grid__inner">
                                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.AwayTeam</div>
                                         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10 score-card__score" style="display:inline-block">@gameState.AwayScore</div>
+                                    </div>
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2" style="display:inline-block">@gameState.HomeTeam</div>
+                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10 score-card__score" style="display:inline-block">@gameState.HomeScore</div>
                                     </div>
                                 </div>
                                 <div class="mdc-card__secondary">
@@ -87,7 +87,7 @@
 
             await hubConnection.StartAsync();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
 
         }
