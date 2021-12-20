@@ -1,5 +1,6 @@
 ﻿using Football.Core.Models;
 using Football.Core.Persistence.Interfaces.DataProviders;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
@@ -19,6 +20,7 @@ namespace Football.Services.GameService.Controllers
             _logger = logger;
         }
 
+        [EnableCors("CorsPolicy")]
         [HttpGet("{gameId}")]
         public async Task<ActionResult> GetGameStats(int gameId)
         {
