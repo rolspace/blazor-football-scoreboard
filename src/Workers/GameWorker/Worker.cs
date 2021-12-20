@@ -40,7 +40,7 @@ namespace Football.Workers.GameWorker
 
                 _httpClient = new HttpClient
                 {
-                    Timeout = TimeSpan.FromSeconds(1)
+                    Timeout = TimeSpan.FromSeconds(2)
                 };
 
                 _hubConnection = new HubConnectionBuilder()
