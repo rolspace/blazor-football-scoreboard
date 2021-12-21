@@ -29,9 +29,11 @@ namespace Football.Core.Persistence.MySql.Utilities
             {
                 GameId = statEntity.GameId,
                 Team = statEntity.Team,
+                Score = statEntity.Score,
+                Quarter = statEntity.Quarter,
+                QuarterSecondsRemaining = statEntity.QuarterSecondsRemaining,
                 AirYards = statEntity.AirYards,
                 Sacks = statEntity.Sacks,
-                Score = statEntity.Score,
                 Punts = statEntity.Punts,
                 ReturnYards = statEntity.ReturnYards
             };
@@ -73,6 +75,8 @@ namespace Football.Core.Persistence.MySql.Utilities
             return new PlayLog()
             {
                 Score = (int)score,
+                Quarter = playEntity.Qtr,
+                QuarterSecondsRemaining = playEntity.QuarterSecondsRemaining ?? 0,
                 OffensePlayLog = isOffensivePlay && !isSpecialTeamsPlay ? new OffensePlayLog()
                 {
                     AirYards = playEntity.AirYards ?? 0

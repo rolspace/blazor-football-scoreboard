@@ -8,6 +8,10 @@
 
         public int Score { get; set; }
 
+        public int Quarter { get; set; }
+
+        public int QuarterSecondsRemaining { get; set; }
+
         public int AirYards { get; set; }
 
         public int Punts { get; set; }

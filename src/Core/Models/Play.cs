@@ -30,6 +30,10 @@
     {
         public int Score { get; set; }
 
+        public int Quarter { get; set; }
+
+        public int QuarterSecondsRemaining { get; set; }
+
         public OffensePlayLog OffensePlayLog { get; set; }
 
         public DefensePlayLog DefensePlayLog { get; set; }

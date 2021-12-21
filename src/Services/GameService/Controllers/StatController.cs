@@ -36,7 +36,9 @@ namespace Football.Services.GameService.Controllers
             {
                 GameId = gameId,
                 Team = team,
-                Score = playLog.Score
+                Score = playLog.Score,
+                Quarter = playLog.Quarter,
+                QuarterSecondsRemaining = playLog.QuarterSecondsRemaining
             };
 
             if (playLog.OffensePlayLog != null)

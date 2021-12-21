@@ -695,6 +695,10 @@ namespace Football.Core.Persistence.MySql.Contexts
 
                 entity.Property(e => e.Score).HasColumnName("score");
 
+                entity.Property(e => e.Quarter).HasColumnName("quarter");
+
+                entity.Property(e => e.QuarterSecondsRemaining).HasColumnName("quarter_seconds_remaining");
+
                 entity.Property(e => e.AirYards).HasColumnName("air_yards");
 
                 entity.Property(e => e.Punts).HasColumnName("punts");

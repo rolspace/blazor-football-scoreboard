@@ -65,6 +65,9 @@ namespace Football.Core.Persistence.MySql
                 statEntity.Team = stat.Team;
             }
 
+            statEntity.Quarter = stat.Quarter;
+            statEntity.QuarterSecondsRemaining = stat.QuarterSecondsRemaining;
+
             statEntity.Score = stat.Score;
             statEntity.AirYards += stat.AirYards;
             statEntity.ReturnYards += stat.ReturnYards;
