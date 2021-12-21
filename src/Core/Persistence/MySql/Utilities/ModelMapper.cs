@@ -45,8 +45,8 @@ namespace Football.Core.Persistence.MySql.Utilities
         {
             if (playEntity == null) return null;
 
-            bool isOffensivePlay = playEntity.IsHomeTeamOnOffense || playEntity.IsAwayTeamOnOffense;
-            bool isSpecialTeamsPlay = playEntity.PlayType == "kickoff" || playEntity.PlayType == "punt";
+            bool isHomeTeamPossession = playEntity.Posteam == playEntity.HomeTeam;
+            bool isAwayTeamPossession = playEntity.Posteam == playEntity.AwayTeam;
 
             var play = new Play
             {
@@ -63,27 +63,29 @@ namespace Football.Core.Persistence.MySql.Utilities
                     AwayTeam = playEntity.AwayTeam,
                     Week = playEntity.Week,
                 },
-                HomePlayLog = MapToPlayLog(playEntity, playEntity.TotalHomeScore, isOffensivePlay, isSpecialTeamsPlay, playEntity.IsHomeTeamReceivingKickoffOrPunt),
-                AwayPlayLog = MapToPlayLog(playEntity, playEntity.TotalAwayScore, isOffensivePlay, isSpecialTeamsPlay, playEntity.IsAwayTeamReceivingKickoffOrPunt),
+                HomePlayLog = MapToPlayLog(playEntity, playEntity.TotalHomeScore ?? 0, isHomeTeamPossession, playEntity.IsHomeTeamReceivingKickoffOrPunt, playEntity.IsHomeTeamPunting),
+                AwayPlayLog = MapToPlayLog(playEntity, playEntity.TotalAwayScore ?? 0, isAwayTeamPossession, playEntity.IsAwayTeamReceivingKickoffOrPunt, playEntity.IsAwayTeamPunting)
             };
 
             return play;
         }
 
-        private static PlayLog MapToPlayLog(PlayEntity playEntity, int? score, bool isOffensivePlay, bool isSpecialTeamsPlay, bool isReceivingKickoffOrPunt)
+        private static PlayLog MapToPlayLog(PlayEntity playEntity, int score, bool isInPossession, bool isReceivingKickoffOrPunt, bool isPunting)
         {
+            bool isSpecialTeamsPlay = playEntity.PlayType == "kickoff" || playEntity.PlayType == "punt";
+
             return new PlayLog()
             {
-                Score = (int)score,
+                Score = score,
                 Quarter = playEntity.Qtr,
                 QuarterSecondsRemaining = playEntity.QuarterSecondsRemaining ?? 0,
-                OffensePlayLog = isOffensivePlay && !isSpecialTeamsPlay ? new OffensePlayLog()
+                OffensePlayLog = isInPossession && !isSpecialTeamsPlay ? new OffensePlayLog()
                 {
                     AirYards = playEntity.AirYards ?? 0
                 }
                 :
                 null,
-                DefensePlayLog = !isOffensivePlay && !isSpecialTeamsPlay ? new DefensePlayLog()
+                DefensePlayLog = !isInPossession && !isSpecialTeamsPlay ? new DefensePlayLog()
                 {
                     Sacks = playEntity.Sack ?? 0
                 }
@@ -92,7 +94,7 @@ namespace Football.Core.Persistence.MySql.Utilities
                 SpecialPlayLog = isSpecialTeamsPlay ? new SpecialPlayLog()
                 {
                     ReturnYards = isReceivingKickoffOrPunt ? playEntity.ReturnYards ?? 0 : 0,
-                    Punts = !isReceivingKickoffOrPunt && Convert.ToBoolean(playEntity.PuntAttempt) ? 1 : 0
+                    Punts = isPunting && Convert.ToBoolean(playEntity.PuntAttempt) ? 1 : 0
                 }
                 :
                 null
