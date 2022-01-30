@@ -1,7 +1,7 @@
 ﻿using Football.Core.Models;
+using Football.Core.Persistence.Entities;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql.Contexts;
-using Football.Core.Persistence.MySql.Entities;
 using Football.Core.Persistence.MySql.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
@@ -51,30 +51,38 @@ namespace Football.Core.Persistence.MySql
 
         public async Task SaveStat(Stat stat)
         {
-            var isNew = false;
+            var shouldAddEntity = false;
+
             StatEntity statEntity = await _dbContext.Set<StatEntity>()
                 .AsQueryable()
                 .FirstOrDefaultAsync(s => s.GameId == stat.GameId && s.Team == stat.Team);
 
+            TimeEntity timeEntity = await _dbContext.Set<TimeEntity>()
+                .AsQueryable()
+                .FirstOrDefaultAsync(t => t.GameId == stat.GameId);
+
             if (statEntity == null)
             {
-                isNew = true;
+                shouldAddEntity = true;
 
-                statEntity = new StatEntity();
-                statEntity.GameId = stat.GameId;
-                statEntity.Team = stat.Team;
+                statEntity = new StatEntity
+                {
+                    GameId = stat.GameId,
+                    Team = stat.Team,
+                    Time = timeEntity ?? new TimeEntity()
+                };
             }
-
-            statEntity.Quarter = stat.Quarter;
-            statEntity.QuarterSecondsRemaining = stat.QuarterSecondsRemaining;
 
             statEntity.Score = stat.Score;
             statEntity.AirYards += stat.AirYards;
             statEntity.ReturnYards += stat.ReturnYards;
             statEntity.Punts += stat.Punts;
             statEntity.Sacks += stat.Sacks;
+            statEntity.Time.GameId = stat.GameId;
+            statEntity.Time.Quarter = stat.Quarter;
+            statEntity.Time.QuarterSecondsRemaining = stat.QuarterSecondsRemaining;
 
-            if (isNew)
+            if (shouldAddEntity)
             {
                 await _dbContext.AddAsync(statEntity);
             }
