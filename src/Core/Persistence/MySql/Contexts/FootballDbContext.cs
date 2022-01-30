@@ -1,4 +1,4 @@
-﻿using Football.Core.Persistence.MySql.Entities;
+﻿using Football.Core.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Football.Core.Persistence.MySql.Contexts
@@ -11,6 +11,8 @@ namespace Football.Core.Persistence.MySql.Contexts
 
         public virtual DbSet<StatEntity> Stat { get; set; }
 
+        public virtual DbSet<TimeEntity> Time { get; set; }
+
         public FootballDbContext() { }
 
         public FootballDbContext(DbContextOptions<FootballDbContext> options)
@@ -21,6 +23,8 @@ namespace Football.Core.Persistence.MySql.Contexts
             modelBuilder.Entity<GameEntity>(entity =>
             {
                 entity.ToTable("game");
+
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
@@ -41,10 +45,12 @@ namespace Football.Core.Persistence.MySql.Contexts
             {
                 entity.ToTable("play");
 
-                entity.HasIndex(e => e.GameId)
-                    .HasName("game_id");
+                entity.HasKey(e => e.Id).HasName("PRIMARY");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.HasIndex(e => e.GameId)
+                    .HasName("game_id");
 
                 entity.Property(e => e.AirYards).HasColumnName("air_yards");
 
@@ -675,16 +681,16 @@ namespace Football.Core.Persistence.MySql.Contexts
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.Play)
                     .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("play_ibfk_1");
             });
 
             modelBuilder.Entity<StatEntity>(entity =>
             {
+                entity.ToTable("stat");
+
                 entity.HasKey(e => new { e.GameId, e.Team })
                     .HasName("PRIMARY");
-
-                entity.ToTable("stat");
 
                 entity.Property(e => e.GameId).HasColumnName("game_id");
 
@@ -694,10 +700,6 @@ namespace Football.Core.Persistence.MySql.Contexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.Score).HasColumnName("score");
-
-                entity.Property(e => e.Quarter).HasColumnName("quarter");
-
-                entity.Property(e => e.QuarterSecondsRemaining).HasColumnName("quarter_seconds_remaining");
 
                 entity.Property(e => e.AirYards).HasColumnName("air_yards");
 
@@ -710,8 +712,33 @@ namespace Football.Core.Persistence.MySql.Contexts
                 entity.HasOne(d => d.Game)
                     .WithMany(p => p.Stat)
                     .HasForeignKey(d => d.GameId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("stat_ibfk_1");
+
+                entity.HasOne(d => d.Time)
+                    .WithMany(p => p.Stat)
+                    .HasForeignKey(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .HasConstraintName("stat_ibfk_2");
+            });
+
+            modelBuilder.Entity<TimeEntity>(entity =>
+            {
+                entity.ToTable("time");
+
+                entity.HasKey(e => e.GameId).HasName("PRIMARY");
+
+                entity.Property(e => e.GameId).HasColumnName("game_id");
+
+                entity.Property(e => e.Quarter).HasColumnName("quarter");
+
+                entity.Property(e => e.QuarterSecondsRemaining).HasColumnName("quarter_seconds_remaining");
+
+                entity.HasOne(d => d.Game)
+                    .WithOne(p => p.Time)
+                    .HasForeignKey<TimeEntity>(d => d.GameId)
+                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .HasConstraintName("time_ibfk_1");
             });
         }
     }

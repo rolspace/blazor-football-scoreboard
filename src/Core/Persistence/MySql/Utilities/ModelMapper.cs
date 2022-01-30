@@ -1,5 +1,5 @@
 ﻿using Football.Core.Models;
-using Football.Core.Persistence.MySql.Entities;
+using Football.Core.Persistence.Entities;
 using System;
 
 namespace Football.Core.Persistence.MySql.Utilities
@@ -30,8 +30,8 @@ namespace Football.Core.Persistence.MySql.Utilities
                 GameId = statEntity.GameId,
                 Team = statEntity.Team,
                 Score = statEntity.Score,
-                Quarter = statEntity.Quarter,
-                QuarterSecondsRemaining = statEntity.QuarterSecondsRemaining,
+                Quarter = statEntity.Time.Quarter,
+                QuarterSecondsRemaining = statEntity.Time.QuarterSecondsRemaining,
                 AirYards = statEntity.AirYards,
                 Sacks = statEntity.Sacks,
                 Punts = statEntity.Punts,
