@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Football.Core.Persistence.MySql.Entities
+namespace Football.Core.Persistence.Entities
 {
     public class GameEntity
     {
@@ -15,5 +15,7 @@ namespace Football.Core.Persistence.MySql.Entities
         public virtual ICollection<PlayEntity> Play { get; set; }
 
         public virtual ICollection<StatEntity> Stat { get; set; }
+
+        public virtual TimeEntity Time { get; set; }
     }
 }

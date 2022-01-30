@@ -1,4 +1,4 @@
-﻿namespace Football.Core.Persistence.MySql.Entities
+﻿namespace Football.Core.Persistence.Entities
 {
     public partial class PlayEntity
     {
