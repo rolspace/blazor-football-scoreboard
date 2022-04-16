@@ -12,7 +12,7 @@ services:
       MYSQL_DATABASE: footballdb
     volumes:
       - path/to/mysql:/var/lib/mysql
-      - data:/docker-entrypoint-initdb.d
+      - ./data:/docker-entrypoint-initdb.d
     networks:
       - db
 
