@@ -1,3 +1,8 @@
+using Football.Core.Persistence.Interfaces.DataProviders;
+using Football.Core.Persistence.MySql;
+using Football.Core.Persistence.MySql.Contexts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -15,6 +20,10 @@ namespace Football.Workers.GameWorker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    services.AddDbContext<FootballDbContext>(options => 
+                        options.UseMySQL(hostContext.Configuration.GetConnectionString("FootballDbContext")));
+
+                    services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
                 });
     }
 }
