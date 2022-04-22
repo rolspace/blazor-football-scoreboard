@@ -1,6 +1,7 @@
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql;
 using Football.Core.Persistence.MySql.Contexts;
+using Football.Services.GameService.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace Football.Services.GameService
 
             services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
 
+            services.AddSignalR();
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "CorsPolicy", (builder) =>
@@ -40,7 +42,6 @@ namespace Football.Services.GameService
             });
 
             services.AddControllers();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Service.Game", Version = "v1" });
@@ -64,6 +65,7 @@ namespace Football.Services.GameService
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<GameHub>("/hub/football/game");
                 endpoints.MapControllers();
             });
         }
