@@ -12,6 +12,6 @@ namespace Football.Core.Persistence.Interfaces.DataProviders
 
         Task<ReadOnlyCollection<Stat>> GetGameStats(int gameId);
 
-        Task SaveStat(Stat stat);
+        Task SaveStat(int gameId, string team, PlayLog playLog);
     }
 }

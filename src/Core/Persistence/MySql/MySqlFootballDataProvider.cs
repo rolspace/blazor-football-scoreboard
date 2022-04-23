@@ -4,6 +4,7 @@ using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql.Contexts;
 using Football.Core.Persistence.MySql.Utilities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,8 +50,23 @@ namespace Football.Core.Persistence.MySql
             return (await stats.ToListAsync()).AsReadOnly();
         }
 
-        public async Task SaveStat(Stat stat)
+        public async Task SaveStat(int gameId, string team, PlayLog playLog)
         {
+            if (playLog == null) throw new ArgumentNullException("playLog should not be null");
+
+            var stat = new Stat
+            {
+                GameId = gameId,
+                Team = team,
+                Score = playLog.Score,
+                Quarter = playLog.Quarter,
+                QuarterSecondsRemaining = playLog.QuarterSecondsRemaining,
+                AirYards = playLog.OffensePlayLog?.AirYards ?? 0,
+                Sacks = playLog.DefensePlayLog?.Sacks ?? 0,
+                Punts = playLog.SpecialPlayLog?.Punts ?? 0,
+                ReturnYards = playLog.SpecialPlayLog?.ReturnYards ?? 0
+            };
+
             var shouldAddEntity = false;
 
             StatEntity statEntity = await _dbContext.Set<StatEntity>()
