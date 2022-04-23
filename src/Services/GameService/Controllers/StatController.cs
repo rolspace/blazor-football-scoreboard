@@ -28,38 +28,5 @@ namespace Football.Services.GameService.Controllers
 
             return Ok(stats);
         }
-
-        [HttpPut("{gameId}/{team}")]
-        public async Task<ActionResult> PutStat(int gameId, string team, [FromBody] PlayLog playLog)
-        {
-            var stat = new Stat
-            {
-                GameId = gameId,
-                Team = team,
-                Score = playLog.Score,
-                Quarter = playLog.Quarter,
-                QuarterSecondsRemaining = playLog.QuarterSecondsRemaining
-            };
-
-            if (playLog.OffensePlayLog != null)
-            {
-                stat.AirYards = playLog.OffensePlayLog.AirYards;
-            }
-
-            if (playLog.DefensePlayLog != null)
-            {
-                stat.Sacks = playLog.DefensePlayLog.Sacks;
-            }
-
-            if (playLog.SpecialPlayLog != null)
-            {
-                stat.Punts = playLog.SpecialPlayLog.Punts;
-                stat.ReturnYards = playLog.SpecialPlayLog.ReturnYards;
-            }
-
-            await _dataProvider.SaveStat(stat);
-
-            return Ok();
-        }
     }
 }
