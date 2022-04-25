@@ -20,13 +20,9 @@ namespace Football.Workers.GameWorker
         private readonly ILogger<Worker> _logger;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly HubConnection _hubConnection;
-        private readonly string _serviceEndpoint;
-
-        private static JsonSerializerOptions jsonSerializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         private bool _isHubActive;
         private Timer _gameTimer;
-        private HttpClient _httpClient;
 
         internal class GameTime
         {
@@ -39,12 +35,6 @@ namespace Football.Workers.GameWorker
             {
                 _logger = logger;
                 _scopeFactory = scopeFactory;
-                _serviceEndpoint = config["ServiceEndpoint"];
-
-                _httpClient = new HttpClient
-                {
-                    Timeout = TimeSpan.FromSeconds(2)
-                };
 
                 _hubConnection = new HubConnectionBuilder()
                     .WithUrl(config["HubEndpoint"]).Build();
