@@ -1,4 +1,6 @@
 using Football.Core.Models;
+using Football.Core.Persistence.Interfaces.DataProviders;
+using Football.Core.Persistence.MySql.Contexts;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Football.Workers.GameWorker
     public class Worker : IHostedService, IAsyncDisposable
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly HubConnection _hubConnection;
         private readonly string _serviceEndpoint;
 
@@ -36,6 +38,7 @@ namespace Football.Workers.GameWorker
             try
             {
                 _logger = logger;
+                _scopeFactory = scopeFactory;
                 _serviceEndpoint = config["ServiceEndpoint"];
 
                 _httpClient = new HttpClient
@@ -90,28 +93,35 @@ namespace Football.Workers.GameWorker
         private async void DoWork(object state)
         {
             var gameTime = state as GameTime;
-            int pastGameTime = gameTime.Counter;
+            int previousTime = gameTime.Counter;
+
             Interlocked.Decrement(ref gameTime.Counter);
+            int currentTime = gameTime.Counter;
 
             try
             {
-                string requestUrl = $"{_serviceEndpoint}/plays/1/{pastGameTime}/{gameTime.Counter}";
-                HttpResponseMessage response = await _httpClient.GetAsync(requestUrl);
-
-                string jsonResponse = await response.Content.ReadAsStringAsync();
-
-                List<Play> plays = JsonSerializer.Deserialize<List<Play>>(jsonResponse, jsonSerializerOptions);
-
-                foreach (Play play in plays)
+                using (IServiceScope scope = _scopeFactory.CreateScope())
                 {
-                    _logger.LogInformation(play.ToString());
+                    var dbContext = scope.ServiceProvider.GetRequiredService<FootballDbContext>();
+                    IFootballDataProvider dataProvider = scope.ServiceProvider.GetRequiredService<IFootballDataProvider>();
 
-                    await _httpClient.PutAsJsonAsync($"{_serviceEndpoint}/stat/{play.Game.Id}/{play.Game.HomeTeam}", play.HomePlayLog);
-                    await _httpClient.PutAsJsonAsync($"{_serviceEndpoint}/stat/{play.Game.Id}/{play.Game.AwayTeam}", play.AwayPlayLog);
+                    IReadOnlyCollection<Play> plays = await dataProvider.GetPlaysByWeekAndGameTime(1, previousTime, currentTime);
 
-                    if (_isHubActive)
+                    foreach (Play play in plays)
                     {
-                        await _hubConnection.SendAsync("SendPlay", play);
+                        _logger.LogInformation(play.ToString());
+
+                        List<Task> tasks = new List<Task> {
+                            dataProvider.SaveStat(play.Game.Id, play.Game.HomeTeam, play.HomePlayLog),
+                            dataProvider.SaveStat(play.Game.Id, play.Game.AwayTeam, play.AwayPlayLog)
+                        };
+
+                        if (_isHubActive)
+                        {
+                            tasks.Add(_hubConnection.SendAsync("SendPlay", play));
+                        }
+
+                        await Task.WhenAll(tasks);
                     }
                 }
             }
