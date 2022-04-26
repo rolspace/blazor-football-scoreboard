@@ -36,8 +36,10 @@ namespace Football.Workers.GameWorker
                 _logger = logger;
                 _scopeFactory = scopeFactory;
 
+                var hubUri = new Uri(config["HubEndpoint"]);
+
                 _hubConnection = new HubConnectionBuilder()
-                    .WithUrl(config["HubEndpoint"]).Build();
+                    .WithUrl(hubUri).Build();
             }
             catch (Exception e)
             {
