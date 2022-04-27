@@ -9,6 +9,7 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 @inject ILoggerProvider LoggerProvider
+@inject Utils.AppSettings AppSettings
 
 <div>
     <div class="mdc-layout-grid__inner">
@@ -68,8 +69,10 @@
                 AwayScore = 0
             }).ToList();
 
+            Uri hubUri = new Uri(AppSettings.HubEndpoint);
+
             hubConnection = new HubConnectionBuilder()
-                .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub"))
+                .WithUrl(hubUri)
                 .ConfigureLogging(logging => logging.AddProvider(LoggerProvider))
                 .Build();
 
