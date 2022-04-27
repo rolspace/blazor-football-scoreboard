@@ -17,7 +17,6 @@ namespace Football.Services.GameService.Controllers
             _dataProvider = dataProvider;
         }
 
-        [EnableCors("CorsPolicy")]
         [HttpGet("week/{weekId}")]
         public async Task<ActionResult> GetGamesByWeek(int weekId)
         {

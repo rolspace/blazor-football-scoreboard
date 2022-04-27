@@ -29,18 +29,7 @@ namespace Football.Services.GameService
                 options.UseMySQL(Configuration.GetConnectionString("FootballDbContext")));
 
             services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
-
             services.AddSignalR();
-            services.AddCors(options =>
-            {
-                options.AddPolicy(name: "CorsPolicy", (builder) =>
-                {
-                    builder.WithOrigins("http://localhost:5001")
-                        .AllowAnyMethod()
-                        .WithHeaders(HeaderNames.ContentType);
-                });
-            });
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -60,7 +49,12 @@ namespace Football.Services.GameService
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors(builder => {
+                builder.WithOrigins("http://localhost:5001")
+                        .AllowAnyHeader()
+                        .WithMethods("GET", "POST")
+                        .AllowCredentials();
+            });
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

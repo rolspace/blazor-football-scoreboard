@@ -20,7 +20,6 @@ namespace Football.Services.GameService.Controllers
             _logger = logger;
         }
 
-        [EnableCors("CorsPolicy")]
         [HttpGet("{gameId}")]
         public async Task<ActionResult> GetGameStats(int gameId)
         {
