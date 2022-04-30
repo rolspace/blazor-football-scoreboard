@@ -18,6 +18,7 @@ namespace Scoreboard.Client
             builder.RootComponents.Add<App>("app");
             builder.Configuration.Bind(appSettings);
             builder.Services.AddSingleton(appSettings);
+
             builder.Services.AddTransient(sp =>
                 new HttpClient {
                     BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
