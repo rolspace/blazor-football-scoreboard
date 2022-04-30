@@ -1,4 +1,4 @@
-namespace Scoreboard.Client.Utils
+namespace Scoreboard.Client.Config
 {
     public class AppSettings
     {
