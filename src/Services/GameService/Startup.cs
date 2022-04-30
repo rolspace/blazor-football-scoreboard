@@ -31,6 +31,7 @@ namespace Football.Services.GameService
             services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
             services.AddSignalR();
             services.AddControllers();
+            services.AddHealthChecks();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Service.Game", Version = "v1" });
@@ -59,6 +60,7 @@ namespace Football.Services.GameService
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/health");
                 endpoints.MapHub<GameHub>("/hub/football/game");
                 endpoints.MapControllers();
             });
