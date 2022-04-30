@@ -9,6 +9,7 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 @inject ILoggerProvider LoggerProvider
+@inject ILogger<Index> logger
 @inject Config.AppSettings AppSettings
 
 <div>
@@ -92,7 +93,7 @@
         }
         catch (Exception ex)
         {
-
+            logger.LogError(ex.ToString());
         }
     }
 }
