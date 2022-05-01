@@ -36,6 +36,54 @@
         "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
       ],
       "problemMatcher": "$msCompile"
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build-gameservice: debug",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "blazornflscoreboard:dev",
+        "target": "base",
+        "dockerfile": "${workspaceFolder}/src/Services/GameService/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
+      }
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build-gameservice: release",
+      "dependsOn": ["build"],
+      "dockerBuild": {
+        "tag": "blazornflscoreboard:latest",
+        "dockerfile": "${workspaceFolder}/src/Services/GameService/Dockerfile",
+        "context": "${workspaceFolder}",
+        "pull": true
+      },
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run-gameservice: debug",
+      "dependsOn": ["docker-build: debug"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj",
+        "enableDebugging": true
+      }
+    },
+    {
+      "type": "docker-run",
+      "label": "docker-run-gameservice: release",
+      "dependsOn": ["docker-build: release"],
+      "dockerRun": {},
+      "netCore": {
+        "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
+      }
     }
   ]
 }
