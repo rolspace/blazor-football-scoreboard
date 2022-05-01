@@ -69,7 +69,7 @@
     {
       "type": "docker-run",
       "label": "docker-run-gameservice: debug",
-      "dependsOn": ["docker-build: debug"],
+      "dependsOn": ["docker-build-gameservice: debug"],
       "dockerRun": {},
       "netCore": {
         "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj",
@@ -79,8 +79,8 @@
     {
       "type": "docker-run",
       "label": "docker-run-gameservice: release",
-      "dependsOn": ["docker-build: release"],
       "dockerRun": {},
+      "dependsOn": ["docker-build-gameservice: release"],
       "netCore": {
         "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
       }
