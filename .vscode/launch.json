@@ -10,10 +10,8 @@
       "args": [],
       "cwd": "${workspaceFolder}/src/Services/GameService",
       "stopAtEntry": false,
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+https?://\\S+",
-        "uriFormat": "https://localhost:11517/swagger"
+      "launchBrowser": {
+        "enabled": false
       },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -29,6 +27,9 @@
       "type": "docker",
       "request": "launch",
       "preLaunchTask": "docker-run-gameservice: debug",
+      "launchBrowser": {
+        "enabled": false
+      },
       "netCore": {
         "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
       }
