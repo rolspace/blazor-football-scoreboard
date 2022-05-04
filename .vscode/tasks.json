@@ -87,6 +87,10 @@
           {
             "hostPort": 11517,
             "containerPort": 11517
+          },
+          {
+            "hostPort": 2500,
+            "containerPort": 2500
           }
         ]
       },
