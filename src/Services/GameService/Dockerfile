@@ -1,7 +1,9 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
+RUN apt-get update && apt-get install -y curl
 WORKDIR /app
 EXPOSE 2500
 EXPOSE 11517
+HEALTHCHECK CMD curl --fail http://localhost:2500/health || exit
 
 ENV ASPNETCORE_URLS=https://+:11517;http://+:2500
 
@@ -24,5 +26,4 @@ RUN dotnet publish "Football.Services.GameService.csproj" -c Release -o /app/pub
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-HEALTHCHECK CMD curl --fail http://localhost:5000/health || exit
 ENTRYPOINT ["dotnet", "Football.Services.GameService.dll"]
