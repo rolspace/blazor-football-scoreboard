@@ -74,6 +74,7 @@
         "env": {
           "ASPNETCORE_Kestrel__Certificates__Default__Password": "password",
           "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/aspnetapp.pfx",
+          "ASPNETCORE_ENVIRONMENT": "Development",
           "ConnectionStrings__FootballDbContext": "Server=host.docker.internal;Database=footballdb;Uid=root;Pwd=password;"
         },
         "volumes": [
