@@ -21,7 +21,6 @@ namespace Scoreboard.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
             services.AddMvc();
             services.AddResponseCompression(opts =>
             {
@@ -45,11 +44,9 @@ namespace Scoreboard.Server
             app.UseBlazorFrameworkFiles();
 
             app.UseRouting();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
-                endpoints.MapHub<GameHub>("/gamehub");
                 endpoints.MapFallbackToFile("index.html");
             });
         }
