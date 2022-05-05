@@ -42,7 +42,7 @@
       "label": "docker-build-gameservice: debug",
       "dependsOn": ["build"],
       "dockerBuild": {
-        "tag": "blazornflscoreboard:dev",
+        "tag": "blazornflscoreboard-gameservice:dev",
         "target": "base",
         "dockerfile": "${workspaceFolder}/src/Services/GameService/Dockerfile",
         "context": "${workspaceFolder}",
@@ -57,7 +57,7 @@
       "label": "docker-build-gameservice: release",
       "dependsOn": ["build"],
       "dockerBuild": {
-        "tag": "blazornflscoreboard:latest",
+        "tag": "blazornflscoreboard-gameservice:latest",
         "dockerfile": "${workspaceFolder}/src/Services/GameService/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
