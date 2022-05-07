@@ -115,6 +115,42 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
             }
+        },
+        {
+            "label": "build-gameworker",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish-gameworker",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch-gameworker",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }
