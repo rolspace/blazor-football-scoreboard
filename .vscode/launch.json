@@ -1,38 +1,38 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "GameService: .NET Core Launch",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build-gameservice",
-      "program": "${workspaceFolder}/src/Services/GameService/bin/Debug/net5.0/Football.Services.GameService.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/src/Services/GameService",
-      "stopAtEntry": false,
-      "launchBrowser": {
-        "enabled": false
-      },
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    {
-      "name": "GameService: .NET Core Attach",
-      "type": "coreclr",
-      "request": "attach"
-    },
-    {
-      "name": "GameService: Docker .NET Core Launch",
-      "type": "docker",
-      "request": "launch",
-      "preLaunchTask": "docker-run-gameservice: debug",
-      "launchBrowser": {
-        "enabled": false
-      },
-      "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
-      }
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GameService: .NET Core Launch",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-gameservice",
+            "program": "${workspaceFolder}/src/Services/GameService/bin/Debug/net5.0/Football.Services.GameService.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Services/GameService",
+            "stopAtEntry": false,
+            "launchBrowser": {
+                "enabled": false
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
+            "name": "GameService: .NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        },
+        {
+            "name": "GameService: Docker .NET Core Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run-gameservice: debug",
+            "launchBrowser": {
+                "enabled": false
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
+            }
+        }
+    ]
 }

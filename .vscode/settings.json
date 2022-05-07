@@ -1,9 +1,12 @@
 {
-  "prettier.enable": false,
-  "prettier.configPath": "",
-  "editor.defaultFormatter": "ms-dotnettools.csharp",
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "editor.detectIndentation": false
+    "prettier.enable": false,
+    "prettier.configPath": "",
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "editor.detectIndentation": false,
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
 }
