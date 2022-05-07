@@ -33,6 +33,24 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Services/GameService/Football.Services.GameService.csproj"
             }
+        },
+        {
+            "name": "GameWorker: .NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/src/Workers/GameWorker/bin/Debug/net5.0/Football.Workers.GameWorker.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Workers/GameWorker",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "GameWorker: .NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
         }
     ]
 }
