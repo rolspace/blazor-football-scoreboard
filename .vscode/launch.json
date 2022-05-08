@@ -18,11 +18,6 @@
             }
         },
         {
-            "name": "GameService: .NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
-        },
-        {
             "name": "GameService: Docker .NET Core Launch",
             "type": "docker",
             "request": "launch",
@@ -38,7 +33,7 @@
             "name": "GameWorker: .NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build-gameworker",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/src/Workers/GameWorker/bin/Debug/net5.0/Football.Workers.GameWorker.dll",
             "args": [],
@@ -48,7 +43,7 @@
             "stopAtEntry": false
         },
         {
-            "name": "GameWorker: .NET Core Attach",
+            "name": "Any Process: .NET Core Attach",
             "type": "coreclr",
             "request": "attach"
         }
