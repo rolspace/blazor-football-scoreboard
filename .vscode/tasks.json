@@ -151,6 +151,62 @@
                 "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-gamework: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "blazornflscoreboard-gameworker:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/src/Workers/GameWorker/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-gameworker: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "blazornflscoreboard-gameworker:latest",
+                "dockerfile": "${workspaceFolder}/src/Workers/GameWorker/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-gameworker: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-gameworker: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj"
+            }
         }
     ]
 }
