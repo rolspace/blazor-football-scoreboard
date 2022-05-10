@@ -191,7 +191,13 @@
             "dependsOn": [
                 "docker-build: debug"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development",
+                    "ConnectionStrings__FootballDbContext": "Server=host.docker.internal;Database=footballdb;Uid=root;Pwd=password;",
+                    "HubEndpoint": "https://localhost:11517/hub/football/game"
+                },
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj",
                 "enableDebugging": true
