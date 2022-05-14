@@ -41,7 +41,7 @@
             "type": "docker-build",
             "label": "docker-build-gameservice: debug",
             "dependsOn": [
-                "build"
+                "build-gameservice"
             ],
             "dockerBuild": {
                 "tag": "blazornflscoreboard-gameservice:dev",
@@ -58,7 +58,7 @@
             "type": "docker-build",
             "label": "docker-build-gameservice: release",
             "dependsOn": [
-                "build"
+                "build-gameservice"
             ],
             "dockerBuild": {
                 "tag": "blazornflscoreboard-gameservice:latest",
@@ -156,7 +156,7 @@
             "type": "docker-build",
             "label": "docker-build-gamework: debug",
             "dependsOn": [
-                "build"
+                "build-gameworker"
             ],
             "dockerBuild": {
                 "tag": "blazornflscoreboard-gameworker:dev",
@@ -173,7 +173,7 @@
             "type": "docker-build",
             "label": "docker-build-gameworker: release",
             "dependsOn": [
-                "build"
+                "build-gameworker"
             ],
             "dockerBuild": {
                 "tag": "blazornflscoreboard-gameworker:latest",

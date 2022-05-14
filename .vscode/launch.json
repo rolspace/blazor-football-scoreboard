@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "GameService: .NET Core Launch",
+            "name": "GameService: .NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-gameservice",
@@ -18,7 +18,7 @@
             }
         },
         {
-            "name": "GameService: Docker .NET Core Launch",
+            "name": "GameService: Docker .NET Core Launch (web)",
             "type": "docker",
             "request": "launch",
             "preLaunchTask": "docker-run-gameservice: debug",
