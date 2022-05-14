@@ -213,6 +213,42 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Workers/GameWorker/Football.Workers.GameWorker.csproj"
             }
+        },
+        {
+            "label": "build-scoreboard",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Scoreboard/Scoreboard.Server/Scoreboard.Server.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish-scoreboard",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/Scoreboard/Scoreboard.Server/Scoreboard.Server.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch-scoreboard",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "--project",
+                "${workspaceFolder}/src/Scoreboard/Scoreboard.Server/Scoreboard.Server.csproj"
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }
