@@ -50,7 +50,7 @@ namespace Football.Core.Persistence.MySql.Contexts
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.HasIndex(e => e.GameId)
-                    .HasName("game_id");
+                    .HasDatabaseName("play");
 
                 entity.Property(e => e.AirYards).HasColumnName("air_yards");
 
