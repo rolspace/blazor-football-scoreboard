@@ -27,7 +27,7 @@ namespace Football.Workers.GameWorker
         internal class GameTime
         {
             public int Counter = 3600;
-        } 
+        }
 
         public Worker(IServiceScopeFactory scopeFactory, ILogger<Worker> logger, IConfiguration config)
         {
@@ -94,26 +94,20 @@ namespace Football.Workers.GameWorker
             {
                 using (IServiceScope scope = _scopeFactory.CreateScope())
                 {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<FootballDbContext>();
                     IFootballDataProvider dataProvider = scope.ServiceProvider.GetRequiredService<IFootballDataProvider>();
-
                     IReadOnlyCollection<Play> plays = await dataProvider.GetPlaysByWeekAndGameTime(1, previousTime, currentTime);
 
                     foreach (Play play in plays)
                     {
                         _logger.LogInformation(play.ToString());
 
-                        List<Task> tasks = new List<Task> {
-                            dataProvider.SaveStat(play.Game.Id, play.Game.HomeTeam, play.HomePlayLog),
-                            dataProvider.SaveStat(play.Game.Id, play.Game.AwayTeam, play.AwayPlayLog)
-                        };
+                        await dataProvider.SaveStat(play.Game.Id, play.Game.HomeTeam, play.HomePlayLog);
+                        await dataProvider.SaveStat(play.Game.Id, play.Game.AwayTeam, play.AwayPlayLog);
 
                         if (_isHubActive)
                         {
-                            tasks.Add(_hubConnection.SendAsync("SendPlay", play));
+                            await _hubConnection.SendAsync("SendPlay", play);
                         }
-
-                        await Task.WhenAll(tasks);
                     }
                 }
             }
