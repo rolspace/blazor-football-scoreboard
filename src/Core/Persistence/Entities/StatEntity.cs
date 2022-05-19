@@ -12,12 +12,10 @@
 
         public int Punts { get; set; }
 
-        public int Sacks { get; set; }
-
         public int ReturnYards { get; set; }
 
-        public virtual GameEntity Game { get; set; }
+        public int Sacks { get; set; }
 
-        public virtual TimeEntity Time { get; set; }
+        public virtual GameEntity Game { get; set; }
     }
 }

@@ -11,7 +11,5 @@ namespace Football.Core.Persistence.Entities
         public int QuarterSecondsRemaining { get; set; }
 
         public virtual GameEntity Game { get; set; }
-
-        public virtual ICollection<StatEntity> Stat { get; set; }
     }
 }
