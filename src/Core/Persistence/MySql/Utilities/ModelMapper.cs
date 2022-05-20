@@ -30,8 +30,8 @@ namespace Football.Core.Persistence.MySql.Utilities
                 GameId = statEntity.GameId,
                 Team = statEntity.Team,
                 Score = statEntity.Score,
-                Quarter = statEntity.Time.Quarter,
-                QuarterSecondsRemaining = statEntity.Time.QuarterSecondsRemaining,
+                Quarter = statEntity.Game.Time.Quarter,
+                QuarterSecondsRemaining = statEntity.Game.Time.QuarterSecondsRemaining,
                 AirYards = statEntity.AirYards,
                 Sacks = statEntity.Sacks,
                 Punts = statEntity.Punts,
@@ -87,7 +87,7 @@ namespace Football.Core.Persistence.MySql.Utilities
                 null,
                 DefensePlayLog = !isInPossession && !isSpecialTeamsPlay ? new DefensePlayLog()
                 {
-                    Sacks = playEntity.Sack ?? 0
+                    Sacks = Convert.ToBoolean(playEntity.Sack) ? 1 : 0
                 }
                 :
                 null,

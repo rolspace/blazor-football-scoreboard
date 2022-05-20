@@ -32,10 +32,10 @@ namespace Football.Core.Persistence.MySql
 
         public async Task<ReadOnlyCollection<Play>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd)
         {
-             IQueryable<Play> plays = _dbContext.Set<PlayEntity>()
-                .AsQueryable()
-                .Where(p => p.Week == week && p.GameSecondsRemaining <= gameSecondsRemainingStart && p.GameSecondsRemaining > gameSecondsRemainingEnd)
-                .Select(p => EntityMapper.MapToPlayModel(p));
+            IQueryable<Play> plays = _dbContext.Set<PlayEntity>()
+               .AsQueryable()
+               .Where(p => p.Week == week && p.GameSecondsRemaining <= gameSecondsRemainingStart && p.GameSecondsRemaining > gameSecondsRemainingEnd)
+               .Select(p => EntityMapper.MapToPlayModel(p));
 
             return (await plays.ToListAsync()).AsReadOnly();
         }
@@ -45,6 +45,7 @@ namespace Football.Core.Persistence.MySql
             IQueryable<Stat> stats = _dbContext.Set<StatEntity>()
                 .AsQueryable()
                 .Where(s => s.GameId == gameId)
+                .Include(s => s.Game.Time)
                 .Select(s => EntityMapper.MapToStatModel(s));
 
             return (await stats.ToListAsync()).AsReadOnly();
@@ -71,21 +72,27 @@ namespace Football.Core.Persistence.MySql
 
             StatEntity statEntity = await _dbContext.Set<StatEntity>()
                 .AsQueryable()
-                .FirstOrDefaultAsync(s => s.GameId == stat.GameId && s.Team == stat.Team);
-
-            TimeEntity timeEntity = await _dbContext.Set<TimeEntity>()
-                .AsQueryable()
-                .FirstOrDefaultAsync(t => t.GameId == stat.GameId);
+                .Where(s => s.GameId == stat.GameId && s.Team == stat.Team)
+                .Include(s => s.Game.Time)
+                .FirstOrDefaultAsync();
 
             if (statEntity == null)
             {
                 shouldAddEntity = true;
 
+                GameEntity gameEntity = await _dbContext.Set<GameEntity>()
+                    .AsQueryable()
+                    .Where(g => g.Id == gameId)
+                    .Include(g => g.Time)
+                    .FirstOrDefaultAsync();
+
+                gameEntity.Time = gameEntity.Time ?? new TimeEntity();
+
                 statEntity = new StatEntity
                 {
                     GameId = stat.GameId,
                     Team = stat.Team,
-                    Time = timeEntity ?? new TimeEntity()
+                    Game = gameEntity,
                 };
             }
 
@@ -94,15 +101,15 @@ namespace Football.Core.Persistence.MySql
             statEntity.ReturnYards += stat.ReturnYards;
             statEntity.Punts += stat.Punts;
             statEntity.Sacks += stat.Sacks;
-            statEntity.Time.GameId = stat.GameId;
-            statEntity.Time.Quarter = stat.Quarter;
-            statEntity.Time.QuarterSecondsRemaining = stat.QuarterSecondsRemaining;
+            statEntity.Game.Time.GameId = stat.GameId;
+            statEntity.Game.Time.Quarter = stat.Quarter;
+            statEntity.Game.Time.QuarterSecondsRemaining = stat.QuarterSecondsRemaining;
 
             if (shouldAddEntity)
             {
                 await _dbContext.AddAsync(statEntity);
             }
-            
+
             await _dbContext.SaveChangesAsync();
         }
     }
