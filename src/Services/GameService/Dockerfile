@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS base
 RUN apt-get update && apt-get install -y curl
 WORKDIR /app
 EXPOSE 2500
@@ -12,7 +12,7 @@ ENV ASPNETCORE_URLS=https://+:11517;http://+:2500
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
 COPY ["src/Services/GameService/Football.Services.GameService.csproj", "src/Services/GameService/"]
 RUN dotnet restore "src/Services/GameService/Football.Services.GameService.csproj"
