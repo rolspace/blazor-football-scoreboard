@@ -34,7 +34,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build-gameworker",
-            "program": "${workspaceFolder}/src/Workers/GameWorker/bin/Debug/net5.0/Football.Workers.GameWorker.dll",
+            "program": "${workspaceFolder}/src/Workers/GameWorker/bin/Debug/net6.0/Football.Workers.GameWorker.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Workers/GameWorker",
             "console": "internalConsole",
