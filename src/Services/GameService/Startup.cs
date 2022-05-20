@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 
 namespace Football.Services.GameService
 {
@@ -24,8 +25,10 @@ namespace Football.Services.GameService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
+
             services.AddDbContext<FootballDbContext>(options =>
-                options.UseMySQL(Configuration.GetConnectionString("FootballDbContext")));
+                options.UseMySql(Configuration.GetConnectionString("FootballDbContext"), serverVersion));
 
             services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
             services.AddSignalR();
@@ -49,7 +52,8 @@ namespace Football.Services.GameService
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors(builder => {
+            app.UseCors(builder =>
+            {
                 builder.WithOrigins("http://localhost:5001")
                         .AllowAnyHeader()
                         .WithMethods("GET", "POST")
