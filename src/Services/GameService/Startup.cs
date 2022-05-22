@@ -25,10 +25,10 @@ namespace Football.Services.GameService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var serverVersion = new MySqlServerVersion(new Version(8, 0, 28));
+            var mySqlServerVersion = new MySqlServerVersion(new Version(8, 0, 28));
 
             services.AddDbContext<FootballDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("FootballDbContext"), serverVersion));
+                options.UseMySql(Configuration.GetConnectionString("FootballDbContext"), mySqlServerVersion));
 
             services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
             services.AddSignalR();
