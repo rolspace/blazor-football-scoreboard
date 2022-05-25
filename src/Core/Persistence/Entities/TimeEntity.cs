@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Football.Core.Persistence.Entities
+﻿namespace Football.Core.Persistence.Entities
 {
     public class TimeEntity
     {

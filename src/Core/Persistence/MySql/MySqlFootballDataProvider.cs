@@ -1,13 +1,13 @@
-﻿using Football.Core.Models;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Football.Core.Models;
 using Football.Core.Persistence.Entities;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql.Contexts;
 using Football.Core.Persistence.MySql.Utilities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Football.Core.Persistence.MySql
 {

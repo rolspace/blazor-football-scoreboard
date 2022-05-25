@@ -1,6 +1,4 @@
-﻿using Football.Core.Models;
-
-namespace Football.Core.Models
+﻿namespace Football.Core.Models
 {
     public class Game
     {

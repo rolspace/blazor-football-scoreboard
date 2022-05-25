@@ -1,6 +1,6 @@
-﻿using Football.Core.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Football.Core.Models;
 
 namespace Football.Core.Persistence.Interfaces.DataProviders
 {

@@ -1,6 +1,6 @@
-﻿using Football.Core.Models;
+﻿using System;
+using Football.Core.Models;
 using Football.Core.Persistence.Entities;
-using System;
 
 namespace Football.Core.Persistence.MySql.Utilities
 {
