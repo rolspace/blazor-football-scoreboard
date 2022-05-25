@@ -1,3 +1,4 @@
+using System;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql;
 using Football.Core.Persistence.MySql.Contexts;
@@ -5,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace Football.Workers.GameWorker
 {
