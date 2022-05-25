@@ -1,6 +1,6 @@
+using System.Threading.Tasks;
 using Football.Core.Models;
 using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 
 namespace Football.Services.GameService.Hubs
 {

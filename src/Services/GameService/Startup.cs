@@ -1,3 +1,4 @@
+using System;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql;
 using Football.Core.Persistence.MySql.Contexts;
@@ -9,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace Football.Services.GameService
 {
