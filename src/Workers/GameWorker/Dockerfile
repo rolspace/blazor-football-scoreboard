@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/runtime:5.0-focal AS base
+FROM mcr.microsoft.com/dotnet/runtime:6.0-focal AS base
 WORKDIR /app
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
@@ -6,7 +6,7 @@ WORKDIR /app
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
 COPY ["src/Workers/GameWorker/Football.Workers.GameWorker.csproj", "src/Workers/GameWorker/"]
 RUN dotnet restore "src/Workers/GameWorker/Football.Workers.GameWorker.csproj"
