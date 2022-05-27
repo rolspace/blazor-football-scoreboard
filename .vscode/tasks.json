@@ -189,7 +189,7 @@
             "type": "docker-run",
             "label": "docker-run-gameworker: debug",
             "dependsOn": [
-                "docker-build: debug"
+                "docker-build-gamework: debug"
             ],
             "dockerRun": {
                 "env": {
@@ -207,7 +207,7 @@
             "type": "docker-run",
             "label": "docker-run-gameworker: release",
             "dependsOn": [
-                "docker-build: release"
+                "docker-build-gamework: release"
             ],
             "dockerRun": {},
             "netCore": {
