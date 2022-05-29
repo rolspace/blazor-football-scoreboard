@@ -54,7 +54,7 @@ namespace Football.Services.GameService
             app.UseRouting();
             app.UseCors(builder =>
             {
-                builder.WithOrigins("http://localhost:5001")
+                builder.WithOrigins(Configuration["AllowedOrigin"])
                         .AllowAnyHeader()
                         .WithMethods("GET", "POST")
                         .AllowCredentials();
