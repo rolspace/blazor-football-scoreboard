@@ -4,6 +4,7 @@
 @using Football.Core.Models
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Logging
+@using Scoreboard.Client.Shared.Components
 @using Scoreboard.Client.ViewModels
 
 @inject NavigationManager NavigationManager
@@ -19,31 +20,9 @@
             <div class="mdc-layout-grid__inner score-grid">
                 @foreach (var gameState in gameStates)
                 {
-                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-                        <a href="game/@gameState.Id/@gameState.AwayTeam/@gameState.HomeTeam">
-                            <div class="mdc-card score-card">
-                                <div class="mdc-card__primary">
-                                    <div class="mdc-layout-grid__inner">
-                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-3-phone"
-                                        style="display:inline-block">@gameState.AwayTeam</div>
-                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop mdc-layout-grid__cell--span-1-phone score-card__score"
-                                        style="display:inline-block">@gameState.AwayScore</div>
-                                    </div>
-                                    <div class="mdc-layout-grid__inner">
-                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-3-phone"
-                                        style="display:inline-block">@gameState.HomeTeam</div>
-                                        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-desktop mdc-layout-grid__cell--span-1-phone score-card__score"
-                                        style="display:inline-block">@gameState.HomeScore</div>
-                                    </div>
-                                </div>
-                                <div class="mdc-card__secondary">
-                                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                                        @gameState.QuarterTimeRemaining
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
+                    HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
+                    QuarterTimeRemaining="@gameState.QuarterTimeRemaining" />
                 }
             </div>
         </div>
@@ -51,7 +30,7 @@
 </div>
 
 @code {
-    private HubConnection hubConnection;
+    private HubConnection? hubConnection;
     private IReadOnlyList<GameState> gameStates = new List<GameState>();
 
     protected override async Task OnInitializedAsync()
