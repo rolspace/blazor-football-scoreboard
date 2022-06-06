@@ -6,11 +6,7 @@
     padding: 8px;
 }
 
-.score-card .mdc-layout-grid__cell {
-    display: inline-block;
-}
-
-.score-card .mdc-layout-grid__cell.score-card__score {
+.score-card .score-card__score {
     text-align: right;
 }
 
