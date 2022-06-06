@@ -8,11 +8,11 @@ namespace Scoreboard.Client.ViewModels
 
         public int Week { get; set; }
 
-        public string HomeTeam { get; set; }
+        public string HomeTeam { get; set; } = "";
 
         public int HomeScore { get; set; }
 
-        public string AwayTeam { get; set; }
+        public string AwayTeam { get; set; } = "";
 
         public int AwayScore { get; set; }
 
@@ -22,7 +22,7 @@ namespace Scoreboard.Client.ViewModels
 
         public string QuarterTimeRemaining => TimeSpan.FromSeconds(QuarterSecondsRemaining).ToString(@"mm\:ss");
 
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
 
         public GameState() { }
 
