@@ -21,7 +21,7 @@
             </div>
             <div class="mdc-card__secondary">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                    @QuarterTimeRemaining
+                    Quarter @Quarter - Time @QuarterTimeRemaining
                 </div>
             </div>
         </div>
@@ -43,6 +43,9 @@
 
     [Parameter]
     public int HomeScore { get; set; } = 0;
+
+    [Parameter]
+    public int Quarter { get; set; } = 0;
 
     [Parameter]
     public string QuarterTimeRemaining { get; set; } = "";
