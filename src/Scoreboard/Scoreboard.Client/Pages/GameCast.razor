@@ -79,10 +79,10 @@
     public int GameId { get; set; }
 
     [Parameter]
-    public string AwayTeam => "";
+    public string AwayTeam { get; set; } = "";
 
     [Parameter]
-    public string HomeTeam => "";
+    public string HomeTeam { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
