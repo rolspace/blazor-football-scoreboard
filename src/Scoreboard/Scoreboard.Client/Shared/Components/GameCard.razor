@@ -24,7 +24,7 @@
                     @LastPlayDescription
                 </div>
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                    Quarter @Quarter - Time @QuarterTimeRemaining
+                    @GetQuarterText(Quarter) Quarter @QuarterTimeRemaining
                 </div>
             </div>
         </div>
@@ -51,8 +51,17 @@
     public string LastPlayDescription { get; set; } = "Last play";
 
     [Parameter]
-    public int Quarter { get; set; } = 0;
+    public int Quarter { get; set; } = 1;
 
     [Parameter]
     public string QuarterTimeRemaining { get; set; } = "";
+
+    string GetQuarterText(int quarter) => quarter switch
+    {
+        1 => "1st",
+        2 => "2nd",
+        3 => "3rd",
+        4 => "4th",
+        _ => ""
+    };
 }
