@@ -1,4 +1,4 @@
-﻿@page "/game/{GameId:int}/{AwayTeam}/{HomeTeam}"
+﻿@page "/game/{GameId:int}"
 
 @using System.Net.Http
 @using Football.Core.Models
@@ -78,12 +78,6 @@
     [Parameter]
     public int GameId { get; set; }
 
-    [Parameter]
-    public string AwayTeam { get; set; } = "";
-
-    [Parameter]
-    public string HomeTeam { get; set; } = "";
-
     protected override async Task OnInitializedAsync()
     {
         try
@@ -92,32 +86,32 @@
 
             if (gameStats == null) return;
 
-            homeStat = gameStats.FirstOrDefault(g => g.Team == HomeTeam);
-            awayStat = gameStats.FirstOrDefault(g => g.Team == AwayTeam);
+            //homeStat = gameStats.FirstOrDefault(g => g.Team == HomeTeam);
+            //awayStat = gameStats.FirstOrDefault(g => g.Team == AwayTeam);
 
             hubConnection = new HubConnectionBuilder()
             .WithUrl(NavigationManager.ToAbsoluteUri("/gamehub"))
             .ConfigureLogging(logging => logging.AddProvider(LoggerProvider))
             .Build();
 
-            hubConnection.On<Play>("ReceivePlay", (play) =>
+            /* hubConnection.On<Play>("ReceivePlay", (play) =>
             {
-                if (GameId == play.Game.Id)
-                {
-                    gameState = new GameState
-                    {
-                        HomeTeam = homeStat.Team,
-                        HomeScore = play.HomeScore,
-                        AwayTeam = awayStat.Team,
-                        AwayScore = play.AwayScore,
-                        Quarter = play.Quarter,
-                        QuarterSecondsRemaining = play.QuarterSecondsRemaining,
-                        Description = play.Description
-                    };
-                };
+            if (GameId == play.Game.Id)
+            {
+            gameState = new GameState
+            {
+            HomeTeam = homeStat.Team,
+            HomeScore = play.HomeScore,
+            AwayTeam = awayStat.Team,
+            AwayScore = play.AwayScore,
+            Quarter = play.Quarter,
+            QuarterSecondsRemaining = play.QuarterSecondsRemaining,
+            Description = play.Description
+            };
+            };
 
-                StateHasChanged();
-            });
+            StateHasChanged();
+            }); */
 
             await hubConnection.StartAsync();
         }
