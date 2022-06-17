@@ -16,6 +16,14 @@ namespace Football.Services.GameService.Controllers
             _dataProvider = dataProvider;
         }
 
+        [HttpGet("{gameId}")]
+        public async Task<ActionResult> GetGame(int gameId)
+        {
+            Game game = await _dataProvider.GetGame(gameId);
+
+            return Ok(game);
+        }
+
         [HttpGet("week/{weekId}")]
         public async Task<ActionResult> GetGamesByWeek(int weekId)
         {
