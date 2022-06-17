@@ -6,6 +6,8 @@ namespace Football.Core.Persistence.Interfaces.DataProviders
 {
     public interface IFootballDataProvider
     {
+        Task<Game> GetGame(int gameId);
+
         Task<ReadOnlyCollection<Game>> GetGamesByWeek(int week);
 
         Task<ReadOnlyCollection<Play>> GetPlaysByWeekAndGameTime(int week, int gameSecondsRemainingStart, int gameSecondsRemainingEnd);

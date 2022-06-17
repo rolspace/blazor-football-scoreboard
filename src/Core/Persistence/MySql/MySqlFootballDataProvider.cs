@@ -20,6 +20,14 @@ namespace Football.Core.Persistence.MySql
             _dbContext = dbContext;
         }
 
+        public async Task<Game> GetGame(int gameId)
+        {
+            GameEntity gameEntity = await _dbContext.Set<GameEntity>()
+                .SingleOrDefaultAsync(g => g.Id == gameId);
+
+            return EntityMapper.MapToGameModel(gameEntity);
+        }
+
         public async Task<ReadOnlyCollection<Game>> GetGamesByWeek(int week)
         {
             IQueryable<Game> games = _dbContext.Set<GameEntity>()
