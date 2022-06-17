@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Football.Services.GameService.Controllers
 {
-    [Route("api/football/stat")]
+    [Route("api/football/stats")]
     public class StatController : Controller
     {
         private readonly ILogger<StatController> _logger;

@@ -16,7 +16,7 @@ namespace Football.Services.GameService.Controllers
             _dataProvider = dataProvider;
         }
 
-        [HttpGet("{weekId}/{start}/{end}")]
+        [HttpGet("week/{weekId}/period/{start}/{end}")]
         public async Task<ActionResult> GetPlaysByWeekAndGameTime(int weekId, int start, int end)
         {
             ReadOnlyCollection<Play> plays = await _dataProvider.GetPlaysByWeekAndGameTime(weekId, start, end);
