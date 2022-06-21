@@ -21,6 +21,11 @@ namespace Football.Services.GameService.Controllers
         {
             Game game = await _dataProvider.GetGame(gameId);
 
+            if (game == null)
+            {
+                return NotFound();
+            }
+
             return Ok(game);
         }
 
