@@ -215,7 +215,19 @@
             }
         },
         {
-            "label": "build-scoreboard",
+            "label": "build-scoreboard-client",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Scoreboard/Scoreboard.Client/Scoreboard.Client.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build-scoreboard-server",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -227,7 +239,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "publish-scoreboard",
+            "label": "publish-scoreboard-server",
             "command": "dotnet",
             "type": "process",
             "args": [
@@ -239,7 +251,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "watch-scoreboard",
+            "label": "watch-scoreboard-server",
             "command": "dotnet",
             "type": "process",
             "args": [
