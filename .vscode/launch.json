@@ -53,7 +53,8 @@
             "name": "Scoreboard: Hosted .NET Blazor Launch (web)",
             "type": "blazorwasm",
             "request": "launch",
-            "cwd": "${workspaceFolder}/src/Scoreboard/Scoreboard.Server",
+            "preLaunchTask": "build-scoreboard-client",
+            "cwd": "${workspaceFolder}/src/Scoreboard/Scoreboard.Client",
             "url": "https://localhost:7187",
             "hosted": true,
             "program": "${workspaceFolder}/src/Scoreboard/Scoreboard.Server/bin/Debug/net6.0/Scoreboard.Server.dll"
