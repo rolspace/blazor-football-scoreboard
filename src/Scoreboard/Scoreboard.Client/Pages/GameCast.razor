@@ -13,31 +13,29 @@
 @inject ILogger<GameCast> logger
 @inject Config.AppSettings AppSettings
 
-<div>
-    <div class="mdc-layout-grid__inner">
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
-            Game Page @GameId
-        </div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
-            @if (game == null && !errorOcurred)
-            {
-                <div>Loading</div>
-            }
-            else if (game == null && errorOcurred)
-            {
-                <div>An error ocurred loading the game</div>
-            }
-            else
-            {
-                <GameCard GameId="@game.Id" AwayTeam="@game.AwayTeam" AwayScore=0 HomeTeam="@game.HomeTeam" HomeScore=0
-                QuarterTimeRemaining="0" />
-            }
-        </div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
+<div class="mdc-layout-grid__inner">
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+        Game Page @GameId
     </div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+        @if (game == null && !errorOcurred)
+        {
+            <div>Loading</div>
+        }
+        else if (game == null && errorOcurred)
+        {
+            <div>An error ocurred loading the game</div>
+        }
+        else if (game != null)
+        {
+            <GameCard GameId="@game.Id" AwayTeam="@game.AwayTeam" AwayScore=0 HomeTeam="@game.HomeTeam" HomeScore=0
+            QuarterTimeRemaining="0" />
+        }
+    </div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
 </div>
 
 @code {
