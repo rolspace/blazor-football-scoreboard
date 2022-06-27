@@ -21,18 +21,19 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
-        @if (game is null && !errorOcurred)
+        @if (gameState is null && !errorOcurred)
         {
             <div>Loading</div>
         }
-        else if (game is null && errorOcurred)
+        else if (gameState is null && errorOcurred)
         {
             <div>An error ocurred loading the game</div>
         }
-        else if (game is not null)
+        else if (gameState is not null)
         {
-            <GameCard GameId="@game.Id" AwayTeam="@game.AwayTeam" AwayScore=0 HomeTeam="@game.HomeTeam" HomeScore=0
-            QuarterTimeRemaining="0" />
+            <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
+            HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
+            QuarterTimeRemaining="@gameState.QuarterTimeRemaining" />
         }
     </div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
@@ -44,8 +45,6 @@
     private bool errorOcurred = false;
 
     private HubConnection? hubConnection;
-
-    private Game? game = null;
 
     private GameState? gameState = null;
 
@@ -60,7 +59,7 @@
     {
         try
         {
-            game = await Http.GetFromJsonAsync<Game>($"https://localhost:11517/api/football/games/{GameId}");
+            var game = await Http.GetFromJsonAsync<Game>($"https://localhost:11517/api/football/games/{GameId}");
 
             if (game is not null)
             {
