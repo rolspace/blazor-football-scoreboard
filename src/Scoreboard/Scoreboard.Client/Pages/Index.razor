@@ -36,8 +36,8 @@
         // TODO: check best practice for error handling in this method
         try
         {
-            var weekGames = await Http.GetFromJsonAsync<Game[]>("https://localhost:11517/api/football/games/week/1");
-            gameStates = weekGames.Select(g => new GameState
+            var games = await Http.GetFromJsonAsync<Game[]>("https://localhost:11517/api/football/games/week/1");
+            gameStates = games.Select(g => new GameState
             {
                 Id = g.Id,
                 Week = g.Week,
