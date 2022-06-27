@@ -21,15 +21,15 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
-        @if (game == null && !errorOcurred)
+        @if (game is null && !errorOcurred)
         {
             <div>Loading</div>
         }
-        else if (game == null && errorOcurred)
+        else if (game is null && errorOcurred)
         {
             <div>An error ocurred loading the game</div>
         }
-        else if (game != null)
+        else if (game is not null)
         {
             <GameCard GameId="@game.Id" AwayTeam="@game.AwayTeam" AwayScore=0 HomeTeam="@game.HomeTeam" HomeScore=0
             QuarterTimeRemaining="0" />
@@ -62,8 +62,23 @@
         {
             game = await Http.GetFromJsonAsync<Game>($"https://localhost:11517/api/football/games/{GameId}");
 
+            if (game is not null)
+            {
+                gameState = new GameState
+                {
+                    Id = game.Id,
+                    Week = game.Week,
+                    Quarter = 1,
+                    QuarterSecondsRemaining = 900,
+                    HomeTeam = game.HomeTeam,
+                    HomeScore = 0,
+                    AwayTeam = game.AwayTeam,
+                    AwayScore = 0
+                };
+            }
+
             @* var gameStats = await Http.GetFromJsonAsync<Stat[]>($"https://localhost:11517/api/football/stats/{GameId}");
-                if (gameStats != null && gameStats.Count() > 0)
+                if (gameStats is not null && gameStats.Count() > 0)
                 {
                 homeStat = gameStats.FirstOrDefault(g => g.Team == game.HomeTeam);
                 awayStat = gameStats.FirstOrDefault(g => g.Team == game.AwayTeam);
