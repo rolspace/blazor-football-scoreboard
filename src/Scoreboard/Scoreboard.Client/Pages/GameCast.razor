@@ -14,13 +14,15 @@
 @inject Config.AppSettings AppSettings
 
 <div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+    <!-- Title row -->
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
         Game Page @GameId
     </div>
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
+    <!-- Game Card row -->
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
         @if (gameState is null && !errorOcurred)
         {
             <div>Loading</div>
@@ -36,7 +38,7 @@
             QuarterTimeRemaining="@gameState.QuarterTimeRemaining" />
         }
     </div>
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
 </div>
 
 @code {
