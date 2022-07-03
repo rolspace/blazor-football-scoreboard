@@ -10,7 +10,7 @@
 @inject Config.AppSettings AppSettings
 @inject HttpClient Http
 @inject ILoggerProvider LoggerProvider
-@inject ILogger<Index> logger
+@inject ILogger<Index> Logger
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
@@ -90,7 +90,7 @@
         catch (Exception ex)
         {
             errorOcurred = true;
-            logger.LogError(ex.ToString());
+            Logger.LogError(ex.ToString());
         }
     }
 }
