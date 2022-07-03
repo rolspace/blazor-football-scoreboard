@@ -17,18 +17,32 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
         <div class="mdc-layout-grid__inner score-grid">
-            @foreach (var gameState in gameStates)
+            @if (gameStates.Count() == 0 && !errorOcurred)
             {
-                <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
+                <div>Loading</div>
+            }
+            else if (gameStates.Count() == 0 && errorOcurred)
+            {
+                <div>An error ocurred loading the games</div>
+            }
+            else if (gameStates.Count() > 0)
+            {
+                foreach (var gameState in gameStates)
+                {
+                    <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
                 HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
                 QuarterTimeRemaining="@gameState.QuarterTimeRemaining" />
+                }
             }
         </div>
     </div>
 </div>
 
 @code {
+    private bool errorOcurred = false;
+
     private HubConnection? hubConnection;
+
     private IReadOnlyList<GameState> gameStates = new List<GameState>();
 
     protected override async Task OnInitializedAsync()
@@ -38,39 +52,44 @@
             var apiUri = new Uri(AppSettings.ApiEndpoint ?? throw new Exception("ApiEndpoint missing"));
 
             var games = await Http.GetFromJsonAsync<Game[]>(new Uri(apiUri, $"games/week/{AppSettings.GameWeek}"));
-            gameStates = games.Select(g => new GameState
+
+            if (games is not null && games.Count() > 0)
             {
-                Id = g.Id,
-                Week = g.Week,
-                Quarter = 1,
-                QuarterSecondsRemaining = 900,
-                HomeTeam = g.HomeTeam,
-                HomeScore = 0,
-                AwayTeam = g.AwayTeam,
-                AwayScore = 0
-            }).ToList();
+                gameStates = games.Select(g => new GameState
+                {
+                    Id = g.Id,
+                    Week = g.Week,
+                    Quarter = 1,
+                    QuarterSecondsRemaining = 900,
+                    HomeTeam = g.HomeTeam,
+                    HomeScore = 0,
+                    AwayTeam = g.AwayTeam,
+                    AwayScore = 0
+                }).ToList();
 
-            var hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEndpoint missing"));
+                var hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEndpoint missing"));
 
-            hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(logging =>
-            logging.AddProvider(LoggerProvider)).Build();
+                hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(logging =>
+                logging.AddProvider(LoggerProvider)).Build();
 
-            hubConnection.On<Play>("ReceivePlay", (play) =>
-            {
-                var game = gameStates.Single(game => game.Id == play.Game.Id);
-                game.HomeScore = play.HomeScore;
-                game.AwayScore = play.AwayScore;
-                game.Quarter = play.Quarter;
-                game.QuarterSecondsRemaining = play.QuarterSecondsRemaining;
-                game.Description = play.Description;
+                hubConnection.On<Play>("ReceivePlay", (play) =>
+                {
+                    var game = gameStates.Single(game => game.Id == play.Game.Id);
+                    game.HomeScore = play.HomeScore;
+                    game.AwayScore = play.AwayScore;
+                    game.Quarter = play.Quarter;
+                    game.QuarterSecondsRemaining = play.QuarterSecondsRemaining;
+                    game.Description = play.Description;
 
-                StateHasChanged();
-            });
+                    StateHasChanged();
+                });
 
-            await hubConnection.StartAsync();
+                await hubConnection.StartAsync();
+            }
         }
         catch (Exception ex)
         {
+            errorOcurred = true;
             logger.LogError(ex.ToString());
         }
     }
