@@ -7,11 +7,11 @@
 @using Scoreboard.Client.Shared.Components
 @using Scoreboard.Client.ViewModels
 
-@inject NavigationManager NavigationManager
+@inject Config.AppSettings AppSettings
 @inject HttpClient Http
 @inject ILoggerProvider LoggerProvider
-@inject ILogger<GameCast> logger
-@inject Config.AppSettings AppSettings
+@inject ILogger<GameCast> Logger
+@inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
     <!-- Title row -->
@@ -42,8 +42,6 @@
 </div>
 
 @code {
-    private bool gameStarted = true;
-
     private bool errorOcurred = false;
 
     private HubConnection? hubConnection;
