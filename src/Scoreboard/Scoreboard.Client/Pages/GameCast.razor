@@ -14,26 +14,39 @@
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
-    @if (gameState is null && !errorOcurred)
+    @if ((game is null || gameState is null) && !errorOcurred)
     {
         <div>Loading</div>
     }
-    else if (gameState is null && errorOcurred)
+    else if ((game is null || gameState is null) && errorOcurred)
     {
         <div>An error ocurred loading the game</div>
     }
-    else if (gameState is not null)
+    else if (game is not null || gameState is not null)
     {
         <!-- Title row -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">Game Page @GameId</div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+        @if (game is not null)
+            {
+                <div>Game Page @game.AwayTeam vs. @game.HomeTeam</div>
+            }
+        </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
         <!-- Game Card row -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-            <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
+        @if (gameState is not null)
+            {
+                <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
             HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
             QuarterTimeRemaining="@gameState.QuarterTimeRemaining" />
+            }
+            else if (game is not null)
+            {
+                <GameCard GameId="@game.Id" AwayTeam="@game.AwayTeam" AwayScore=0 HomeTeam="@game.HomeTeam" HomeScore=0
+            QuarterTimeRemaining="15:00" />
+            }
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
     }
@@ -41,6 +54,8 @@
 
 @code {
     private bool errorOcurred = false;
+
+    private Game? game = null;
 
     private HubConnection? hubConnection;
 
@@ -58,7 +73,7 @@
         try
         {
             var apiUri = new Uri(AppSettings.ApiEndpoint ?? throw new Exception("ApiEndpoint missing"));
-            var game = await Http.GetFromJsonAsync<Game>(new Uri(apiUri, $"games/{GameId}"));
+            game = await Http.GetFromJsonAsync<Game>(new Uri(apiUri, $"games/{GameId}"));
 
             if (game is not null)
             {
