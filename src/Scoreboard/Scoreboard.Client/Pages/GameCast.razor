@@ -58,56 +58,54 @@
     {
         try
         {
+            // TODO: get stats at the same time you get the game
             var apiUri = new Uri(AppSettings.ApiEndpoint ?? throw new Exception("ApiEndpoint missing"));
             var game = await Http.GetFromJsonAsync<Game>(new Uri(apiUri, $"games/{GameId}"));
 
-            if (game is not null)
+            if (game is null) throw new Exception("Game cannot be null");
+
+            var gameStats = await Http.GetFromJsonAsync<Stat[]>(new Uri(apiUri, $"stats/{GameId}"));
+            homeStat = gameStats?.FirstOrDefault(g => g.Team == game.HomeTeam);
+            awayStat = gameStats?.FirstOrDefault(g => g.Team == game.AwayTeam);
+
+            gameState = new GameState
             {
-                gameState = new GameState
+                Id = game.Id,
+                Week = game.Week,
+                HomeTeam = game.HomeTeam,
+                HomeScore = homeStat?.Score ?? 0,
+                AwayTeam = game.AwayTeam,
+                AwayScore = awayStat?.Score ?? 0,
+                Quarter = homeStat?.Quarter ?? 1,
+                QuarterSecondsRemaining = homeStat?.QuarterSecondsRemaining ?? 900,
+            };
+
+            Uri hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEnpoint missing"));
+
+            hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(logging =>
+            logging.AddProvider(LoggerProvider)).Build();
+
+            hubConnection.On<Play>("ReceivePlay", (play) =>
+            {
+                if (GameId == play.Game.Id)
                 {
-                    Id = game.Id,
-                    Week = game.Week,
-                    Quarter = 1,
-                    QuarterSecondsRemaining = 900,
-                    HomeTeam = game.HomeTeam,
-                    HomeScore = 0,
-                    AwayTeam = game.AwayTeam,
-                    AwayScore = 0
+                    gameState = new GameState
+                    {
+                        Id = play.Game.Id,
+                        HomeTeam = play.Game.HomeTeam,
+                        HomeScore = play.HomeScore,
+                        AwayTeam = play.Game.AwayTeam,
+                        AwayScore = play.AwayScore,
+                        Quarter = play.Quarter,
+                        QuarterSecondsRemaining = play.QuarterSecondsRemaining,
+                        Description = play.Description
+                    };
                 };
 
-                var gameStats = await Http.GetFromJsonAsync<Stat[]>(new Uri(apiUri, $"stats/{GameId}"));
-                if (gameStats is not null)
-                {
-                    homeStat = gameStats.FirstOrDefault(g => g.Team == game.HomeTeam);
-                    awayStat = gameStats.FirstOrDefault(g => g.Team == game.AwayTeam);
+                StateHasChanged();
+            });
 
-                    Uri hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEnpoint missing"));
-
-                    hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(logging =>
-                    logging.AddProvider(LoggerProvider)).Build();
-
-                    hubConnection.On<Play>("ReceivePlay", (play) =>
-                    {
-                        if (GameId == play.Game.Id)
-                        {
-                            gameState = new GameState
-                            {
-                                HomeTeam = homeStat.Team,
-                                HomeScore = play.HomeScore,
-                                AwayTeam = awayStat.Team,
-                                AwayScore = play.AwayScore,
-                                Quarter = play.Quarter,
-                                QuarterSecondsRemaining = play.QuarterSecondsRemaining,
-                                Description = play.Description
-                            };
-                        };
-
-                        StateHasChanged();
-                    });
-
-                    await hubConnection.StartAsync();
-                }
-            }
+            await hubConnection.StartAsync();
         }
         catch (Exception ex)
         {
