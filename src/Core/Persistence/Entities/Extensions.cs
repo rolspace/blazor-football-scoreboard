@@ -1,31 +1,40 @@
-﻿using System;
+using System;
 using Football.Core.Models;
-using Football.Core.Persistence.Entities;
 
-namespace Football.Core.Persistence.MySql.Utilities
+namespace Football.Core.Persistence.Entities
 {
-    public class EntityMapper
+    public static class Extensions
     {
-        public static Game MapToGameModel(GameEntity gameEntity)
+        public static Game ToModel(this GameEntity gameEntity)
         {
-            if (gameEntity == null) return null;
+            if (gameEntity is null) return null;
 
-            var game = new Game
+            return new Game
             {
                 Id = gameEntity.Id,
                 Week = gameEntity.Week,
                 HomeTeam = gameEntity.HomeTeam,
                 AwayTeam = gameEntity.AwayTeam,
+                Time = gameEntity.Time.ToModel()
             };
-
-            return game;
         }
 
-        public static Stat MapToStatModel(StatEntity statEntity)
+        public static Time ToModel(this TimeEntity timeEntity)
+        {
+            if (timeEntity is null) return null;
+
+            return new Time
+            {
+                Quarter = timeEntity.Quarter,
+                QuarterSecondsRemaining = timeEntity.QuarterSecondsRemaining
+            };
+        }
+
+        public static Stat ToModel(this StatEntity statEntity)
         {
             if (statEntity == null) return null;
 
-            var stat = new Stat
+            return new Stat
             {
                 GameId = statEntity.GameId,
                 Team = statEntity.Team,
@@ -37,18 +46,16 @@ namespace Football.Core.Persistence.MySql.Utilities
                 Punts = statEntity.Punts,
                 ReturnYards = statEntity.ReturnYards
             };
-
-            return stat;
         }
 
-        public static Play MapToPlayModel(PlayEntity playEntity)
+        public static Play ToModel(this PlayEntity playEntity)
         {
             if (playEntity == null) return null;
 
             bool isHomeTeamPossession = playEntity.Posteam == playEntity.HomeTeam;
             bool isAwayTeamPossession = playEntity.Posteam == playEntity.AwayTeam;
 
-            var play = new Play
+            return new Play
             {
                 Id = playEntity.Id,
                 HomeScore = playEntity.TotalHomeScore ?? 0,
@@ -56,21 +63,13 @@ namespace Football.Core.Persistence.MySql.Utilities
                 Description = playEntity.Desc,
                 Quarter = playEntity.Qtr,
                 QuarterSecondsRemaining = playEntity.QuarterSecondsRemaining ?? 0,
-                Game = new Game()
-                {
-                    Id = playEntity.GameId,
-                    HomeTeam = playEntity.HomeTeam,
-                    AwayTeam = playEntity.AwayTeam,
-                    Week = playEntity.Week,
-                },
-                HomePlayLog = MapToPlayLog(playEntity, playEntity.TotalHomeScore ?? 0, isHomeTeamPossession, playEntity.IsHomeTeamReceivingKickoffOrPunt, playEntity.IsHomeTeamPunting),
-                AwayPlayLog = MapToPlayLog(playEntity, playEntity.TotalAwayScore ?? 0, isAwayTeamPossession, playEntity.IsAwayTeamReceivingKickoffOrPunt, playEntity.IsAwayTeamPunting)
+                Game = playEntity.Game.ToModel(),
+                HomePlayLog = playEntity.ToModel(playEntity.TotalHomeScore ?? 0, isHomeTeamPossession, playEntity.IsHomeTeamReceivingKickoffOrPunt, playEntity.IsHomeTeamPunting),
+                AwayPlayLog = playEntity.ToModel(playEntity.TotalAwayScore ?? 0, isAwayTeamPossession, playEntity.IsAwayTeamReceivingKickoffOrPunt, playEntity.IsAwayTeamPunting)
             };
-
-            return play;
         }
 
-        private static PlayLog MapToPlayLog(PlayEntity playEntity, int score, bool isInPossession, bool isReceivingKickoffOrPunt, bool isPunting)
+        public static PlayLog ToModel(this PlayEntity playEntity, int score, bool isInPossession, bool isReceivingKickoffOrPunt, bool isPunting)
         {
             bool isSpecialTeamsPlay = playEntity.PlayType == "kickoff" || playEntity.PlayType == "punt";
 
