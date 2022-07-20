@@ -2,7 +2,7 @@
 
 namespace Football.Core.Persistence.Entities
 {
-    public partial class PlayEntity
+    public class PlayEntity
     {
         public int Id { get; set; }
 
