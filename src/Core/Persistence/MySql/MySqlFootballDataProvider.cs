@@ -6,7 +6,6 @@ using Football.Core.Models;
 using Football.Core.Persistence.Entities;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql.Contexts;
-using Football.Core.Persistence.MySql.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Football.Core.Persistence.MySql
@@ -23,9 +22,10 @@ namespace Football.Core.Persistence.MySql
         public async Task<Game> GetGame(int gameId)
         {
             GameEntity gameEntity = await _dbContext.Set<GameEntity>()
+                .Include(g => g.Time)
                 .SingleOrDefaultAsync(g => g.Id == gameId);
 
-            return EntityMapper.MapToGameModel(gameEntity);
+            return gameEntity.ToModel();
         }
 
         public async Task<ReadOnlyCollection<Game>> GetGamesByWeek(int week)
@@ -33,7 +33,7 @@ namespace Football.Core.Persistence.MySql
             IQueryable<Game> games = _dbContext.Set<GameEntity>()
                 .AsQueryable()
                 .Where(g => g.Week == week)
-                .Select(g => EntityMapper.MapToGameModel(g));
+                .Select(g => g.ToModel());
 
             return (await games.ToListAsync()).AsReadOnly();
         }
@@ -43,7 +43,7 @@ namespace Football.Core.Persistence.MySql
             IQueryable<Play> plays = _dbContext.Set<PlayEntity>()
                .AsQueryable()
                .Where(p => p.Week == week && p.GameSecondsRemaining <= gameSecondsRemainingStart && p.GameSecondsRemaining > gameSecondsRemainingEnd)
-               .Select(p => EntityMapper.MapToPlayModel(p));
+               .Select(p => p.ToModel());
 
             return (await plays.ToListAsync()).AsReadOnly();
         }
@@ -54,7 +54,7 @@ namespace Football.Core.Persistence.MySql
                 .AsQueryable()
                 .Where(s => s.GameId == gameId)
                 .Include(s => s.Game.Time)
-                .Select(s => EntityMapper.MapToStatModel(s));
+                .Select(s => s.ToModel());
 
             return (await stats.ToListAsync()).AsReadOnly();
         }
