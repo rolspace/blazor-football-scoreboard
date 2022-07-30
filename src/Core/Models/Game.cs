@@ -14,8 +14,6 @@ namespace Football.Core.Models
 
         public Time Time { get; set; }
 
-        public virtual ICollection<Play> Plays { get; set; }
-
         public virtual ICollection<Stat> Stats { get; set; }
     }
 
