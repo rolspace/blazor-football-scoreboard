@@ -62,7 +62,7 @@ namespace Football.Core.Persistence.MySql
 
         public async Task SaveStat(int gameId, string team, PlayLog playLog)
         {
-            if (playLog == null) throw new ArgumentNullException("playLog should not be null");
+            if (playLog == null) throw new ArgumentNullException("PlayLog should not be null");
 
             var stat = new Stat
             {
