@@ -33,8 +33,10 @@ namespace Football.Core.Persistence.MySql
         {
             IQueryable<Game> games = _dbContext.Set<GameEntity>()
                 .AsQueryable()
-                .Where(g => g.Week == week)
-                .Select(g => g.ToModel());
+                .Include(gameEntity => gameEntity.Time)
+                .Include(gameEntity => gameEntity.Stats)
+                .Where(gameEntity => gameEntity.Week == week)
+                .Select(gameEntity => gameEntity.ToModel());
 
             return (await games.ToListAsync()).AsReadOnly();
         }
