@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Football.Core.Models;
 
 namespace Football.Core.Persistence.Entities
@@ -15,7 +17,8 @@ namespace Football.Core.Persistence.Entities
                 Week = gameEntity.Week,
                 HomeTeam = gameEntity.HomeTeam,
                 AwayTeam = gameEntity.AwayTeam,
-                Time = gameEntity.Time.ToModel()
+                Time = gameEntity.Time.ToModel(),
+                Stats = gameEntity.Stats.Select(s => s.ToModel()).ToList().AsReadOnly()
             };
         }
 
@@ -39,8 +42,6 @@ namespace Football.Core.Persistence.Entities
                 GameId = statEntity.GameId,
                 Team = statEntity.Team,
                 Score = statEntity.Score,
-                Quarter = statEntity.Game.Time.Quarter,
-                QuarterSecondsRemaining = statEntity.Game.Time.QuarterSecondsRemaining,
                 AirYards = statEntity.AirYards,
                 Sacks = statEntity.Sacks,
                 Punts = statEntity.Punts,

@@ -23,6 +23,7 @@ namespace Football.Core.Persistence.MySql
         {
             GameEntity gameEntity = await _dbContext.Set<GameEntity>()
                 .Include(g => g.Time)
+                .Include(g => g.Stats)
                 .SingleOrDefaultAsync(g => g.Id == gameId);
 
             return gameEntity.ToModel();
@@ -68,8 +69,6 @@ namespace Football.Core.Persistence.MySql
                 GameId = gameId,
                 Team = team,
                 Score = playLog.Score,
-                Quarter = playLog.Quarter,
-                QuarterSecondsRemaining = playLog.QuarterSecondsRemaining,
                 AirYards = playLog.OffensePlayLog?.AirYards ?? 0,
                 Sacks = playLog.DefensePlayLog?.Sacks ?? 0,
                 Punts = playLog.SpecialPlayLog?.Punts ?? 0,
@@ -94,7 +93,13 @@ namespace Football.Core.Persistence.MySql
                     .Include(g => g.Time)
                     .FirstOrDefaultAsync();
 
-                gameEntity.Time = gameEntity.Time ?? new TimeEntity();
+                gameEntity.Time = gameEntity.Time
+                    ?? new TimeEntity()
+                    {
+                        GameId = stat.GameId,
+                        Quarter = playLog.Quarter,
+                        QuarterSecondsRemaining = playLog.QuarterSecondsRemaining
+                    };
 
                 statEntity = new StatEntity
                 {
@@ -109,9 +114,6 @@ namespace Football.Core.Persistence.MySql
             statEntity.ReturnYards += stat.ReturnYards;
             statEntity.Punts += stat.Punts;
             statEntity.Sacks += stat.Sacks;
-            statEntity.Game.Time.GameId = stat.GameId;
-            statEntity.Game.Time.Quarter = stat.Quarter;
-            statEntity.Game.Time.QuarterSecondsRemaining = stat.QuarterSecondsRemaining;
 
             if (shouldAddEntity)
             {
