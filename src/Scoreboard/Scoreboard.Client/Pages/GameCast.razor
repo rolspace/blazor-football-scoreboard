@@ -58,7 +58,6 @@
     {
         try
         {
-            // TODO: get stats at the same time you get the game
             var apiUri = new Uri(AppSettings.ApiEndpoint ?? throw new Exception("ApiEndpoint missing"));
             var game = await Http.GetFromJsonAsync<Game>(new Uri(apiUri, $"games/{GameId}"));
 
