@@ -68,8 +68,8 @@
 
                 var hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEndpoint missing"));
 
-                hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(logging =>
-                logging.AddProvider(LoggerProvider)).Build();
+                hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(loggingBuilder =>
+                loggingBuilder.AddProvider(LoggerProvider)).Build();
 
                 hubConnection.On<Play>("ReceivePlay", (play) =>
                 {
