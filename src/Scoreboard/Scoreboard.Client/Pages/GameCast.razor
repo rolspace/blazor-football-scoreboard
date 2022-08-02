@@ -47,10 +47,6 @@
 
     private GameState? gameState = null;
 
-    private Stat? homeStat = new Stat();
-
-    private Stat? awayStat = new Stat();
-
     [Parameter]
     public int GameId { get; set; }
 
@@ -63,8 +59,8 @@
 
             if (game is null) throw new Exception("Game cannot be null");
 
-            homeStat = game.Stats?.FirstOrDefault(g => g.Team == game.HomeTeam);
-            awayStat = game.Stats?.FirstOrDefault(g => g.Team == game.AwayTeam);
+            Stat? homeStat = game.Stats?.FirstOrDefault(g => g.Team == game.HomeTeam);
+            Stat? awayStat = game.Stats?.FirstOrDefault(g => g.Team == game.AwayTeam);
 
             gameState = new GameState
             {
