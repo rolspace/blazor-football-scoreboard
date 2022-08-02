@@ -45,8 +45,9 @@ namespace Football.Core.Persistence.MySql
         {
             IQueryable<Play> plays = _dbContext.Set<PlayEntity>()
                .AsQueryable()
-               .Where(p => p.Week == week && p.GameSecondsRemaining <= gameSecondsRemainingStart && p.GameSecondsRemaining > gameSecondsRemainingEnd)
-               .Select(p => p.ToModel());
+               .Include(playEntity => playEntity.Game)
+               .Where(playEntity => playEntity.Week == week && playEntity.GameSecondsRemaining <= gameSecondsRemainingStart && playEntity.GameSecondsRemaining > gameSecondsRemainingEnd)
+               .Select(playEntity => playEntity.ToModel());
 
             return (await plays.ToListAsync()).AsReadOnly();
         }
