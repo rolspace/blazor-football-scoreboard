@@ -59,8 +59,8 @@
 
             if (game is null) throw new Exception("Game cannot be null");
 
-            Stat? homeStat = game.Stats?.FirstOrDefault(g => g.Team == game.HomeTeam);
-            Stat? awayStat = game.Stats?.FirstOrDefault(g => g.Team == game.AwayTeam);
+            Stat? homeStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.HomeTeam);
+            Stat? awayStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.AwayTeam);
 
             gameState = new GameState
             {
