@@ -64,9 +64,8 @@
 
             if (game is null) throw new Exception("Game cannot be null");
 
-            var gameStats = await Http.GetFromJsonAsync<Stat[]>(new Uri(apiUri, $"stats/{GameId}"));
-            homeStat = gameStats?.FirstOrDefault(g => g.Team == game.HomeTeam);
-            awayStat = gameStats?.FirstOrDefault(g => g.Team == game.AwayTeam);
+            homeStat = game.Stats?.FirstOrDefault(g => g.Team == game.HomeTeam);
+            awayStat = game.Stats?.FirstOrDefault(g => g.Team == game.AwayTeam);
 
             gameState = new GameState
             {
@@ -76,8 +75,8 @@
                 HomeScore = homeStat?.Score ?? 0,
                 AwayTeam = game.AwayTeam,
                 AwayScore = awayStat?.Score ?? 0,
-                Quarter = homeStat?.Quarter ?? 1,
-                QuarterSecondsRemaining = homeStat?.QuarterSecondsRemaining ?? 900,
+                Quarter = game.Time?.Quarter ?? 1,
+                QuarterSecondsRemaining = game.Time?.QuarterSecondsRemaining ?? 900,
             };
 
             Uri hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEnpoint missing"));
