@@ -54,16 +54,22 @@
 
             if (games is not null && games.Count() > 0)
             {
-                gameStates = games.Select(g => new GameState
+                gameStates = games.Select(game =>
                 {
-                    Id = g.Id,
-                    Week = g.Week,
-                    Quarter = 1,
-                    QuarterSecondsRemaining = 900,
-                    HomeTeam = g.HomeTeam,
-                    HomeScore = 0,
-                    AwayTeam = g.AwayTeam,
-                    AwayScore = 0
+                    Stat? homeStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.HomeTeam);
+                    Stat? awayStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.AwayTeam);
+
+                    return new GameState
+                    {
+                        Id = game.Id,
+                        Week = game.Week,
+                        HomeTeam = game.HomeTeam,
+                        HomeScore = homeStat?.Score ?? 0,
+                        AwayTeam = game.AwayTeam,
+                        AwayScore = awayStat?.Score ?? 0,
+                        Quarter = game.Time?.Quarter ?? 1,
+                        QuarterSecondsRemaining = game.Time?.QuarterSecondsRemaining ?? 900,
+                    };
                 }).ToList();
 
                 var hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEndpoint missing"));
