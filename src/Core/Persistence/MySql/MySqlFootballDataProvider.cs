@@ -86,7 +86,12 @@ namespace Football.Core.Persistence.MySql
                 .Include(s => s.Game.Time)
                 .FirstOrDefaultAsync();
 
-            if (statEntity == null)
+            if (statEntity is not null)
+            {
+                statEntity.Game.Time.Quarter = playLog.Quarter;
+                statEntity.Game.Time.QuarterSecondsRemaining = playLog.QuarterSecondsRemaining;
+            }
+            else if (statEntity is null)
             {
                 shouldAddEntity = true;
 
@@ -96,13 +101,20 @@ namespace Football.Core.Persistence.MySql
                     .Include(g => g.Time)
                     .FirstOrDefaultAsync();
 
-                gameEntity.Time = gameEntity.Time
-                    ?? new TimeEntity()
+                if (gameEntity.Time is not null)
+                {
+                    gameEntity.Time.Quarter = playLog.Quarter;
+                    gameEntity.Time.QuarterSecondsRemaining = playLog.QuarterSecondsRemaining;
+                }
+                else
+                {
+                    gameEntity.Time = new TimeEntity()
                     {
                         GameId = stat.GameId,
                         Quarter = playLog.Quarter,
                         QuarterSecondsRemaining = playLog.QuarterSecondsRemaining
                     };
+                }
 
                 statEntity = new StatEntity
                 {
