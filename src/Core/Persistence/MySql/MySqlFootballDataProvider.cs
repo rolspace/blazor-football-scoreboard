@@ -90,7 +90,7 @@ namespace Football.Core.Persistence.MySql
                     .Include(gameEntity => gameEntity.Time)
                     .FirstOrDefaultAsync();
 
-                if (gameEntity is null) throw new Exception("Game must exist");
+                if (gameEntity is null) throw new Exception("Game must exist in order to save statistics");
 
                 gameEntity.Time = gameEntity.Time ?? new TimeEntity()
                 {
