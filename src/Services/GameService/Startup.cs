@@ -55,9 +55,9 @@ namespace Football.Services.GameService
             app.UseCors(builder =>
             {
                 builder.WithOrigins(Configuration["AllowedOrigin"])
-                        .AllowAnyHeader()
-                        .WithMethods("GET", "POST")
-                        .AllowCredentials();
+                    .AllowAnyHeader()
+                    .WithMethods("GET", "POST")
+                    .AllowCredentials();
             });
             app.UseAuthorization();
 
