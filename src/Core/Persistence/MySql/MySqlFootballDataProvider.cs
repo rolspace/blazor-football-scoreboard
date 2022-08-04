@@ -62,28 +62,17 @@ namespace Football.Core.Persistence.MySql
 
             return (await stats.ToListAsync()).AsReadOnly();
         }
-
         public async Task SaveStat(int gameId, string team, PlayLog playLog)
         {
-            if (playLog == null) throw new ArgumentNullException("PlayLog should not be null");
-
-            var stat = new Stat
-            {
-                GameId = gameId,
-                Team = team,
-                Score = playLog.Score,
-                AirYards = playLog.OffensePlayLog?.AirYards ?? 0,
-                Sacks = playLog.DefensePlayLog?.Sacks ?? 0,
-                Punts = playLog.SpecialPlayLog?.Punts ?? 0,
-                ReturnYards = playLog.SpecialPlayLog?.ReturnYards ?? 0
-            };
+            if (string.IsNullOrEmpty(team)) throw new ArgumentNullException("Team should not be null or empty");
+            if (playLog is null) throw new ArgumentNullException("PlayLog should not be null");
 
             var shouldAddEntity = false;
 
             StatEntity statEntity = await _dbContext.Set<StatEntity>()
                 .AsQueryable()
-                .Where(s => s.GameId == stat.GameId && s.Team == stat.Team)
-                .Include(s => s.Game.Time)
+                .Where(statEntity => statEntity.GameId == gameId && statEntity.Team == team)
+                .Include(statEntity => statEntity.Game.Time)
                 .FirstOrDefaultAsync();
 
             if (statEntity is not null)
@@ -97,38 +86,33 @@ namespace Football.Core.Persistence.MySql
 
                 GameEntity gameEntity = await _dbContext.Set<GameEntity>()
                     .AsQueryable()
-                    .Where(g => g.Id == gameId)
-                    .Include(g => g.Time)
+                    .Where(gameEntity => gameEntity.Id == gameId)
+                    .Include(gameEntity => gameEntity.Time)
                     .FirstOrDefaultAsync();
 
-                if (gameEntity.Time is not null)
+                if (gameEntity is null) throw new Exception("Game must exist");
+
+                gameEntity.Time = gameEntity.Time ?? new TimeEntity()
                 {
-                    gameEntity.Time.Quarter = playLog.Quarter;
-                    gameEntity.Time.QuarterSecondsRemaining = playLog.QuarterSecondsRemaining;
-                }
-                else
-                {
-                    gameEntity.Time = new TimeEntity()
-                    {
-                        GameId = stat.GameId,
-                        Quarter = playLog.Quarter,
-                        QuarterSecondsRemaining = playLog.QuarterSecondsRemaining
-                    };
-                }
+                    GameId = gameId
+                };
+
+                gameEntity.Time.Quarter = playLog.Quarter;
+                gameEntity.Time.QuarterSecondsRemaining = playLog.QuarterSecondsRemaining;
 
                 statEntity = new StatEntity
                 {
-                    GameId = stat.GameId,
-                    Team = stat.Team,
+                    GameId = gameId,
+                    Team = team,
                     Game = gameEntity,
                 };
             }
 
-            statEntity.Score = stat.Score;
-            statEntity.AirYards += stat.AirYards;
-            statEntity.ReturnYards += stat.ReturnYards;
-            statEntity.Punts += stat.Punts;
-            statEntity.Sacks += stat.Sacks;
+            statEntity.Score = playLog.Score;
+            statEntity.AirYards += playLog.OffensePlayLog?.AirYards ?? 0;
+            statEntity.ReturnYards += playLog.SpecialPlayLog?.ReturnYards ?? 0;
+            statEntity.Punts += playLog.SpecialPlayLog?.Punts ?? 0;
+            statEntity.Sacks += playLog.DefensePlayLog?.Sacks ?? 0;
 
             if (shouldAddEntity)
             {
