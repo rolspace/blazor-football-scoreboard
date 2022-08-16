@@ -34,7 +34,7 @@
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
             <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
             HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
-            QuarterTimeRemaining="@gameState.QuarterTimeRemaining" LastPlayDescription="@gameState.Description" />
+            QuarterTimeRemaining="@gameState.QuarterTimeRemaining" LastPlayDescription="@gameState.PlayDescription" />
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
     }
@@ -92,7 +92,7 @@
                         AwayScore = play.AwayScore,
                         Quarter = play.Quarter,
                         QuarterSecondsRemaining = play.QuarterSecondsRemaining,
-                        Description = play.Description
+                        PlayDescription = play.Description
                     };
                 };
 

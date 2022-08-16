@@ -31,7 +31,8 @@
                 {
                     <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
                 HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
-                QuarterTimeRemaining="@gameState.QuarterTimeRemaining" LastPlayDescription="@gameState.Description" />
+                QuarterTimeRemaining="@gameState.QuarterTimeRemaining"
+                LastPlayDescription="@gameState.PlayDescription" />
                 }
             }
         </div>
@@ -84,7 +85,7 @@
                     game.AwayScore = play.AwayScore;
                     game.Quarter = play.Quarter;
                     game.QuarterSecondsRemaining = play.QuarterSecondsRemaining;
-                    game.Description = play.Description;
+                    game.PlayDescription = play.Description;
 
                     StateHasChanged();
                 });

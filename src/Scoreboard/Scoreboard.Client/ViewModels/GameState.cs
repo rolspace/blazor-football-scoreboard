@@ -22,7 +22,7 @@ namespace Scoreboard.Client.ViewModels
 
         public string QuarterTimeRemaining => TimeSpan.FromSeconds(QuarterSecondsRemaining).ToString(@"mm\:ss");
 
-        public string Description { get; set; } = "";
+        public string PlayDescription { get; set; } = "";
 
         public GameState() { }
 
@@ -37,12 +37,12 @@ namespace Scoreboard.Client.ViewModels
             AwayScore = awayScore;
             Quarter = quarter;
             QuarterSecondsRemaining = quarterSecondsRemaining;
-            Description = description;
+            PlayDescription = description;
         }
 
         public override string ToString()
         {
-            return string.Format("{0}: Home: {1} - Away {2}; {3}", Id, HomeScore, AwayScore, Description);
+            return string.Format("{0}: Home: {1} - Away {2}; {3}", Id, HomeScore, AwayScore, PlayDescription);
         }
     }
 }
