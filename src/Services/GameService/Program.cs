@@ -50,6 +50,7 @@ try
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Service.Game v1"));
     }
 
+    app.UseSerilogRequestLogging();
     app.UseHttpsRedirection();
     app.UseRouting();
     app.UseCors(corsPolicyBuilder =>
