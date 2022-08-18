@@ -59,7 +59,6 @@ try
             .WithMethods("GET", "POST")
             .AllowCredentials();
     });
-    app.UseAuthorization();
 
     app.UseEndpoints(endpoints =>
     {
