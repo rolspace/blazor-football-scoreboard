@@ -7,18 +7,42 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
-var builder = Host.CreateDefaultBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
-builder.ConfigureServices((hostContext, services) =>
+try
 {
-    services.AddHostedService<Worker>();
+    Log.Information("Application startup starting");
 
-    var mySqlServerVersion = new MySqlServerVersion(new Version(8, 0, 28));
-    services.AddDbContext<FootballDbContext>(options =>
-        options.UseMySql(hostContext.Configuration.GetConnectionString("FootballDbContext"), mySqlServerVersion));
+    var builder = Host.CreateDefaultBuilder(args);
 
-    services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
-});
+    builder.ConfigureServices((hostBuildContext, services) =>
+    {
+        services.AddHostedService<Worker>();
 
-builder.Build().Run();
+        var mySqlServerVersion = new MySqlServerVersion(new Version(8, 0, 28));
+        services.AddDbContext<FootballDbContext>(options =>
+            options.UseMySql(hostBuildContext.Configuration.GetConnectionString("FootballDbContext"), mySqlServerVersion));
+
+        services.AddScoped<IFootballDataProvider, MySqlFootballDataProvider>();
+    })
+    .UseSerilog((hostBuilderContext, loggerConfiguration) => loggerConfiguration
+        .ReadFrom.Configuration(hostBuilderContext.Configuration)
+        .Enrich.FromLogContext()
+    );
+
+    builder.Build().Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application startup failed");
+}
+finally
+{
+    Log.Information("Application shut down complete");
+    Log.CloseAndFlush();
+}
