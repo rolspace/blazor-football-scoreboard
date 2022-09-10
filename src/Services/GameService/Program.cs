@@ -14,18 +14,21 @@ using Serilog;
 using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
 try
 {
+    Log.Information("Begin Application startup");
+
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
     builder.Host.UseSerilog((hostBuilderContext, loggerConfiguration) => loggerConfiguration
+        .ReadFrom.Configuration(hostBuilderContext.Configuration)
         .Enrich.FromLogContext()
-        .ReadFrom.Configuration(hostBuilderContext.Configuration));
+    );
 
     var mySqlServerVersion = new MySqlServerVersion(new Version(8, 0, 28));
 
@@ -67,6 +70,8 @@ try
         endpoints.MapHub<GameHub>("/hub/football/game");
         endpoints.MapControllers();
     });
+
+    Log.Information("Completed application startup");
 
     app.Run();
 }
