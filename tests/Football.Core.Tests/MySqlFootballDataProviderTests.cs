@@ -1,6 +1,6 @@
 namespace Football.Core.Tests;
 
-public class UnitTest1
+public class MySqlFootballDataProviderTests
 {
     [Fact]
     public void Test1()
