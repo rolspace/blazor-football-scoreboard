@@ -16,18 +16,9 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `footballdb`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `footballdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-
-USE `footballdb`;
-
---
 -- Table structure for table `game`
 --
 
-DROP TABLE IF EXISTS `game`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `game` (
@@ -53,7 +44,6 @@ UNLOCK TABLES;
 -- Table structure for table `play`
 --
 
-DROP TABLE IF EXISTS `play`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `play` (
@@ -229,7 +219,6 @@ UNLOCK TABLES;
 -- Table structure for table `stat`
 --
 
-DROP TABLE IF EXISTS `stat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `stat` (
@@ -258,7 +247,6 @@ UNLOCK TABLES;
 -- Table structure for table `time`
 --
 
-DROP TABLE IF EXISTS `time`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `time` (
