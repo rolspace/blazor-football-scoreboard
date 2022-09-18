@@ -9,7 +9,7 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: footballdb
+      MYSQL_DATABASE: football_db
     volumes:
       - path/to/mysql:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
