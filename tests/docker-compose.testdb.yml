@@ -1,12 +1,12 @@
 version: "3.8"
 
 services:
-  db:
+  testdb:
     container_name: nflscoreboard-mysql-testdb
     image: mysql:8.0.28
     command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 3306:3306
+      - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: football_testdb
@@ -14,18 +14,18 @@ services:
       - path/to/mysql:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
     networks:
-      - db
+      - testdb
 
-  adminer:
-    container_name: adminer
+  testadminer:
+    container_name: testadminer
     image: adminer
     ports:
-      - 8080:8080
+      - 8081:8080
     networks:
-      - db
+      - testdb
     depends_on:
-      - db
+      - testdb
 
 networks:
-  db:
+  testdb:
     driver: bridge
