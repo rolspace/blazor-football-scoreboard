@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Football.Core.Models;
 using Football.Core.Persistence.MySql;
 
@@ -19,6 +20,6 @@ public class MySqlFootballDataProviderTests : IClassFixture<TestDatabaseFixture>
 
         Game game = await mySqlFootballDataProvider.GetGame(0);
 
-        Assert.Null(game);
+        game.Should().BeNull();
     }
 }
