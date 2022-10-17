@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class TestDatabaseFixture
 {
-    private const string ConnectionString = @"Server=localhost;Database=football_testdb;Uid=root;Pwd=password;";
+    private const string ConnectionString = @"Server=localhost;Port=3307;Database=football_testdb;Uid=root;Pwd=password;";
 
     public FootballDbContext CreateContext()
         => new FootballDbContext(
