@@ -22,4 +22,25 @@ public class MySqlFootballDataProviderTests : IClassFixture<TestDatabaseFixture>
 
         game.Should().BeNull();
     }
+
+    [Fact]
+    public async Task Get_Game_IdExists_ReturnsGame()
+    {
+        using var dbContext = Fixture.CreateContext();
+
+        MySqlFootballDataProvider mySqlFootballDataProvider = new MySqlFootballDataProvider(dbContext);
+
+        Game game = await mySqlFootballDataProvider.GetGame(2019090500);
+        Game expected = new()
+        {
+            Id = 2019090500,
+            Week = 1,
+            HomeTeam = "CHI",
+            AwayTeam = "GB",
+            Time = null,
+            Stats = Enumerable.Empty<Stat>().ToList(),
+        };
+
+        game.Should().BeEquivalentTo(expected);
+    }
 }
