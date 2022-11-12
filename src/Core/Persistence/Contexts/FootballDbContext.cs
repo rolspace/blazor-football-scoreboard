@@ -1,17 +1,17 @@
 ﻿using Football.Core.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Football.Core.Persistence.MySql.Contexts
+namespace Football.Core.Persistence.Contexts
 {
-    public class FootballDbContext : DbContext
+    public class FootballDbContext : DbContext, IFootballDbContext
     {
-        public virtual DbSet<PlayEntity> Play { get; set; }
+        public virtual DbSet<PlayEntity> Play => Set<PlayEntity>();
 
-        public virtual DbSet<GameEntity> Game { get; set; }
+        public virtual DbSet<GameEntity> Game => Set<GameEntity>();
 
-        public virtual DbSet<StatEntity> Stat { get; set; }
+        public virtual DbSet<StatEntity> Stat => Set<StatEntity>();
 
-        public virtual DbSet<TimeEntity> Time { get; set; }
+        public virtual DbSet<TimeEntity> Time => Set<TimeEntity>();
 
         public FootballDbContext() { }
 

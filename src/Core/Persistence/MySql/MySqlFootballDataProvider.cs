@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Football.Core.Models;
+using Football.Core.Persistence.Contexts;
 using Football.Core.Persistence.Entities;
 using Football.Core.Persistence.Interfaces.DataProviders;
-using Football.Core.Persistence.MySql.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Football.Core.Persistence.MySql
