@@ -1,7 +1,7 @@
 using System;
+using Football.Core.Persistence.Contexts;
 using Football.Core.Persistence.Interfaces.DataProviders;
 using Football.Core.Persistence.MySql;
-using Football.Core.Persistence.MySql.Contexts;
 using Football.Services.GameService.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
