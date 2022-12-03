@@ -2,5 +2,5 @@ namespace Football.Application.Games.Queries;
 
 public class GamesVm
 {
-    public IList<GamesDto> Games { get; set; }
+    public IList<GameDto> Games { get; set; } = new List<GameDto>();
 }
