@@ -1,3 +1,5 @@
+using Football.Application.Common.Models;
+
 namespace Football.Application.Games.Queries;
 
 public class GamesVm
