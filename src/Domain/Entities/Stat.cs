@@ -16,6 +16,6 @@ namespace Football.Domain.Entities
 
         public int Sacks { get; set; }
 
-        public virtual Game Game { get; set; }
+        public Game Game { get; set; }
     }
 }

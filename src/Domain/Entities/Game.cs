@@ -12,7 +12,7 @@ namespace Football.Domain.Entities
 
         public string AwayTeam { get; set; }
 
-        public virtual Time Time { get; set; } = null;
+        public Time Time { get; set; } = null;
 
         public IList<Play> Plays { get; private set; } = new List<Play>();
 
