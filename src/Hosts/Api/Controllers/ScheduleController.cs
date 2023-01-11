@@ -4,7 +4,7 @@ namespace Football.Host.Api.Controllers;
 
 [ApiController]
 [Route("api/schedule")]
-public class ScheduleController : ControllerBase
+public class ScheduleController : ApiControllerBase
 {
     public ScheduleController()
     {

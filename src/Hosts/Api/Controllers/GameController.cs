@@ -4,7 +4,7 @@ namespace Football.Host.Api.Controllers;
 
 [ApiController]
 [Route("api/games")]
-public class GameController : ControllerBase
+public class GameController : ApiControllerBase
 {
     public GameController()
     {
