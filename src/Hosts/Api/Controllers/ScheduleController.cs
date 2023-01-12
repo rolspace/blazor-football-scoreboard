@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Football.Host.Api.Controllers;
+namespace Football.Api.Controllers;
 
 [ApiController]
 [Route("api/schedule")]

@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Football.Host.Api;
+namespace Football.Api;
 
 [ApiController]
 public abstract class ApiControllerBase : ControllerBase
