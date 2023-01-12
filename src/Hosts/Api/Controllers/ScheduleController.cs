@@ -6,10 +6,6 @@ namespace Football.Api.Controllers;
 [Route("api/schedule")]
 public class ScheduleController : ApiControllerBase
 {
-    public ScheduleController()
-    {
-    }
-
     [HttpGet("{weekNumber}")]
     public async Task<ActionResult> GetSchedule(int weekNumber)
     {

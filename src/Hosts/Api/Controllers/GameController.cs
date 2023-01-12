@@ -6,10 +6,6 @@ namespace Football.Api.Controllers;
 [Route("api/games")]
 public class GameController : ApiControllerBase
 {
-    public GameController()
-    {
-    }
-
     [HttpGet("{gameId}")]
     public async Task<ActionResult> GetGame(int gameId)
     {
