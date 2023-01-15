@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Application\Football.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
+  </ItemGroup>
+
 </Project>
