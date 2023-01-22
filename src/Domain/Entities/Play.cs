@@ -308,7 +308,7 @@ namespace Football.Domain.Entities
 
         public bool? DefensiveExtraPointConv { get; set; }
 
-        public Game Game { get; set; } = null;
+        public Game Game { get; set; }
 
         [NotMapped]
         protected internal bool IsHomeTeamOnOffense => Posteam == HomeTeam;
