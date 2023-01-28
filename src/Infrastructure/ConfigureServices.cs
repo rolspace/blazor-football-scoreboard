@@ -1,6 +1,5 @@
 using Football.Application.Common.Interfaces;
 using Football.Infrastructure.Persistence;
-using Football.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -16,8 +15,6 @@ public static class ConfigureServices
             options.UseMySql(configuration.GetConnectionString("FootballDbConnection"), mySqlServerVersion));
 
         services.AddScoped<IFootballDbContext>(provider => provider.GetRequiredService<FootballDbContext>());
-
-        services.AddTransient<IDateTime, DateTimeService>();
 
         return services;
     }
