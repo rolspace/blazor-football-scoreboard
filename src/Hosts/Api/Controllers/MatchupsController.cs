@@ -1,0 +1,16 @@
+using Football.Application.Common.Models;
+using Football.Application.Games.Queries;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Football.Api.Controllers;
+
+[ApiController]
+[Route("api/matchups")]
+public class MatchupsController : ApiControllerBase
+{
+    [HttpGet("{week}")]
+    public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesByWeek([FromRoute] GetGamesQuery query)
+    {
+        return Ok(await Mediator.Send(query));
+    }
+}
