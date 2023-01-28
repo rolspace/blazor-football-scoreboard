@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Football.Api.Controllers;
 
 [ApiController]
-[Route("api/matchups")]
-public class MatchupsController : ApiControllerBase
+[Route("api/weekly-games")]
+public class WeeklyGamesController : ApiControllerBase
 {
     [HttpGet("{week}")]
     public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesByWeek([FromRoute] GetGamesQuery query)
