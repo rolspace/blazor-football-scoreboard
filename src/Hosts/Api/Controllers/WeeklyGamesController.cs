@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Football.Api.Controllers;
 
 [ApiController]
-[Route("api/weekly-schedule")]
+[Route("api/weekly-games")]
 public class WeeklyScheduleController : ApiControllerBase
 {
     [HttpGet("{week}")]
