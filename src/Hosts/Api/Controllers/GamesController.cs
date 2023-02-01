@@ -11,6 +11,12 @@ public class GamesController : ApiControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<GameDto>> GetGameById([FromRoute] GetGameQuery query)
     {
-        return Ok(await Mediator.Send(query));
+        if (query == null) return BadRequest();
+
+        GameDto game = await Mediator.Send(query);
+
+        if (game == null) return NotFound();
+
+        return Ok(game);
     }
 }

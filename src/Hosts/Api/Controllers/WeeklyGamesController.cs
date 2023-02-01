@@ -11,6 +11,12 @@ public class WeeklyScheduleController : ApiControllerBase
     [HttpGet("{week}")]
     public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesByWeek([FromRoute] GetGamesQuery query)
     {
-        return Ok(await Mediator.Send(query));
+        if (query == null) return BadRequest();
+
+        IEnumerable<GameDto> games = await Mediator.Send(query);
+
+        if (games.Count() == 0) return NotFound();
+
+        return Ok(games);
     }
 }
