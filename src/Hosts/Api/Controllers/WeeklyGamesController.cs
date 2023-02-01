@@ -9,6 +9,9 @@ namespace Football.Api.Controllers;
 public class WeeklyScheduleController : ApiControllerBase
 {
     [HttpGet("{week}")]
+    [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesByWeek([FromRoute] GetGamesQuery query)
     {
         if (query == null) return BadRequest();
