@@ -310,14 +310,15 @@ namespace Football.Domain.Entities
 
         public Game Game { get; set; }
 
-        [NotMapped]
-        protected internal bool IsHomeTeamOnOffense => Posteam == HomeTeam;
+        public bool IsHomeTeamOnOffense => Posteam == HomeTeam;
 
-        [NotMapped]
-        protected internal bool IsAwayTeamOnOffense => Posteam == AwayTeam;
+        public bool IsAwayTeamOnOffense => Posteam == AwayTeam;
 
-        [NotMapped]
-        protected internal bool HasHomeTeamReceivedKickoffOrPunt
+        public bool HasHomeTeamPunted => PlayType == "punt" && Posteam == HomeTeam;
+
+        public bool HasAwayTeamPunted => PlayType == "punt" && Posteam == AwayTeam;
+
+        public bool HasHomeTeamReceivedKickoffOrPunt
         {
             get
             {
@@ -328,8 +329,7 @@ namespace Football.Domain.Entities
             }
         }
 
-        [NotMapped]
-        protected internal bool hasAwayTeamReceivedKickoffOrPunt
+        public bool HasAwayTeamReceivedKickoffOrPunt
         {
             get
             {
@@ -337,24 +337,6 @@ namespace Football.Domain.Entities
                 bool hasAwayTeamReceivedPunt = PlayType == "punt" && Defteam == AwayTeam;
 
                 return hasAwayTeamReceivedKickoff || hasAwayTeamReceivedPunt;
-            }
-        }
-
-        [NotMapped]
-        protected internal bool IsHomeTeamPunt
-        {
-            get
-            {
-                return PlayType == "punt" && Posteam == HomeTeam;
-            }
-        }
-
-        [NotMapped]
-        protected internal bool IsAwayTeamPunt
-        {
-            get
-            {
-                return PlayType == "punt" && Posteam == AwayTeam;
             }
         }
     }
