@@ -1,3 +1,4 @@
+using Football.Api.Hubs;
 using Serilog;
 using Serilog.Events;
 
@@ -21,6 +22,7 @@ try
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
 
+    builder.Services.AddSignalR();
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -36,7 +38,12 @@ try
     app.UseSerilogRequestLogging();
     app.UseHttpsRedirection();
 
-    app.MapControllers();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapHealthChecks("/health");
+        endpoints.MapHub<PlayHub>("/hub/plays");
+        endpoints.MapControllers();
+    });
 
     Log.Information("Completed application startup");
 
