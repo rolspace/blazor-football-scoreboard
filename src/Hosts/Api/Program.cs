@@ -24,6 +24,7 @@ try
 
     builder.Services.AddSignalR();
     builder.Services.AddControllers();
+    builder.Services.AddHealthChecks();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
@@ -37,6 +38,7 @@ try
 
     app.UseSerilogRequestLogging();
     app.UseHttpsRedirection();
+    app.UseRouting();
 
     app.UseEndpoints(endpoints =>
     {
