@@ -1,13 +1,21 @@
 using Football.Application.Common.Models;
 using Football.Application.Queries.Games;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Football.Api.Controllers.V1;
 
 [ApiController]
 [Route("api/v1/games")]
-public class GamesController : ApiControllerBase
+public class GamesController : ControllerBase
 {
+    private ISender _mediator;
+
+    public GamesController(ISender mediator)
+    {
+        _mediator = mediator;
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(GameDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -16,7 +24,7 @@ public class GamesController : ApiControllerBase
     {
         if (query == null) return BadRequest();
 
-        GameDto game = await Mediator.Send(query);
+        GameDto game = await _mediator.Send(query);
 
         if (game == null) return NotFound();
 
@@ -31,7 +39,7 @@ public class GamesController : ApiControllerBase
     {
         if (query == null) return BadRequest();
 
-        IEnumerable<GameDto> games = await Mediator.Send(query);
+        IEnumerable<GameDto> games = await _mediator.Send(query);
 
         if (games.Count() == 0) return NotFound();
 
