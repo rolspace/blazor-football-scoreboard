@@ -1,11 +1,11 @@
 using Football.Application.Common.Models;
-using Football.Application.Games.Queries;
+using Football.Application.Queries.Games;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Football.Api.Controllers;
+namespace Football.Api.Controllers.V1;
 
 [ApiController]
-[Route("api/games")]
+[Route("api/v1/games")]
 public class GamesController : ApiControllerBase
 {
     [HttpGet("{id}")]
@@ -21,5 +21,20 @@ public class GamesController : ApiControllerBase
         if (game == null) return NotFound();
 
         return Ok(game);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesByWeek([FromQuery] GetGamesQuery query)
+    {
+        if (query == null) return BadRequest();
+
+        IEnumerable<GameDto> games = await Mediator.Send(query);
+
+        if (games.Count() == 0) return NotFound();
+
+        return Ok(games);
     }
 }
