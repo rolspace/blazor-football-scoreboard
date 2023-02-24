@@ -31,4 +31,33 @@ public class UnitTest1
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(gameDto, okResult.Value);
     }
+
+    [Fact]
+    public async Task GetGamesById_NonExistingGameId_ReturnsNotFound()
+    {
+        var getGameQuery = new GetGameQuery { Id = 0 };
+
+        var mockSender = new Mock<ISender>();
+        mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()))
+            .ReturnsAsync((GameDto?)null);
+
+        var gamesController = new GamesController(mockSender.Object);
+        var actionResult = await gamesController.GetGameById(getGameQuery);
+
+        var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+    }
+
+    [Fact]
+    public async Task GetGamesById_NonExistingGameId_ReturnsBadRequest()
+    {
+        GetGameQuery? getGameQuery = null;
+
+        var mockSender = new Mock<ISender>();
+        mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()));
+
+        var gamesController = new GamesController(mockSender.Object);
+        var actionResult = await gamesController.GetGameById(getGameQuery);
+
+        var notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
+    }
 }
