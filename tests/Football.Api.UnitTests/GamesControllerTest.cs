@@ -92,4 +92,19 @@ public class UnitTest1
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(gameDtos, okResult.Value);
     }
+
+    [Fact]
+    public async Task GetGamesByWeek_NonExistingWeek_ReturnsNotFound()
+    {
+        var getGamesQuery = new GetGamesQuery { Week = 0 };
+
+        var mockSender = new Mock<ISender>();
+        mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
+            .ReturnsAsync(new List<GameDto>());
+
+        var gamesController = new GamesController(mockSender.Object);
+        var actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
+
+        var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+    }
 }
