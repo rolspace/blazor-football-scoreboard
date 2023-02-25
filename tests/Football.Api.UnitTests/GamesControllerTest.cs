@@ -10,7 +10,7 @@ namespace Football.Api.UnitTests;
 public class UnitTest1
 {
     [Fact]
-    public async Task GetGamesById_ValidGameId_ReturnsHttpOk()
+    public async Task GetGamesById_ValidGameId_ReturnsHttpOkAndGameDto()
     {
         var getGameQuery = new GetGameQuery { Id = 1 };
         var gameDto = new GameDto
