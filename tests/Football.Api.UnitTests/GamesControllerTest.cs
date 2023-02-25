@@ -48,7 +48,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public async Task GetGamesById_NonExistingGameId_ReturnsBadRequest()
+    public async Task GetGamesById_InvalidQuery_ReturnsBadRequest()
     {
         GetGameQuery? getGameQuery = null!;
 
