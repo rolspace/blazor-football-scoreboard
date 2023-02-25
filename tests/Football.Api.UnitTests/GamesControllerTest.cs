@@ -50,10 +50,10 @@ public class UnitTest1
     [Fact]
     public async Task GetGamesById_InvalidQuery_ReturnsBadRequest()
     {
-        GetGameQuery? getGameQuery = null!;
+        GetGameQuery getGameQuery = null!;
 
         var mockSender = new Mock<ISender>();
-        mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()));
+        mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()));
 
         var gamesController = new GamesController(mockSender.Object);
         var actionResult = await gamesController.GetGameById(getGameQuery);
