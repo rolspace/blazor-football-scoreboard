@@ -107,4 +107,18 @@ public class UnitTest1
 
         var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
     }
+
+    [Fact]
+    public async Task GetGamesByWeek_InvalidQuery_ReturnsBadRequest()
+    {
+        GetGamesQuery getGamesQuery = null!;
+
+        var mockSender = new Mock<ISender>();
+        mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()));
+
+        var gamesController = new GamesController(mockSender.Object);
+        var actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
+
+        var notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
+    }
 }
