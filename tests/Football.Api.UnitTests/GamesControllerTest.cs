@@ -60,4 +60,36 @@ public class UnitTest1
 
         var notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
     }
+
+    [Fact]
+    public async Task GetGamesByWeek_WeekExists_ReturnsHttpOkAndGameDtoList()
+    {
+        var getGamesQuery = new GetGamesQuery { Week = 1 };
+        var gameDtos = new List<GameDto> {
+            new GameDto
+            {
+                Id = 1,
+                Week = 1,
+                HomeTeam = "HT1",
+                AwayTeam = "AT1"
+            },
+            new GameDto
+            {
+                Id = 2,
+                Week = 1,
+                HomeTeam = "HT2",
+                AwayTeam = "AT2"
+            }
+        };
+
+        var mockSender = new Mock<ISender>();
+        mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
+            .ReturnsAsync(gameDtos);
+
+        var gamesController = new GamesController(mockSender.Object);
+        var actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
+
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        Assert.Equal(gameDtos, okResult.Value);
+    }
 }
