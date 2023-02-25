@@ -50,7 +50,7 @@ public class UnitTest1
     [Fact]
     public async Task GetGamesById_NonExistingGameId_ReturnsBadRequest()
     {
-        GetGameQuery? getGameQuery = null;
+        GetGameQuery? getGameQuery = null!;
 
         var mockSender = new Mock<ISender>();
         mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()));
