@@ -1,3 +1,5 @@
+using System.Reflection;
+using Football.Api.Extensions;
 using Football.Api.Hubs;
 using Serilog;
 using Serilog.Events;
@@ -13,6 +15,11 @@ try
     Log.Information("Began Application startup");
 
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+    if (builder.Environment.IsDevelopment() || builder.Environment.IsLocalhost())
+    {
+        builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
+    }
 
     builder.Host.UseSerilog((hostBuilderContext, loggerConfiguration) => loggerConfiguration
         .ReadFrom.Configuration(hostBuilderContext.Configuration)
@@ -30,7 +37,7 @@ try
 
     var app = builder.Build();
 
-    if (app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment() || app.Environment.IsLocalhost())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
