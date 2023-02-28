@@ -50,7 +50,7 @@ try
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapHealthChecks("/health");
-        endpoints.MapHub<PlayHub>("/hub/plays");
+        endpoints.MapHub<PlayHub>("/hub/v1/plays");
         endpoints.MapControllers();
     });
 
