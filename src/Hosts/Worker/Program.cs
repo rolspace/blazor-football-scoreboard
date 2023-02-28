@@ -1,7 +1,7 @@
 using Football.Worker;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddHostedService<StreamService>();
+builder.Services.AddHostedService<PlayLogHostedService>();
 
 var app = builder.Build();
 

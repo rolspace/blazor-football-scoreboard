@@ -1,10 +1,10 @@
 namespace Football.Worker;
 
-public class StreamService : IHostedService, IAsyncDisposable
+public class PlayLogHostedService : IHostedService, IAsyncDisposable
 {
-    private readonly ILogger<StreamService> _logger;
+    private readonly ILogger<PlayLogHostedService> _logger;
 
-    public StreamService(ILogger<StreamService> logger)
+    public PlayLogHostedService(ILogger<PlayLogHostedService> logger)
     {
         _logger = logger;
     }
