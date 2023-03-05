@@ -44,7 +44,17 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
     }
 
     private async void DoWork(object? state)
-    { }
+    {
+        var gameTime = state as GameTime;
+        if (gameTime == null) throw new InvalidOperationException("Worker state cannot be null");
+
+        int previousTime = gameTime.Counter;
+
+        Interlocked.Decrement(ref gameTime.Counter);
+        int currentTime = gameTime.Counter;
+
+        Console.WriteLine(currentTime);
+    }
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
