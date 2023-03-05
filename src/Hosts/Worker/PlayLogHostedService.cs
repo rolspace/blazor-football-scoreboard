@@ -10,6 +10,13 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     private readonly IServiceScopeFactory _scopeFactory;
 
+    private Timer? _gameTimer;
+
+    internal class GameTime
+    {
+        public int Counter = 3600;
+    }
+
     public PlayLogHostedService(IHubProvider hubProvider, IServiceScopeFactory scopeFactory, ILogger<PlayLogHostedService> logger)
     {
         _hubProvider = hubProvider;
@@ -19,7 +26,8 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Service started");
+        var gameTime = new GameTime();
+        _gameTimer = new Timer(new TimerCallback(DoWork), gameTime, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 
         try
         {
@@ -29,7 +37,14 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         {
             _logger.LogError(ex, "An error occurred starting the SignalR connection hub");
         }
+        finally
+        {
+            _logger.LogInformation("Service started");
+        }
     }
+
+    private async void DoWork(object? state)
+    { }
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
