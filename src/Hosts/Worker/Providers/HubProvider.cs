@@ -11,17 +11,17 @@ public class HubProvider : IHubProvider
         _hubConnection = new HubConnectionBuilder().WithUrl(hubUri).Build();
     }
 
-    public async Task StartHubAsync()
+    public async Task StartAsync()
     {
         await _hubConnection.StartAsync();
     }
 
-    public async Task StopHubAsync()
+    public async Task StopAsync()
     {
         await _hubConnection.StopAsync();
     }
 
-    public async Task DisposeHubAsync()
+    public async Task DisposeAsync()
     {
         await _hubConnection.DisposeAsync();
     }

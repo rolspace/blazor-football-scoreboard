@@ -2,9 +2,9 @@ namespace Football.Worker.Providers;
 
 public interface IHubProvider
 {
-    Task StartHubAsync();
+    Task StartAsync();
 
-    Task StopHubAsync();
+    Task StopAsync();
 
-    Task DisposeHubAsync();
+    Task DisposeAsync();
 }

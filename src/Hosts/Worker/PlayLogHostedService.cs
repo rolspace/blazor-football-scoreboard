@@ -31,7 +31,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
         try
         {
-            await _hubProvider.StartHubAsync();
+            await _hubProvider.StartAsync();
         }
         catch (Exception ex)
         {
@@ -60,13 +60,13 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
     {
         _logger.LogInformation("Service stopped");
 
-        await _hubProvider.StopHubAsync();
+        await _hubProvider.StopAsync();
     }
 
     public async ValueTask DisposeAsync()
     {
         _logger.LogInformation("Service disposed");
 
-        await _hubProvider.DisposeHubAsync();
+        await _hubProvider.DisposeAsync();
     }
 }
