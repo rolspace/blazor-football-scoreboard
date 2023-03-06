@@ -12,11 +12,6 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     private Timer? _gameTimer;
 
-    internal class GameTime
-    {
-        public int Counter = 3600;
-    }
-
     public PlayLogHostedService(IHubProvider hubProvider, IServiceScopeFactory scopeFactory, ILogger<PlayLogHostedService> logger)
     {
         _hubProvider = hubProvider;
@@ -37,7 +32,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred starting the SignalR connection hub");
-            throw ex;
+            throw;
         }
     }
 
@@ -46,10 +41,9 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         var gameTime = state as GameTime;
         if (gameTime == null) throw new InvalidOperationException("Worker state cannot be null");
 
-        int previousTime = gameTime.Counter;
+        int previousTime = gameTime.GetTime();
 
-        Interlocked.Decrement(ref gameTime.Counter);
-        int currentTime = gameTime.Counter;
+        int currentTime = gameTime.DecreaseTime();
 
         Console.WriteLine(currentTime);
     }
