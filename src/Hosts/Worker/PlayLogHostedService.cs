@@ -32,14 +32,12 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         try
         {
             await _hubProvider.StartAsync();
+            _logger.LogInformation("Service started");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred starting the SignalR connection hub");
-        }
-        finally
-        {
-            _logger.LogInformation("Service started");
+            throw ex;
         }
     }
 
@@ -58,15 +56,15 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Service stopped");
-
         await _hubProvider.StopAsync();
+
+        _logger.LogInformation("Service stopped");
     }
 
     public async ValueTask DisposeAsync()
     {
-        _logger.LogInformation("Service disposed");
-
         await _hubProvider.DisposeAsync();
+
+        _logger.LogInformation("Service disposed");
     }
 }
