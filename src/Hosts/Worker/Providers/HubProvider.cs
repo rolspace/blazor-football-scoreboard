@@ -13,16 +13,25 @@ public class HubProvider : IHubProvider
 
     public async Task StartAsync()
     {
-        await _hubConnection.StartAsync();
+        if (_hubConnection.State == HubConnectionState.Disconnected)
+        {
+            await _hubConnection.StartAsync();
+        }
     }
 
     public async Task StopAsync()
     {
-        await _hubConnection.StopAsync();
+        if (_hubConnection.State == HubConnectionState.Connected)
+        {
+            await _hubConnection.StopAsync();
+        }
     }
 
     public async Task DisposeAsync()
     {
-        await _hubConnection.DisposeAsync();
+        if (_hubConnection.State == HubConnectionState.Disconnected)
+        {
+            await _hubConnection.DisposeAsync();
+        }
     }
 }
