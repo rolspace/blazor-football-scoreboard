@@ -12,7 +12,7 @@ public record GetGameQuery : IRequest<GameDto>
     public int Id { get; init; }
 }
 
-public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto>
+public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto?>
 {
     private readonly IFootballDbContext _footballDbContext;
 
@@ -24,7 +24,7 @@ public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto>
         _mapper = mapper;
     }
 
-    public async Task<GameDto> Handle(GetGameQuery request, CancellationToken cancellationToken)
+    public async Task<GameDto?> Handle(GetGameQuery request, CancellationToken cancellationToken)
     {
         return await _footballDbContext.Games
                 .Where(game => game.Id == request.Id)
