@@ -7,11 +7,8 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());
-    }
+        var assembly = Assembly.GetExecutingAssembly();
 
-    private void ApplyMappingsFromAssembly(Assembly assembly)
-    {
         var mapFromType = typeof(MapFrom<>);
 
         var mappingMethodName = nameof(MapFrom<object>.Mapping);
@@ -28,8 +25,10 @@ public class MappingProfile : Profile
 
             var methodInfo = type.GetMethod(mappingMethodName);
 
-            methodInfo.Invoke(instance, new object[] { this });
-
+            if (methodInfo != null)
+            {
+                methodInfo.Invoke(instance, new object[] { this });
+            }
         }
     }
 }
