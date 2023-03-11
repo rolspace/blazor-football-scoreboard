@@ -4,6 +4,8 @@ using Football.Worker.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddApplicationServices();
+
 builder.Services.AddTransient<IHubProvider>((serviceProvider) =>
 {
     var hubSettings = builder.Configuration.GetSection(HubSettings.Hub).Get<HubSettings>();
