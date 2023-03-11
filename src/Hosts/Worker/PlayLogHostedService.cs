@@ -27,12 +27,14 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         try
         {
             await _hubProvider.StartAsync();
-            _logger.LogInformation("Service started");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred starting the SignalR connection hub");
-            throw;
+        }
+        finally
+        {
+            _logger.LogInformation("Hosted service started");
         }
     }
 
@@ -44,6 +46,15 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         int previousTime = gameTime.GetTime();
 
         int currentTime = gameTime.DecreaseTime();
+
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error while retrieve play log data.");
+        }
 
         Console.WriteLine(currentTime);
     }
