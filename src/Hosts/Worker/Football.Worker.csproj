@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Football.Application.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Football.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
