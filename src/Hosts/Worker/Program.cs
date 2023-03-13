@@ -1,11 +1,18 @@
+using System.Reflection;
 using Football.Worker;
+using Football.Worker.Extensions;
 using Football.Worker.Providers;
 using Football.Worker.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment() || builder.Environment.IsLocalhost())
+{
+    builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
+}
+
 builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddTransient<IHubProvider>((serviceProvider) =>
 {
