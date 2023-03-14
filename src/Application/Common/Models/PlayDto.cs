@@ -4,7 +4,7 @@ using Football.Domain.Entities;
 
 namespace Football.Application.Common.Models;
 
-public class PlayDto : MapFrom<Play>
+public sealed class PlayDto : MapFrom<Play>
 {
     public int Id { get; set; }
 

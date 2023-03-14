@@ -3,7 +3,7 @@ using Football.Domain.Entities;
 
 namespace Football.Application.Common.Models;
 
-public class GameDto : MapFrom<Game>
+public sealed class GameDto : MapFrom<Game>
 {
     public int Id { get; set; }
 
