@@ -22,6 +22,11 @@ public sealed class PlayDto : MapFrom<Play>
 
     public int QuarterSecondsRemaining { get; set; }
 
+    public override string ToString()
+    {
+        return $"{QuarterSecondsRemaining} - {HomeTeam}:{HomeScore} - {AwayTeam}:{AwayScore} - {Description}";
+    }
+
     public override void Mapping(Profile profile)
     {
         profile.CreateMap<Play, PlayDto>()
