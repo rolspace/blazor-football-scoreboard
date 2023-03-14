@@ -13,9 +13,11 @@ public class MappingProfile : Profile
 
         var mappingMethodName = nameof(MapFrom<object>.Mapping);
 
-        var types = assembly.GetExportedTypes().Where(t => t.BaseType != null
-            && t.BaseType.IsGenericType
-            && t.BaseType.GetGenericTypeDefinition() == mapFromType).ToList();
+        var types = assembly.GetExportedTypes()
+            .Where(t => t.BaseType != null
+                && t.BaseType.IsGenericType
+                && t.BaseType.GetGenericTypeDefinition() == mapFromType)
+            .ToList();
 
         var argumentTypes = new Type[] { typeof(Profile) };
 
