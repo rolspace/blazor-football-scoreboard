@@ -1,4 +1,6 @@
-namespace Football.Api.Extensions;
+using Microsoft.Extensions.Hosting;
+
+namespace Football.Infrastructure.Extensions;
 
 public static class HostEnvironmentExtensions
 {

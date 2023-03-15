@@ -1,6 +1,6 @@
 using System.Reflection;
-using Football.Api.Extensions;
 using Football.Api.Hubs;
+using Football.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
 

@@ -1,6 +1,6 @@
 using System.Reflection;
+using Football.Infrastructure.Extensions;
 using Football.Worker;
-using Football.Worker.Extensions;
 using Football.Worker.Providers;
 using Football.Worker.Settings;
 
