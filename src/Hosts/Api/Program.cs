@@ -12,7 +12,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("Began Application startup");
+    Log.Information("Application start.");
 
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,13 @@ try
     {
         builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
     }
+
+    builder.Host.UseDefaultServiceProvider(options =>
+    {
+        bool validate = builder.Environment.IsDevelopment() || builder.Environment.IsLocalhost();
+        options.ValidateScopes = validate;
+        options.ValidateOnBuild = validate;
+    });
 
     builder.Host.UseSerilog((hostBuilderContext, loggerConfiguration) => loggerConfiguration
         .ReadFrom.Configuration(hostBuilderContext.Configuration)
@@ -54,16 +61,14 @@ try
         endpoints.MapControllers();
     });
 
-    Log.Information("Completed application startup");
-
     app.Run();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Failed application startup");
+    Log.Fatal(ex, "Application terminated unexpectedly.");
 }
 finally
 {
-    Log.Information("Completed application shut down");
+    Log.Information("Application shut down.");
     Log.CloseAndFlush();
 }

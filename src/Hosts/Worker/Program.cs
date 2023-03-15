@@ -11,6 +11,13 @@ if (builder.Environment.IsDevelopment() || builder.Environment.IsLocalhost())
     builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 }
 
+builder.Host.UseDefaultServiceProvider(options =>
+{
+    bool validate = builder.Environment.IsDevelopment() || builder.Environment.IsLocalhost();
+    options.ValidateScopes = validate;
+    options.ValidateOnBuild = validate;
+});
+
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
@@ -21,13 +28,14 @@ builder.Services.AddTransient<IHubProvider>((serviceProvider) =>
 
     return new HubProvider(hubUri);
 });
+
 builder.Services.AddHostedService<PlayLogHostedService>();
 
 var app = builder.Build();
 
 app.MapGet("/", () => new Response
 {
-    Message = "StreamService is running"
+    Message = "Web application for the PlayLogHostedService"
 });
 
 app.Run();
