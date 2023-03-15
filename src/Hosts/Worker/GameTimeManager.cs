@@ -1,6 +1,6 @@
 namespace Football.Worker;
 
-internal class GameTime
+internal class GameTimeManager
 {
     private readonly object _locker = new object();
 
@@ -12,7 +12,7 @@ internal class GameTime
 
     public int GetQuarter() => _quarter;
 
-    public void DecreaseSecondsRemaining()
+    public void PassTime()
     {
         lock (_locker)
         {

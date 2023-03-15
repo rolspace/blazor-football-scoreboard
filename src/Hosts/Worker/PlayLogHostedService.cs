@@ -24,7 +24,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        var gameTime = new GameTime();
+        var gameTime = new GameTimeManager();
         _gameTimer = new Timer(new TimerCallback(DoWork), gameTime, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 
         try
@@ -43,11 +43,11 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     private async void DoWork(object? state)
     {
-        var gameTime = state as GameTime;
-        if (gameTime == null) throw new InvalidOperationException("Worker state cannot be null");
+        var gameTimeManager = state as GameTimeManager;
+        if (gameTimeManager == null) throw new InvalidOperationException("Worker state cannot be null");
 
-        int quarter = gameTime.GetQuarter();
-        int quarterSecondsRemaining = gameTime.GetQuarterSecondsRemaining();
+        int quarter = gameTimeManager.GetQuarter();
+        int quarterSecondsRemaining = gameTimeManager.GetQuarterSecondsRemaining();
 
         try
         {
@@ -69,7 +69,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
                 }
             }
 
-            gameTime.DecreaseSecondsRemaining();
+            gameTimeManager.PassTime();
         }
         catch (Exception ex)
         {
