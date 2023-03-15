@@ -1,4 +1,7 @@
+using Football.Application.Common.Models;
+using Football.Application.Queries.Plays;
 using Football.Worker.Providers;
+using MediatR;
 
 namespace Football.Worker;
 
@@ -6,9 +9,9 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 {
     private readonly IHubProvider _hubProvider;
 
-    private readonly ILogger<PlayLogHostedService> _logger;
-
     private readonly IServiceScopeFactory _scopeFactory;
+
+    private readonly ILogger<PlayLogHostedService> _logger;
 
     private Timer? _gameTimer;
 
@@ -43,20 +46,35 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         var gameTime = state as GameTime;
         if (gameTime == null) throw new InvalidOperationException("Worker state cannot be null");
 
-        int previousTime = gameTime.GetTime();
-
-        int currentTime = gameTime.DecreaseTime();
+        int quarter = gameTime.GetQuarter();
+        int quarterSecondsRemaining = gameTime.GetQuarterSecondsRemaining();
 
         try
         {
+            GetPlaysQuery query = new GetPlaysQuery()
+            {
+                Week = 1,
+                Quarter = quarter,
+                QuarterSecondsRemaining = quarterSecondsRemaining
+            };
 
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                ISender mediator = scope.ServiceProvider.GetRequiredService<ISender>();
+                var plays = await mediator.Send(query);
+
+                foreach (PlayDto play in plays)
+                {
+                    _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {play.ToString()}");
+                }
+            }
+
+            gameTime.DecreaseSecondsRemaining();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error while retrieve play log data.");
+            _logger.LogError(ex, "An error ocurred trying to retrieve play log data.");
         }
-
-        Console.WriteLine(currentTime);
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
@@ -68,6 +86,8 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        if (_gameTimer != null) await _gameTimer.DisposeAsync();
+
         await _hubProvider.DisposeAsync();
 
         _logger.LogInformation("Service disposed");
