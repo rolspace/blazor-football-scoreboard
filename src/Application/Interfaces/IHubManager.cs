@@ -1,6 +1,6 @@
-namespace Football.Worker.Providers;
+namespace Football.Application.Interfaces;
 
-public interface IHubProvider
+public interface IHubManager
 {
     Task StartAsync();
 

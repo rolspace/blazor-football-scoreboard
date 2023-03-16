@@ -1,4 +1,5 @@
 using Football.Application.Interfaces;
+using Football.Infrastructure.Communication;
 using Football.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,14 @@ public static class ConfigureServices
             options.UseMySql(configuration.GetConnectionString("FootballDbConnection"), mySqlServerVersion));
 
         services.AddScoped<IFootballDbContext>(provider => provider.GetRequiredService<FootballDbContext>());
+
+        services.AddTransient<IHubManager>((serviceProvider) =>
+        {
+            var hubSettings = configuration.GetSection(HubSettings.Hub).Get<HubSettings>();
+
+            var hubUri = new Uri(hubSettings != null ? hubSettings.Endpoint : string.Empty);
+            return new HubManager(hubUri);
+        });
 
         return services;
     }

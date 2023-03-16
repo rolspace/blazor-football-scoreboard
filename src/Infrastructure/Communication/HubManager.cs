@@ -1,12 +1,13 @@
+using Football.Application.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
 
-namespace Football.Worker.Providers;
+namespace Football.Infrastructure.Communication;
 
-public class HubProvider : IHubProvider
+public class HubManager : IHubManager
 {
     private readonly HubConnection _hubConnection;
 
-    public HubProvider(Uri hubUri)
+    public HubManager(Uri hubUri)
     {
         _hubConnection = new HubConnectionBuilder().WithUrl(hubUri).Build();
     }

@@ -1,6 +1,7 @@
+using Football.Application;
 using Football.Application.Common.Models;
+using Football.Application.Interfaces;
 using Football.Application.Queries.Plays;
-using Football.Worker.Providers;
 using MediatR;
 
 // TODO: Convert to background service
@@ -8,7 +9,7 @@ namespace Football.Worker;
 
 public class PlayLogHostedService : IHostedService, IAsyncDisposable
 {
-    private readonly IHubProvider _hubProvider;
+    private readonly IHubManager _hubManager;
 
     private readonly IServiceScopeFactory _scopeFactory;
 
@@ -16,9 +17,9 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     private Timer? _gameTimer;
 
-    public PlayLogHostedService(IHubProvider hubProvider, IServiceScopeFactory scopeFactory, ILogger<PlayLogHostedService> logger)
+    public PlayLogHostedService(IHubManager hubManager, IServiceScopeFactory scopeFactory, ILogger<PlayLogHostedService> logger)
     {
-        _hubProvider = hubProvider;
+        _hubManager = hubManager;
         _scopeFactory = scopeFactory;
         _logger = logger;
     }
@@ -30,7 +31,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
         try
         {
-            await _hubProvider.StartAsync();
+            await _hubManager.StartAsync();
         }
         catch (Exception ex)
         {
@@ -94,7 +95,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        await _hubProvider.StopAsync();
+        await _hubManager.StopAsync();
 
         _logger.LogInformation("Service stopped");
     }
@@ -103,7 +104,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
     {
         if (_gameTimer != null) await _gameTimer.DisposeAsync();
 
-        await _hubProvider.DisposeAsync();
+        await _hubManager.DisposeAsync();
 
         _logger.LogInformation("Service disposed");
     }

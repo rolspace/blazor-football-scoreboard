@@ -1,4 +1,4 @@
-namespace Football.Worker.Settings;
+namespace Football.Infrastructure.Communication;
 
 public class HubSettings
 {

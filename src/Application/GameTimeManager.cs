@@ -1,6 +1,8 @@
-namespace Football.Worker;
+using Football.Application.Interfaces;
 
-internal class GameTimeManager
+namespace Football.Application;
+
+public class GameTimeManager : IGameTimeManager
 {
     private readonly object _locker = new object();
 
