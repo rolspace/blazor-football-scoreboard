@@ -1,4 +1,4 @@
-using Football.Application.Common.Interfaces;
+using Football.Application.Interfaces;
 using Football.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

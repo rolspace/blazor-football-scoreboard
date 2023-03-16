@@ -1,4 +1,4 @@
-namespace Football.Application.Common.Interfaces;
+namespace Football.Application.Interfaces;
 
 public interface IDateTime
 {

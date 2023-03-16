@@ -1,4 +1,4 @@
-using Football.Application.Common.Interfaces;
+using Football.Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

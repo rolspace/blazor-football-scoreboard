@@ -1,7 +1,7 @@
 using Football.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Football.Application.Common.Interfaces;
+namespace Football.Application.Interfaces;
 
 public interface IFootballDbContext
 {
