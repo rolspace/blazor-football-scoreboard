@@ -3,6 +3,7 @@ using Football.Application.Queries.Plays;
 using Football.Worker.Providers;
 using MediatR;
 
+// TODO: Convert to background service
 namespace Football.Worker;
 
 public class PlayLogHostedService : IHostedService, IAsyncDisposable
@@ -46,30 +47,44 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
         var gameTimeManager = state as GameTimeManager;
         if (gameTimeManager == null) throw new InvalidOperationException("Worker state cannot be null");
 
-        int quarter = gameTimeManager.GetQuarter();
-        int quarterSecondsRemaining = gameTimeManager.GetQuarterSecondsRemaining();
-
         try
         {
-            GetPlaysQuery query = new GetPlaysQuery()
+            using (IServiceScope scope = _scopeFactory.CreateScope())
             {
-                Week = 1,
-                Quarter = quarter,
-                QuarterSecondsRemaining = quarterSecondsRemaining
-            };
+                var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                ISender mediator = scope.ServiceProvider.GetRequiredService<ISender>();
-                var plays = await mediator.Send(query);
+                if (gameTimeManager.IsEndOfRegulation)
+                {
+                    bool startOvertime = await mediator.Send(new CheckOvertimeQuery() { Week = 1 });
+
+                    if (startOvertime)
+                    {
+                        gameTimeManager.StartOvertime(startOvertime);
+                    }
+                    else
+                    {
+                        gameTimeManager.End();
+                    }
+                }
+
+                int quarter = gameTimeManager.GetQuarter();
+                int quarterSecondsRemaining = gameTimeManager.GetQuarterSecondsRemaining();
+                var query = new GetPlaysQuery()
+                {
+                    Week = 1,
+                    Quarter = quarter,
+                    QuarterSecondsRemaining = quarterSecondsRemaining
+                };
+
+                gameTimeManager.PassTime();
+
+                IEnumerable<PlayDto> plays = await mediator.Send(query);
 
                 foreach (PlayDto play in plays)
                 {
                     _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {play.ToString()}");
                 }
             }
-
-            gameTimeManager.PassTime();
         }
         catch (Exception ex)
         {

@@ -4,13 +4,15 @@ internal class GameTimeManager
 {
     private readonly object _locker = new object();
 
-    private int _secondsRemaining = 900;
+    private int _secondsRemaining = 50;
 
-    private int _quarter = 1;
+    private int _quarter = 4;
 
-    public int GetQuarterSecondsRemaining() => _secondsRemaining;
+    private bool _overtime = false;
 
     public int GetQuarter() => _quarter;
+
+    public int GetQuarterSecondsRemaining() => _secondsRemaining;
 
     public void PassTime()
     {
@@ -22,14 +24,33 @@ internal class GameTimeManager
             }
             else if (_secondsRemaining == 0 && _quarter < 4)
             {
+                Interlocked.Increment(ref _quarter);
                 Interlocked.Exchange(ref _secondsRemaining, 900);
-                Interlocked.Increment(ref _quarter);
             }
-            else if (_secondsRemaining == 0 && _quarter == 4)
+            else if (_secondsRemaining == 0 && _quarter == 4 && _overtime)
             {
-                Interlocked.Exchange(ref _secondsRemaining, 600);
                 Interlocked.Increment(ref _quarter);
+                Interlocked.Exchange(ref _secondsRemaining, 600);
             }
+        }
+    }
+
+    public bool IsEndOfRegulation => _quarter == 4 && _secondsRemaining == 0;
+
+    public void StartOvertime(bool startOvertime)
+    {
+        lock (_locker)
+        {
+            _overtime = startOvertime;
+        }
+    }
+
+    public void End()
+    {
+        lock (_locker)
+        {
+            Interlocked.Exchange(ref _quarter, -1);
+            Interlocked.Exchange(ref _secondsRemaining, -1);
         }
     }
 }
