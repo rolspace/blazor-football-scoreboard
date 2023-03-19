@@ -54,20 +54,6 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
             {
                 var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
 
-                if (gameTimeManager.IsEndOfRegulation)
-                {
-                    bool startOvertime = await mediator.Send(new CheckOvertimeQuery() { Week = 1 });
-
-                    if (startOvertime)
-                    {
-                        gameTimeManager.StartOvertime(startOvertime);
-                    }
-                    else
-                    {
-                        gameTimeManager.End();
-                    }
-                }
-
                 int quarter = gameTimeManager.GetQuarter();
                 int quarterSecondsRemaining = gameTimeManager.GetQuarterSecondsRemaining();
                 var query = new GetPlaysQuery()
@@ -77,14 +63,17 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
                     QuarterSecondsRemaining = quarterSecondsRemaining
                 };
 
-                gameTimeManager.PassTime();
-
                 IEnumerable<PlayDto> plays = await mediator.Send(query);
+
+                int gamesEndedCount = plays.Count(p => p.GameEnded);
+                if (gamesEndedCount > 0) gameTimeManager.IncrementGamesFinished(gamesEndedCount);
 
                 foreach (PlayDto play in plays)
                 {
                     _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {play.ToString()}");
                 }
+
+                gameTimeManager.SetTime();
             }
         }
         catch (Exception ex)

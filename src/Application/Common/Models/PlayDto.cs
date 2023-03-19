@@ -22,6 +22,8 @@ public sealed class PlayDto : MapFrom<Play>
 
     public int QuarterSecondsRemaining { get; set; }
 
+    public bool GameEnded { get; set; }
+
     public override string ToString()
     {
         return $"{HomeTeam}:{HomeScore} - {AwayTeam}:{AwayScore} - {Description}";
@@ -36,6 +38,8 @@ public sealed class PlayDto : MapFrom<Play>
             .ForMember(d => d.HomeScore, o => o.MapFrom(s => s.TotalHomeScore))
             .ForMember(d => d.AwayTeam, o => o.MapFrom(s => s.AwayTeam))
             .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))
-            .ForMember(d => d.Quarter, o => o.MapFrom(s => s.Qtr));
+            .ForMember(d => d.Quarter, o => o.MapFrom(s => s.Qtr))
+            .ForMember(d => d.QuarterSecondsRemaining, o => o.MapFrom(s => s.QuarterSecondsRemaining))
+            .ForMember(d => d.GameEnded, o => o.MapFrom(s => s.Desc == "END GAME"));
     }
 }
