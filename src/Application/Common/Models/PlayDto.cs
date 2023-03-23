@@ -26,7 +26,7 @@ public sealed class PlayDto : MapFrom<Play>
 
     public override string ToString()
     {
-        return $"{HomeTeam}:{HomeScore} - {AwayTeam}:{AwayScore} - {Description}";
+        return $"{AwayTeam}:{AwayScore} @ {HomeTeam}:{HomeScore} - {Description}";
     }
 
     public override void Mapping(Profile profile)
