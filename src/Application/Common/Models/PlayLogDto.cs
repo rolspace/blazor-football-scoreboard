@@ -4,7 +4,7 @@ using Football.Domain.Entities;
 
 namespace Football.Application.Common.Models;
 
-public class PlayLogDto
+public class HomePlayLogDto : MapFrom<Play>, IPlayLogDto
 {
     public string Team { get; set; } = string.Empty;
 
@@ -15,40 +15,31 @@ public class PlayLogDto
     public DefensePlayLogDto? DefenseLog { get; set; }
 
     public SpecialTeamsPlayLogDto? SpecialTeamsLog { get; set; }
-}
 
-public class OffensePlayLogDto
-{
-    public int AirYards { get; set; }
-}
-
-public class DefensePlayLogDto
-{
-    public int Sacks { get; set; }
-}
-
-public class SpecialTeamsPlayLogDto
-{
-    public int ReturnYards { get; set; }
-
-    public int Punts { get; set; }
-}
-
-public class PlayLogDtoConverter : IValueConverter<Play, PlayLogDto>
-{
-    private bool _homeTeam;
-
-    public PlayLogDtoConverter(bool homeTeam)
+    public override void Mapping(Profile profile)
     {
-        _homeTeam = homeTeam;
+        profile.CreateMap<Play, HomePlayLogDto>()
+            .ForMember(d => d.Team, o => o.MapFrom(s => s.HomeTeam))
+            .ForMember(d => d.Score, o => o.MapFrom(s => s.TotalHomeScore));
     }
+}
 
-    public PlayLogDto Convert(Play source, ResolutionContext context)
+public class AwayPlayLogDto : MapFrom<Play>, IPlayLogDto
+{
+    public string Team { get; set; } = string.Empty;
+
+    public int Score { get; set; }
+
+    public OffensePlayLogDto? OffenseLog { get; set; }
+
+    public DefensePlayLogDto? DefenseLog { get; set; }
+
+    public SpecialTeamsPlayLogDto? SpecialTeamsLog { get; set; }
+
+    public override void Mapping(Profile profile)
     {
-        return new PlayLogDto()
-        {
-            Team = _homeTeam ? source.HomeTeam : source.AwayTeam,
-            Score = (_homeTeam ? source.TotalHomeScore : source.TotalAwayScore) ?? 0
-        };
+        profile.CreateMap<Play, AwayPlayLogDto>()
+            .ForMember(d => d.Team, o => o.MapFrom(s => s.AwayTeam))
+            .ForMember(d => d.Score, o => o.MapFrom(s => s.TotalAwayScore));
     }
 }
