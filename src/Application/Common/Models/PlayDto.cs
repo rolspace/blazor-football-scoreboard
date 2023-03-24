@@ -24,9 +24,9 @@ public sealed class PlayDto : MapFrom<Play>
 
     public bool GameEnded { get; set; }
 
-    public PlayLogDto HomeTeamLog { get; set; }
+    public PlayLogDto? HomeTeamLog { get; set; }
 
-    public PlayLogDto AwayTeamLog { get; set; }
+    public PlayLogDto? AwayTeamLog { get; set; }
 
     public override string ToString()
     {
