@@ -6,70 +6,48 @@ namespace Football.Application.Common.Models;
 
 public interface IPlayLog
 {
-    string Team { get; set; }
+    OffenseLog? OffenseLog { get; set; }
 
-    int Score { get; set; }
+    DefenseLog? DefenseLog { get; set; }
 
-    OffensePlayLog? OffenseLog { get; set; }
+    SpecialTeamsReceivingLog? SpecialTeamsReceivingLog { get; set; }
 
-    DefensePlayLog? DefenseLog { get; set; }
-
-    SpecialTeamsPlayLog? SpecialTeamsLog { get; set; }
+    SpecialTeamsKickingLog? SpecialTeamsKickingLog { get; set; }
 }
 
-public class HomePlayLog : MapFrom<Play>, IPlayLog
+public class PlayLog : MapFrom<Play>, IPlayLog
 {
-    public string Team { get; set; } = string.Empty;
+    public OffenseLog? OffenseLog { get; set; }
 
-    public int Score { get; set; }
+    public DefenseLog? DefenseLog { get; set; }
 
-    public OffensePlayLog? OffenseLog { get; set; }
+    public SpecialTeamsReceivingLog? SpecialTeamsReceivingLog { get; set; }
 
-    public DefensePlayLog? DefenseLog { get; set; }
-
-    public SpecialTeamsPlayLog? SpecialTeamsLog { get; set; }
+    public SpecialTeamsKickingLog? SpecialTeamsKickingLog { get; set; }
 
     public override void Mapping(Profile profile)
     {
-        profile.CreateMap<Play, HomePlayLog>()
-            .ForMember(d => d.Team, o => o.MapFrom(s => s.HomeTeam))
-            .ForMember(d => d.Score, o => o.MapFrom(s => s.TotalHomeScore));
+        profile.CreateMap<Play, PlayLog>()
+            .ForMember(d => d.OffenseLog, o => o.MapFrom(s => s));
     }
 }
 
-public class AwayPlayLog : MapFrom<Play>, IPlayLog
-{
-    public string Team { get; set; } = string.Empty;
-
-    public int Score { get; set; }
-
-    public OffensePlayLog? OffenseLog { get; set; }
-
-    public DefensePlayLog? DefenseLog { get; set; }
-
-    public SpecialTeamsPlayLog? SpecialTeamsLog { get; set; }
-
-    public override void Mapping(Profile profile)
-    {
-        profile.CreateMap<Play, AwayPlayLog>()
-            .ForMember(d => d.Team, o => o.MapFrom(s => s.AwayTeam))
-            .ForMember(d => d.Score, o => o.MapFrom(s => s.TotalAwayScore));
-    }
-}
-
-public class OffensePlayLog
+public class OffenseLog : MapFrom<Play>
 {
     public int AirYards { get; set; }
 }
 
-public class DefensePlayLog
+public class DefenseLog
 {
     public int Sacks { get; set; }
 }
 
-public class SpecialTeamsPlayLog
+public class SpecialTeamsReceivingLog
 {
     public int ReturnYards { get; set; }
+}
 
+public class SpecialTeamsKickingLog
+{
     public int Punts { get; set; }
 }
