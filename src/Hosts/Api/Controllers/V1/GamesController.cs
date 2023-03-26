@@ -1,5 +1,5 @@
 using Football.Application.Common.Models;
-using Football.Application.Queries.Games;
+using Football.Application.Games.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

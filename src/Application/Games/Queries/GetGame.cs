@@ -5,32 +5,32 @@ using Football.Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Football.Application.Queries.Games;
+namespace Football.Application.Games.Queries;
 
-public record GetGamesQuery : IRequest<IEnumerable<GameDto>>
+public record GetGameQuery : IRequest<GameDto>
 {
-    public int Week { get; init; }
+    public int Id { get; init; }
 }
 
-public class GetGamesQueryHandler : IRequestHandler<GetGamesQuery, IEnumerable<GameDto>>
+public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto?>
 {
     private readonly IFootballDbContext _footballDbContext;
 
     private readonly IMapper _mapper;
 
-    public GetGamesQueryHandler(IFootballDbContext footballDbContext, IMapper mapper)
+    public GetGameQueryHandler(IFootballDbContext footballDbContext, IMapper mapper)
     {
         _footballDbContext = footballDbContext;
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<GameDto>> Handle(GetGamesQuery request, CancellationToken cancellationToken)
+    public async Task<GameDto?> Handle(GetGameQuery request, CancellationToken cancellationToken)
     {
         return await _footballDbContext.Games
-                .Where(game => game.Week == request.Week)
+                .Where(game => game.Id == request.Id)
                 .Include(game => game.Time)
                 .Include(game => game.Stats)
                 .ProjectTo<GameDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .SingleOrDefaultAsync();
     }
 }

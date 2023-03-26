@@ -5,7 +5,7 @@ using Football.Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Football.Application.Queries.Plays;
+namespace Football.Application.Plays.Queries;
 
 public record GetPlaysQuery : IRequest<IEnumerable<PlayLog>>
 {

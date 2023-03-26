@@ -1,7 +1,7 @@
 using Football.Application;
 using Football.Application.Common.Models;
 using Football.Application.Interfaces;
-using Football.Application.Queries.Plays;
+using Football.Application.Plays.Queries;
 using MediatR;
 
 // TODO: Convert to background service
