@@ -8,11 +8,15 @@ namespace Football.Domain.Entities
 
         public int Week { get; set; }
 
-        public string HomeTeam { get; set; }
+        public string HomeTeam { get; set; } = string.Empty;
 
-        public string AwayTeam { get; set; }
+        public string AwayTeam { get; set; } = string.Empty;
 
-        public Time Time { get; set; }
+        public GameState State { get; set; } = GameState.Pending;
+
+        public int Quarter { get; set; }
+
+        public int QuarterSecondsRemaining { get; set; }
 
         public IList<Play> Plays { get; private set; } = new List<Play>();
 
