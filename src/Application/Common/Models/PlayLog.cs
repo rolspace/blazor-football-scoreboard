@@ -4,50 +4,42 @@ using Football.Domain.Entities;
 
 namespace Football.Application.Common.Models;
 
-public interface IPlayLog
+public sealed class PlayLog : MapFrom<Play>
 {
-    OffenseLog? OffenseLog { get; set; }
+    public int Id { get; set; }
 
-    DefenseLog? DefenseLog { get; set; }
+    public string HomeTeam { get; set; } = string.Empty;
 
-    SpecialTeamsReceivingLog? SpecialTeamsReceivingLog { get; set; }
+    public int HomeScore { get; set; }
 
-    SpecialTeamsKickingLog? SpecialTeamsKickingLog { get; set; }
-}
+    public string AwayTeam { get; set; } = string.Empty;
 
-public class PlayLog : MapFrom<Play>, IPlayLog
-{
-    public OffenseLog? OffenseLog { get; set; }
+    public int AwayScore { get; set; }
 
-    public DefenseLog? DefenseLog { get; set; }
+    public int Quarter { get; set; }
 
-    public SpecialTeamsReceivingLog? SpecialTeamsReceivingLog { get; set; }
+    public int QuarterSecondsRemaining { get; set; }
 
-    public SpecialTeamsKickingLog? SpecialTeamsKickingLog { get; set; }
+    public string Description { get; set; } = string.Empty;
+
+    public bool GameEndingPlay { get; set; }
+
+    public PlayStats? PlayStats { get; set; }
+
+    public override string ToString()
+    {
+        return $"{AwayTeam}:{AwayScore} @ {HomeTeam}:{HomeScore} - {Description}";
+    }
 
     public override void Mapping(Profile profile)
     {
         profile.CreateMap<Play, PlayLog>()
-            .ForMember(d => d.OffenseLog, o => o.MapFrom(s => s));
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.PlayId))
+            .ForMember(d => d.HomeScore, o => o.MapFrom(s => s.TotalHomeScore))
+            .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))
+            .ForMember(d => d.Description, o => o.MapFrom(s => s.Desc))
+            .ForMember(d => d.Quarter, o => o.MapFrom(s => s.Qtr))
+            .ForMember(d => d.GameEndingPlay, o => o.MapFrom(s => s.Desc == "END GAME"))
+            .ForMember(d => d.PlayStats, o => o.MapFrom(s => s));
     }
-}
-
-public class OffenseLog : MapFrom<Play>
-{
-    public int AirYards { get; set; }
-}
-
-public class DefenseLog
-{
-    public int Sacks { get; set; }
-}
-
-public class SpecialTeamsReceivingLog
-{
-    public int ReturnYards { get; set; }
-}
-
-public class SpecialTeamsKickingLog
-{
-    public int Punts { get; set; }
 }

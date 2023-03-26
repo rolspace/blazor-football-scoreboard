@@ -63,14 +63,14 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
                     QuarterSecondsRemaining = quarterSecondsRemaining
                 };
 
-                IEnumerable<PlayDto> plays = await mediator.Send(query);
+                IEnumerable<PlayLog> playLogs = await mediator.Send(query);
 
-                int gamesEndedCount = plays.Count(p => p.GameEndingPlay);
+                int gamesEndedCount = playLogs.Count(p => p.GameEndingPlay);
                 if (gamesEndedCount > 0) gameTimeManager.IncrementGamesFinished(gamesEndedCount);
 
-                foreach (PlayDto play in plays)
+                foreach (PlayLog playLog in playLogs)
                 {
-                    _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {play.ToString()}");
+                    _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {playLog.ToString()}");
                 }
 
                 gameTimeManager.SetTime();
