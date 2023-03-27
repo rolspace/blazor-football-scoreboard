@@ -26,7 +26,11 @@ CREATE TABLE `game` (
   `week` int NOT NULL,
   `home_team` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `away_team` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `state_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `quarter` int DEFAULT NULL,
+  `quarter_seconds_remaining` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `game_ibfk_1` FOREIGN KEY (`state_type`) REFERENCES `state` (`state_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -36,8 +40,30 @@ CREATE TABLE `game` (
 
 LOCK TABLES `game` WRITE;
 /*!40000 ALTER TABLE `game` DISABLE KEYS */;
-INSERT INTO `game` VALUES (2019090500,1,'CHI','GB');
+INSERT INTO `game` VALUES (2019090500,1,'CHI','GB',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `game` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `state`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `state` (
+  `state_type` varchar(10) NOT NULL,
+  PRIMARY KEY (`state_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `state`
+--
+
+LOCK TABLES `state` WRITE;
+/*!40000 ALTER TABLE `state` DISABLE KEYS */;
+INSERT INTO `state` VALUES ('Started'),('Finished');
+/*!40000 ALTER TABLE `state` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -243,29 +269,6 @@ LOCK TABLES `stat` WRITE;
 /*!40000 ALTER TABLE `stat` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `time`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `time` (
-  `game_id` int NOT NULL,
-  `quarter` int NOT NULL,
-  `quarter_seconds_remaining` int NOT NULL,
-  PRIMARY KEY (`game_id`),
-  CONSTRAINT `time_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `time`
---
-
-LOCK TABLES `time` WRITE;
-/*!40000 ALTER TABLE `time` DISABLE KEYS */;
-/*!40000 ALTER TABLE `time` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
