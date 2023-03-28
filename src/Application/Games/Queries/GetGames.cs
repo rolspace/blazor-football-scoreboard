@@ -28,7 +28,6 @@ public class GetGamesQueryHandler : IRequestHandler<GetGamesQuery, IEnumerable<G
     {
         return await _footballDbContext.Games
                 .Where(game => game.Week == request.Week)
-                .Include(game => game.Time)
                 .Include(game => game.Stats)
                 .ProjectTo<GameDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();

@@ -26,10 +26,10 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
 
         entityTypeBuilder.Property(e => e.Week).HasColumnName("week");
 
-        entityTypeBuilder.OwnsOne(e => e.Time)
-            .Property(t => t.Quarter).HasColumnName("Quarter");
+        entityTypeBuilder.Property(e => e.State).HasColumnName("state_type").HasConversion<string>();
 
-        entityTypeBuilder.OwnsOne(e => e.Time)
-            .Property(t => t.QuarterSecondsRemaining).HasColumnName("QuarterSecondsRemaining");
+        entityTypeBuilder.Property(e => e.Quarter).HasColumnName("quarter");
+
+        entityTypeBuilder.Property(e => e.QuarterSecondsRemaining).HasColumnName("quarter_seconds_remaining");
     }
 }

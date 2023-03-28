@@ -12,4 +12,10 @@ public sealed class GameDto : MapFrom<Game>
     public string HomeTeam { get; set; } = string.Empty;
 
     public string AwayTeam { get; set; } = string.Empty;
+
+    public string State { get; set; } = string.Empty;
+
+    public int Quarter { get; set; }
+
+    public int QuarterSecondsRemaining { get; set; }
 }

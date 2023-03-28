@@ -28,7 +28,6 @@ public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto?>
     {
         return await _footballDbContext.Games
                 .Where(game => game.Id == request.Id)
-                .Include(game => game.Time)
                 .Include(game => game.Stats)
                 .ProjectTo<GameDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
