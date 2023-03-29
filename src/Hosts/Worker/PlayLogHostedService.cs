@@ -65,8 +65,8 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
                 IEnumerable<PlayLog> playLogs = await mediator.Send(query);
 
-                int gamesEndedCount = playLogs.Count(p => p.GameEndingPlay);
-                if (gamesEndedCount > 0) gameTimeManager.IncrementGamesFinished(gamesEndedCount);
+                int gameOverCount = playLogs.Count(p => p.GameOver);
+                if (gameOverCount > 0) gameTimeManager.IncrementGamesOver(gameOverCount);
 
                 foreach (PlayLog playLog in playLogs)
                 {

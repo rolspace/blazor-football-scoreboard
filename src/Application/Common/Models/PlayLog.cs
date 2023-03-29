@@ -22,7 +22,7 @@ public sealed class PlayLog : MapFrom<Play>
 
     public string Description { get; set; } = string.Empty;
 
-    public bool GameEndingPlay { get; set; }
+    public bool GameOver { get; set; }
 
     public PlayStats? PlayStats { get; set; }
 
@@ -39,7 +39,7 @@ public sealed class PlayLog : MapFrom<Play>
             .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))
             .ForMember(d => d.Description, o => o.MapFrom(s => s.Desc))
             .ForMember(d => d.Quarter, o => o.MapFrom(s => s.Qtr))
-            .ForMember(d => d.GameEndingPlay, o => o.MapFrom(s => s.Desc == "END GAME"))
+            .ForMember(d => d.GameOver, o => o.MapFrom(s => s.Desc == "END GAME"))
             .ForMember(d => d.PlayStats, o => o.MapFrom(s => s));
     }
 }
