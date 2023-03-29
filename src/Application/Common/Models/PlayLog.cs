@@ -8,6 +8,8 @@ public sealed class PlayLog : MapFrom<Play>
 {
     public int Id { get; set; }
 
+    public int GameId { get; set; }
+
     public string HomeTeam { get; set; } = string.Empty;
 
     public int HomeScore { get; set; }
@@ -20,9 +22,9 @@ public sealed class PlayLog : MapFrom<Play>
 
     public int QuarterSecondsRemaining { get; set; }
 
-    public string Description { get; set; } = string.Empty;
-
     public bool GameOver { get; set; }
+
+    public string Description { get; set; } = string.Empty;
 
     public PlayStats? PlayStats { get; set; }
 
