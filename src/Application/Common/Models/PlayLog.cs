@@ -26,7 +26,23 @@ public sealed class PlayLog : MapFrom<Play>
 
     public string Description { get; set; } = string.Empty;
 
-    public PlayStats? PlayStats { get; set; }
+    public bool Kickoff { get; set; }
+
+    public bool Punt { get; set; }
+
+    public bool HomeTeamPossession { get; set; }
+
+    public bool HomeTeamOnOffense { get; set; }
+
+    public bool AwayTeamOnOffense { get; set; }
+
+    public int YardsGained { get; set; }
+
+    public int Sacks { get; set; }
+
+    public int ReturnYards { get; set; }
+
+    public int Punts { get; set; }
 
     public override string ToString()
     {
@@ -41,7 +57,6 @@ public sealed class PlayLog : MapFrom<Play>
             .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))
             .ForMember(d => d.Description, o => o.MapFrom(s => s.Desc))
             .ForMember(d => d.Quarter, o => o.MapFrom(s => s.Qtr))
-            .ForMember(d => d.GameOver, o => o.MapFrom(s => s.Desc == "END GAME"))
-            .ForMember(d => d.PlayStats, o => o.MapFrom(s => s));
+            .ForMember(d => d.GameOver, o => o.MapFrom(s => s.Desc == "END GAME"));
     }
 }
