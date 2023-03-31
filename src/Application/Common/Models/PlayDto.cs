@@ -4,7 +4,7 @@ using Football.Domain.Entities;
 
 namespace Football.Application.Common.Models;
 
-public sealed class PlayLog : MapFrom<Play>
+public sealed class PlayDto : MapFrom<Play>
 {
     public int Id { get; set; }
 
@@ -51,7 +51,7 @@ public sealed class PlayLog : MapFrom<Play>
 
     public override void Mapping(Profile profile)
     {
-        profile.CreateMap<Play, PlayLog>()
+        profile.CreateMap<Play, PlayDto>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.PlayId))
             .ForMember(d => d.HomeScore, o => o.MapFrom(s => s.TotalHomeScore))
             .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))

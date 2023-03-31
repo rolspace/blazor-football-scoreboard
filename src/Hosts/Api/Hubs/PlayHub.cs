@@ -6,9 +6,9 @@ namespace Football.Api.Hubs
 {
     public class PlayHub : Hub
     {
-        public async Task SendPlay(PlayLog playLog)
+        public async Task SendPlay(PlayDto playDto)
         {
-            await Clients.All.SendAsync("ReceivePlay", playLog);
+            await Clients.All.SendAsync("ReceivePlay", playDto);
         }
     }
 }

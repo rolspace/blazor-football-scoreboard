@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Football.Application.Plays.Queries;
 
-public record GetPlaysQuery : IRequest<IEnumerable<PlayLog>>
+public record GetPlaysQuery : IRequest<IEnumerable<PlayDto>>
 {
     public int Week { get; set; }
 
@@ -16,7 +16,7 @@ public record GetPlaysQuery : IRequest<IEnumerable<PlayLog>>
     public int QuarterSecondsRemaining { get; set; }
 }
 
-public class GetPlaysQueryHandler : IRequestHandler<GetPlaysQuery, IEnumerable<PlayLog>>
+public class GetPlaysQueryHandler : IRequestHandler<GetPlaysQuery, IEnumerable<PlayDto>>
 {
     private readonly IFootballDbContext _footballDbContext;
 
@@ -28,11 +28,11 @@ public class GetPlaysQueryHandler : IRequestHandler<GetPlaysQuery, IEnumerable<P
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<PlayLog>> Handle(GetPlaysQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<PlayDto>> Handle(GetPlaysQuery request, CancellationToken cancellationToken)
     {
         return await _footballDbContext.Plays
             .Where(p => p.Week == request.Week && p.Qtr == request.Quarter && p.QuarterSecondsRemaining == request.QuarterSecondsRemaining)
-            .ProjectTo<PlayLog>(_mapper.ConfigurationProvider)
+            .ProjectTo<PlayDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 }
