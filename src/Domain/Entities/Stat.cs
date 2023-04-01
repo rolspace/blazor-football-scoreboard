@@ -8,7 +8,7 @@ namespace Football.Domain.Entities
 
         public int Score { get; set; }
 
-        public int AirYards { get; set; }
+        public int YardsGained { get; set; }
 
         public int Punts { get; set; }
 

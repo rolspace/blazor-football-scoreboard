@@ -251,10 +251,10 @@ CREATE TABLE `stat` (
   `game_id` int NOT NULL,
   `team` varchar(3) NOT NULL,
   `score` int NOT NULL,
-  `air_yards` int NOT NULL,
   `punts` int NOT NULL,
   `return_yards` int NOT NULL,
   `sacks` int NOT NULL,
+  `yards_gained` int NOT NULL,
   PRIMARY KEY (`game_id`,`team`),
   CONSTRAINT `stat_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
