@@ -20,7 +20,7 @@ public class StatConfiguration : IEntityTypeConfiguration<Stat>
             .HasMaxLength(3)
             .HasColumnName("team");
 
-        entityTypeBuilder.Property(e => e.AirYards).HasColumnName("air_yards");
+        entityTypeBuilder.Property(e => e.Score).HasColumnName("score");
 
         entityTypeBuilder.Property(e => e.Punts).HasColumnName("punts");
 
@@ -28,7 +28,7 @@ public class StatConfiguration : IEntityTypeConfiguration<Stat>
 
         entityTypeBuilder.Property(e => e.Sacks).HasColumnName("sacks");
 
-        entityTypeBuilder.Property(e => e.Score).HasColumnName("score");
+        entityTypeBuilder.Property(e => e.YardsGained).HasColumnName("yards_gained");
 
         entityTypeBuilder.HasOne(d => d.Game)
             .WithMany(p => p.Stats)
