@@ -2,6 +2,7 @@ using Football.Application;
 using Football.Application.Common.Models;
 using Football.Application.Interfaces;
 using Football.Application.Plays.Queries;
+using Football.Application.Stats.Commands;
 using MediatR;
 
 // TODO: Convert to background service
@@ -63,14 +64,43 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
                     QuarterSecondsRemaining = quarterSecondsRemaining
                 };
 
-                IEnumerable<PlayLog> playLogs = await mediator.Send(query);
+                IEnumerable<PlayDto> playDtos = await mediator.Send(query);
 
-                int gameOverCount = playLogs.Count(p => p.GameOver);
+                int gameOverCount = playDtos.Count(p => p.GameOver);
                 if (gameOverCount > 0) gameTimeManager.IncrementGamesOver(gameOverCount);
 
-                foreach (PlayLog playLog in playLogs)
+                foreach (PlayDto playDto in playDtos)
                 {
-                    _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {playLog.ToString()}");
+                    var saveStatsCommand = new SaveStatsCommand()
+                    {
+                        GameId = playDto.GameId,
+                        Quarter = playDto.Quarter,
+                        QuarterSecondsRemaining = playDto.QuarterSecondsRemaining,
+                        GameOver = playDto.GameOver,
+                        SaveStatCommandItems = new List<SaveStatsCommandItem>()
+                        {
+                            new SaveStatsCommandItem() {
+                                Team = playDto.HomeTeam,
+                                Score = playDto.HomeScore,
+                                YardsGained = playDto.HomeTeamOnOffense ? playDto.YardsGained : 0,
+                                Sacks = playDto.AwayTeamOnOffense && Convert.ToBoolean(playDto.Sack) ? 1 : 0,
+                                ReturnYards = playDto.Kickoff && playDto.HomeTeamPossession && playDto.ReturnYards != null ? (int)playDto.ReturnYards : 0,
+                                Punts = playDto.Punt && playDto.HomeTeamPossession && Convert.ToBoolean(playDto.PuntAttempt) ? 1 : 0
+                            },
+                            new SaveStatsCommandItem() {
+                                Team = playDto.AwayTeam,
+                                Score = playDto.AwayScore,
+                                YardsGained = playDto.AwayTeamOnOffense ? playDto.YardsGained : 0,
+                                Sacks = playDto.HomeTeamOnOffense && Convert.ToBoolean(playDto.Sack) ? 1 : 0,
+                                ReturnYards = playDto.Kickoff && playDto.HomeTeamPossession && playDto.ReturnYards != null ? (int)playDto.ReturnYards : 0,
+                                Punts = playDto.Punt && playDto.HomeTeamPossession && Convert.ToBoolean(playDto.PuntAttempt) ? 1 : 0
+                            }
+                        }
+                    };
+
+                    await mediator.Send(saveStatsCommand);
+
+                    _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {playDto.ToString()}");
                 }
 
                 gameTimeManager.SetTime();

@@ -1,0 +1,88 @@
+using Football.Application.Interfaces;
+using Football.Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Football.Application.Stats.Commands;
+
+public record SaveStatsCommand : IRequest<int>
+{
+    public int GameId { get; init; }
+
+    public int Quarter { get; set; }
+
+    public int QuarterSecondsRemaining { get; set; }
+
+    public bool GameOver { get; set; }
+
+    public List<SaveStatsCommandItem> SaveStatCommandItems { get; set; } = new List<SaveStatsCommandItem>();
+}
+
+public class SaveStatsCommandItem
+{
+    public string Team { get; set; } = string.Empty;
+
+    public int Score { get; set; }
+
+    public int YardsGained { get; set; }
+
+    public int Sacks { get; set; }
+
+    public int Punts { get; set; }
+
+    public int ReturnYards { get; set; }
+}
+
+public class SaveStatsCommandHandler : IRequestHandler<SaveStatsCommand, int>
+{
+    private readonly IFootballDbContext _footballDbContext;
+
+    public SaveStatsCommandHandler(IFootballDbContext footballDbContext)
+    {
+        _footballDbContext = footballDbContext;
+    }
+
+    public async Task<int> Handle(SaveStatsCommand saveStatsCommand, CancellationToken cancellationToken)
+    {
+        Game? game = await _footballDbContext.Games
+            .AsQueryable()
+            .Where(g => g.Id == saveStatsCommand.GameId)
+            .SingleOrDefaultAsync();
+
+        if (game is null) return 0;
+
+        foreach (var statCommandItem in saveStatsCommand.SaveStatCommandItems)
+        {
+            Stat? stat = await _footballDbContext.Stats
+                .Where(s => s.GameId == saveStatsCommand.GameId && s.Team == statCommandItem.Team)
+                .SingleOrDefaultAsync();
+
+            if (stat is not null)
+            {
+                stat.Score = statCommandItem.Score;
+                stat.YardsGained += statCommandItem.YardsGained;
+                stat.Sacks += statCommandItem.Sacks;
+                stat.ReturnYards += statCommandItem.ReturnYards;
+                stat.Punts += statCommandItem.Punts;
+            }
+            else
+            {
+                game.Stats.Add(new Stat
+                {
+                    Team = statCommandItem.Team,
+                    Score = statCommandItem.Score,
+                    YardsGained = statCommandItem.YardsGained,
+                    Sacks = statCommandItem.Sacks,
+                    ReturnYards = statCommandItem.ReturnYards,
+                    Punts = statCommandItem.Punts
+                });
+            }
+        }
+
+        game.State = saveStatsCommand.GameOver ? GameState.Finished : GameState.Started;
+        game.Quarter = saveStatsCommand.Quarter;
+        game.QuarterSecondsRemaining = saveStatsCommand.QuarterSecondsRemaining;
+
+        return await _footballDbContext.SaveChangesAsync(cancellationToken);
+    }
+}

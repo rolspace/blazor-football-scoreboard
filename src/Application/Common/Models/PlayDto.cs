@@ -38,15 +38,15 @@ public sealed class PlayDto : MapFrom<Play>
 
     public int YardsGained { get; set; }
 
-    public int Sacks { get; set; }
+    public bool? Sack { get; set; }
 
-    public int ReturnYards { get; set; }
+    public int? ReturnYards { get; set; }
 
-    public int Punts { get; set; }
+    public bool? PuntAttempt { get; set; }
 
     public override string ToString()
     {
-        return $"{AwayTeam}:{AwayScore} @ {HomeTeam}:{HomeScore} - {Description}";
+        return $"{GameId} - {AwayTeam}:{AwayScore} @ {HomeTeam}:{HomeScore} - {Description}";
     }
 
     public override void Mapping(Profile profile)
@@ -55,8 +55,13 @@ public sealed class PlayDto : MapFrom<Play>
             .ForMember(d => d.Id, o => o.MapFrom(s => s.PlayId))
             .ForMember(d => d.HomeScore, o => o.MapFrom(s => s.TotalHomeScore))
             .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))
-            .ForMember(d => d.Description, o => o.MapFrom(s => s.Desc))
             .ForMember(d => d.Quarter, o => o.MapFrom(s => s.Qtr))
-            .ForMember(d => d.GameOver, o => o.MapFrom(s => s.Desc == "END GAME"));
+            .ForMember(d => d.GameOver, o => o.MapFrom(s => s.Desc == "END GAME"))
+            .ForMember(d => d.Description, o => o.MapFrom(s => s.Desc))
+            .ForMember(d => d.Kickoff, o => o.MapFrom(s => s.PlayType == "kickoff"))
+            .ForMember(d => d.Punt, o => o.MapFrom(s => s.PlayType == "punt"))
+            .ForMember(d => d.HomeTeamPossession, o => o.MapFrom(s => s.Posteam == s.HomeTeam))
+            .ForMember(d => d.HomeTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.HomeTeam && (s.PlayType != null || s.PlayType != "kickoff" || s.PlayType != "punt")))
+            .ForMember(d => d.HomeTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.AwayTeam && (s.PlayType != null || s.PlayType != "kickoff" || s.PlayType != "punt")));
     }
 }
