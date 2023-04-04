@@ -467,13 +467,6 @@ public class PlayConfiguration : IEntityTypeConfiguration<Play>
             .HasMaxLength(6)
             .HasColumnName("yrdln");
 
-        entityTypeBuilder.Ignore(e => e.IsHomeTeamOnOffense);
-        entityTypeBuilder.Ignore(e => e.IsAwayTeamOnOffense);
-        entityTypeBuilder.Ignore(e => e.HasHomeTeamPunted);
-        entityTypeBuilder.Ignore(e => e.HasAwayTeamPunted);
-        entityTypeBuilder.Ignore(e => e.HasHomeTeamReceivedKickoffOrPunt);
-        entityTypeBuilder.Ignore(e => e.HasAwayTeamReceivedKickoffOrPunt);
-
         entityTypeBuilder.HasOne(d => d.Game)
             .WithMany(p => p.Plays)
             .HasForeignKey(d => d.GameId)

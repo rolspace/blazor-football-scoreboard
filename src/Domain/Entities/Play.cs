@@ -309,35 +309,5 @@ namespace Football.Domain.Entities
         public bool? DefensiveExtraPointConv { get; set; }
 
         public Game Game { get; set; }
-
-        public bool IsHomeTeamOnOffense => Posteam == HomeTeam;
-
-        public bool IsAwayTeamOnOffense => Posteam == AwayTeam;
-
-        public bool HasHomeTeamPunted => PlayType == "punt" && Posteam == HomeTeam;
-
-        public bool HasAwayTeamPunted => PlayType == "punt" && Posteam == AwayTeam;
-
-        public bool HasHomeTeamReceivedKickoffOrPunt
-        {
-            get
-            {
-                bool hasHomeTeamReceivedKickoff = PlayType == "kickoff" && Posteam == HomeTeam;
-                bool hasHomeTeamReceivedPunt = PlayType == "punt" && Defteam == HomeTeam;
-
-                return hasHomeTeamReceivedKickoff || hasHomeTeamReceivedPunt;
-            }
-        }
-
-        public bool HasAwayTeamReceivedKickoffOrPunt
-        {
-            get
-            {
-                bool hasAwayTeamReceivedKickoff = PlayType == "kickoff" && Posteam == AwayTeam;
-                bool hasAwayTeamReceivedPunt = PlayType == "punt" && Defteam == AwayTeam;
-
-                return hasAwayTeamReceivedKickoff || hasAwayTeamReceivedPunt;
-            }
-        }
     }
 }
