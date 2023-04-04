@@ -31,7 +31,11 @@ public class GetPlaysQueryHandler : IRequestHandler<GetPlaysQuery, IEnumerable<P
     public async Task<IEnumerable<PlayDto>> Handle(GetPlaysQuery request, CancellationToken cancellationToken)
     {
         return await _footballDbContext.Plays
-            .Where(p => p.Week == request.Week && p.Qtr == request.Quarter && p.QuarterSecondsRemaining == request.QuarterSecondsRemaining)
+            .Where(p => p.Week == request.Week
+                && p.Qtr == request.Quarter
+                && p.QuarterSecondsRemaining.HasValue
+                && p.QuarterSecondsRemaining == request.QuarterSecondsRemaining
+                && !string.IsNullOrEmpty(p.PlayType))
             .ProjectTo<PlayDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
