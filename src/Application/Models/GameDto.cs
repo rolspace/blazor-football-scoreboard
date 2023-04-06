@@ -1,9 +1,6 @@
-using Football.Application.Common.Mappings;
-using Football.Domain.Entities;
+namespace Football.Application.Models;
 
-namespace Football.Application.Common.Models;
-
-public sealed class GameDto : MapFrom<Game>
+public sealed class GameDto
 {
     public int Id { get; set; }
 

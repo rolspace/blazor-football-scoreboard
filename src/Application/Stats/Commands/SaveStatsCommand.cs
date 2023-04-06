@@ -51,35 +51,45 @@ public class SaveStatsCommandHandler : IRequestHandler<SaveStatsCommand, int>
 
         if (game is null) return 0;
 
-        foreach (var statCommandItem in saveStatsCommand.SaveStatCommandItems)
+        foreach (var saveStatCommandItem in saveStatsCommand.SaveStatCommandItems)
         {
             Stat? stat = await _footballDbContext.Stats
-                .Where(s => s.GameId == saveStatsCommand.GameId && s.Team == statCommandItem.Team)
+                .Where(s => s.GameId == saveStatsCommand.GameId && s.Team == saveStatCommandItem.Team)
                 .SingleOrDefaultAsync();
 
             if (stat is not null)
             {
-                stat.Score = statCommandItem.Score;
-                stat.YardsGained += statCommandItem.YardsGained;
-                stat.Sacks += statCommandItem.Sacks;
-                stat.ReturnYards += statCommandItem.ReturnYards;
-                stat.Punts += statCommandItem.Punts;
+                stat.Score = saveStatCommandItem.Score;
+                stat.YardsGained += saveStatCommandItem.YardsGained;
+                stat.Sacks += saveStatCommandItem.Sacks;
+                stat.ReturnYards += saveStatCommandItem.ReturnYards;
+                stat.Punts += saveStatCommandItem.Punts;
             }
             else
             {
                 game.Stats.Add(new Stat
                 {
-                    Team = statCommandItem.Team,
-                    Score = statCommandItem.Score,
-                    YardsGained = statCommandItem.YardsGained,
-                    Sacks = statCommandItem.Sacks,
-                    ReturnYards = statCommandItem.ReturnYards,
-                    Punts = statCommandItem.Punts
+                    Team = saveStatCommandItem.Team,
+                    Score = saveStatCommandItem.Score,
+                    YardsGained = saveStatCommandItem.YardsGained,
+                    Sacks = saveStatCommandItem.Sacks,
+                    ReturnYards = saveStatCommandItem.ReturnYards,
+                    Punts = saveStatCommandItem.Punts
                 });
             }
         }
 
-        game.State = saveStatsCommand.GameOver ? GameState.Finished : GameState.Started;
+
+        if (game.State != GameState.Finished && saveStatsCommand.GameOver)
+        {
+            game.State = GameState.Finished;
+        }
+
+        if (game.State is null)
+        {
+            game.State = GameState.Started;
+        }
+
         game.Quarter = saveStatsCommand.Quarter;
         game.QuarterSecondsRemaining = saveStatsCommand.QuarterSecondsRemaining;
 

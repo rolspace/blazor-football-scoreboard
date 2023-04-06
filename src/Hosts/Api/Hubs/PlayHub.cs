@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Football.Application.Common.Models;
+using Football.Application.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Football.Api.Hubs

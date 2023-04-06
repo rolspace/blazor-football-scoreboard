@@ -1,6 +1,6 @@
 using Football.Application;
-using Football.Application.Common.Models;
 using Football.Application.Interfaces;
+using Football.Application.Models;
 using Football.Application.Plays.Queries;
 using Football.Application.Stats.Commands;
 using MediatR;
