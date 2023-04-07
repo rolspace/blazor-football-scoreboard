@@ -20,6 +20,6 @@ public class MapFromEntityProfile : Profile
             .ForMember(d => d.Punt, o => o.MapFrom(s => s.PlayType == "punt"))
             .ForMember(d => d.HomeTeamPossession, o => o.MapFrom(s => s.Posteam == s.HomeTeam))
             .ForMember(d => d.HomeTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.HomeTeam && (s.PlayType != "kickoff" || s.PlayType != "punt")))
-            .ForMember(d => d.HomeTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.AwayTeam && (s.PlayType != "kickoff" || s.PlayType != "punt")));
+            .ForMember(d => d.AwayTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.AwayTeam && (s.PlayType != "kickoff" || s.PlayType != "punt")));
     }
 }

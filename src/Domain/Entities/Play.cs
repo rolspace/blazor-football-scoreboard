@@ -58,7 +58,7 @@ namespace Football.Domain.Entities
 
         public string Desc { get; set; }
 
-        public string PlayType { get; set; }
+        public string? PlayType { get; set; }
 
         public int YardsGained { get; set; }
 

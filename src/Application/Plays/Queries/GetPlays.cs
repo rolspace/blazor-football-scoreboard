@@ -34,8 +34,7 @@ public class GetPlaysQueryHandler : IRequestHandler<GetPlaysQuery, IEnumerable<P
             .Where(p => p.Week == request.Week
                 && p.Qtr == request.Quarter
                 && p.QuarterSecondsRemaining.HasValue
-                && p.QuarterSecondsRemaining == request.QuarterSecondsRemaining
-                && !string.IsNullOrEmpty(p.PlayType))
+                && p.QuarterSecondsRemaining == request.QuarterSecondsRemaining)
             .ProjectTo<PlayDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }

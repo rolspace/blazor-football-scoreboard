@@ -1,3 +1,4 @@
+using AutoMapper;
 using Football.Application;
 using Football.Application.Interfaces;
 using Football.Application.Models;
@@ -12,15 +13,19 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 {
     private readonly IHubManager _hubManager;
 
+    private readonly IMapper _mapper;
+
     private readonly IServiceScopeFactory _scopeFactory;
 
     private readonly ILogger<PlayLogHostedService> _logger;
 
     private Timer? _gameTimer;
 
-    public PlayLogHostedService(IHubManager hubManager, IServiceScopeFactory scopeFactory, ILogger<PlayLogHostedService> logger)
+    public PlayLogHostedService(IHubManager hubManager, IMapper mapper,
+        IServiceScopeFactory scopeFactory, ILogger<PlayLogHostedService> logger)
     {
         _hubManager = hubManager;
+        _mapper = mapper;
         _scopeFactory = scopeFactory;
         _logger = logger;
     }
@@ -71,32 +76,7 @@ public class PlayLogHostedService : IHostedService, IAsyncDisposable
 
                 foreach (PlayDto playDto in playDtos)
                 {
-                    var saveStatsCommand = new SaveStatsCommand()
-                    {
-                        GameId = playDto.GameId,
-                        Quarter = playDto.Quarter,
-                        QuarterSecondsRemaining = playDto.QuarterSecondsRemaining,
-                        GameOver = playDto.GameOver,
-                        SaveStatCommandItems = new List<SaveStatsCommandItem>()
-                        {
-                            new SaveStatsCommandItem() {
-                                Team = playDto.HomeTeam,
-                                Score = playDto.HomeScore,
-                                YardsGained = playDto.HomeTeamOnOffense ? playDto.YardsGained : 0,
-                                Sacks = playDto.AwayTeamOnOffense && Convert.ToBoolean(playDto.Sack) ? 1 : 0,
-                                ReturnYards = playDto.Kickoff && playDto.HomeTeamPossession && playDto.ReturnYards != null ? (int)playDto.ReturnYards : 0,
-                                Punts = playDto.Punt && playDto.HomeTeamPossession && Convert.ToBoolean(playDto.PuntAttempt) ? 1 : 0
-                            },
-                            new SaveStatsCommandItem() {
-                                Team = playDto.AwayTeam,
-                                Score = playDto.AwayScore,
-                                YardsGained = playDto.AwayTeamOnOffense ? playDto.YardsGained : 0,
-                                Sacks = playDto.HomeTeamOnOffense && Convert.ToBoolean(playDto.Sack) ? 1 : 0,
-                                ReturnYards = playDto.Kickoff && playDto.HomeTeamPossession && playDto.ReturnYards != null ? (int)playDto.ReturnYards : 0,
-                                Punts = playDto.Punt && playDto.HomeTeamPossession && Convert.ToBoolean(playDto.PuntAttempt) ? 1 : 0
-                            }
-                        }
-                    };
+                    var saveStatsCommand = _mapper.Map<SaveStatsCommand>(playDto);
 
                     await mediator.Send(saveStatsCommand);
 
