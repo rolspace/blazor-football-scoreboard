@@ -4,7 +4,7 @@ namespace Football.Domain.Entities
     {
         public int GameId { get; set; }
 
-        public string Team { get; set; }
+        public string? Team { get; set; }
 
         public int Score { get; set; }
 
@@ -16,6 +16,6 @@ namespace Football.Domain.Entities
 
         public int Sacks { get; set; }
 
-        public Game Game { get; set; }
+        public Game? Game { get; set; }
     }
 }

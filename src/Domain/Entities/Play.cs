@@ -12,21 +12,21 @@ namespace Football.Domain.Entities
 
         public int GameId { get; set; }
 
-        public string HomeTeam { get; set; }
+        public string? HomeTeam { get; set; }
 
-        public string AwayTeam { get; set; }
+        public string? AwayTeam { get; set; }
 
-        public string Posteam { get; set; }
+        public string? Posteam { get; set; }
 
-        public string PosteamType { get; set; }
+        public string? PosteamType { get; set; }
 
-        public string Defteam { get; set; }
+        public string? Defteam { get; set; }
 
-        public string SideOfField { get; set; }
+        public string? SideOfField { get; set; }
 
         public int? Yardline100 { get; set; }
 
-        public string GameDate { get; set; }
+        public string? GameDate { get; set; }
 
         public int? QuarterSecondsRemaining { get; set; }
 
@@ -34,7 +34,7 @@ namespace Football.Domain.Entities
 
         public int? GameSecondsRemaining { get; set; }
 
-        public string GameHalf { get; set; }
+        public string? GameHalf { get; set; }
 
         public bool? QuarterEnd { get; set; }
 
@@ -48,15 +48,15 @@ namespace Football.Domain.Entities
 
         public int? GoalToGo { get; set; }
 
-        public string Time { get; set; }
+        public string? Time { get; set; }
 
-        public string Yrdln { get; set; }
+        public string? Yrdln { get; set; }
 
         public int Ydstogo { get; set; }
 
         public int Ydsnet { get; set; }
 
-        public string Desc { get; set; }
+        public string? Desc { get; set; }
 
         public string? PlayType { get; set; }
 
@@ -74,25 +74,25 @@ namespace Football.Domain.Entities
 
         public bool? QbScramble { get; set; }
 
-        public string PassLength { get; set; }
+        public string? PassLength { get; set; }
 
-        public string PassLocation { get; set; }
+        public string? PassLocation { get; set; }
 
         public int? AirYards { get; set; }
 
         public int? YardsAfterCatch { get; set; }
 
-        public string RunLocation { get; set; }
+        public string? RunLocation { get; set; }
 
-        public string RunGap { get; set; }
+        public string? RunGap { get; set; }
 
-        public string FieldGoalResult { get; set; }
+        public string? FieldGoalResult { get; set; }
 
         public int? KickDistance { get; set; }
 
-        public string ExtraPointResult { get; set; }
+        public string? ExtraPointResult { get; set; }
 
-        public string TwoPointConvResult { get; set; }
+        public string? TwoPointConvResult { get; set; }
 
         public int HomeTimeoutsRemaining { get; set; }
 
@@ -100,9 +100,9 @@ namespace Football.Domain.Entities
 
         public bool? Timeout { get; set; }
 
-        public string TimeoutTeam { get; set; }
+        public string? TimeoutTeam { get; set; }
 
-        public string TdTeam { get; set; }
+        public string? TdTeam { get; set; }
 
         public int? PosteamTimeoutsRemaining { get; set; }
 
@@ -190,115 +190,115 @@ namespace Football.Domain.Entities
 
         public bool? AssistTackle { get; set; }
 
-        public string PasserPlayerId { get; set; }
+        public string? PasserPlayerId { get; set; }
 
-        public string PasserPlayerName { get; set; }
+        public string? PasserPlayerName { get; set; }
 
-        public string ReceiverPlayerId { get; set; }
+        public string? ReceiverPlayerId { get; set; }
 
-        public string ReceiverPlayerName { get; set; }
+        public string? ReceiverPlayerName { get; set; }
 
-        public string RusherPlayerId { get; set; }
+        public string? RusherPlayerId { get; set; }
 
-        public string RusherPlayerName { get; set; }
+        public string? RusherPlayerName { get; set; }
 
-        public string InterceptionPlayerId { get; set; }
+        public string? InterceptionPlayerId { get; set; }
 
-        public string InterceptionPlayerName { get; set; }
+        public string? InterceptionPlayerName { get; set; }
 
-        public string PuntReturnerPlayerId { get; set; }
+        public string? PuntReturnerPlayerId { get; set; }
 
-        public string PuntReturnerPlayerName { get; set; }
+        public string? PuntReturnerPlayerName { get; set; }
 
-        public string KickoffReturnerPlayerName { get; set; }
+        public string? KickoffReturnerPlayerName { get; set; }
 
-        public string KickoffReturnerPlayerId { get; set; }
+        public string? KickoffReturnerPlayerId { get; set; }
 
-        public string PunterPlayerId { get; set; }
+        public string? PunterPlayerId { get; set; }
 
-        public string PunterPlayerName { get; set; }
+        public string? PunterPlayerName { get; set; }
 
-        public string KickerPlayerId { get; set; }
+        public string? KickerPlayerId { get; set; }
 
-        public string KickerPlayerName { get; set; }
+        public string? KickerPlayerName { get; set; }
 
-        public string ForcedFumblePlayer1Team { get; set; }
+        public string? ForcedFumblePlayer1Team { get; set; }
 
-        public string ForcedFumblePlayer1PlayerId { get; set; }
+        public string? ForcedFumblePlayer1PlayerId { get; set; }
 
-        public string ForcedFumblePlayer1PlayerName { get; set; }
+        public string? ForcedFumblePlayer1PlayerName { get; set; }
 
-        public string ForcedFumblePlayer2PlayerId { get; set; }
+        public string? ForcedFumblePlayer2PlayerId { get; set; }
 
-        public string ForcedFumblePlayer2Team { get; set; }
+        public string? ForcedFumblePlayer2Team { get; set; }
 
-        public string ForcedFumblePlayer2PlayerName { get; set; }
+        public string? ForcedFumblePlayer2PlayerName { get; set; }
 
-        public string SoloTackle1Team { get; set; }
+        public string? SoloTackle1Team { get; set; }
 
-        public string SoloTackle2Team { get; set; }
+        public string? SoloTackle2Team { get; set; }
 
-        public string SoloTackle1PlayerId { get; set; }
+        public string? SoloTackle1PlayerId { get; set; }
 
-        public string SoloTackle2PlayerId { get; set; }
+        public string? SoloTackle2PlayerId { get; set; }
 
-        public string SoloTackle1PlayerName { get; set; }
+        public string? SoloTackle1PlayerName { get; set; }
 
-        public string SoloTackle2PlayerName { get; set; }
+        public string? SoloTackle2PlayerName { get; set; }
 
-        public string PassDefense1PlayerId { get; set; }
+        public string? PassDefense1PlayerId { get; set; }
 
-        public string PassDefense1PlayerName { get; set; }
+        public string? PassDefense1PlayerName { get; set; }
 
-        public string PassDefense2PlayerId { get; set; }
+        public string? PassDefense2PlayerId { get; set; }
 
-        public string PassDefense2PlayerName { get; set; }
+        public string? PassDefense2PlayerName { get; set; }
 
-        public string Fumbled1Team { get; set; }
+        public string? Fumbled1Team { get; set; }
 
-        public string Fumbled1PlayerId { get; set; }
+        public string? Fumbled1PlayerId { get; set; }
 
-        public string Fumbled1PlayerName { get; set; }
+        public string? Fumbled1PlayerName { get; set; }
 
-        public string Fumbled2PlayerId { get; set; }
+        public string? Fumbled2PlayerId { get; set; }
 
-        public string Fumbled2PlayerName { get; set; }
+        public string? Fumbled2PlayerName { get; set; }
 
-        public string Fumbled2Team { get; set; }
+        public string? Fumbled2Team { get; set; }
 
-        public string FumbleRecovery1Team { get; set; }
+        public string? FumbleRecovery1Team { get; set; }
 
         public int? FumbleRecovery1Yards { get; set; }
 
-        public string FumbleRecovery1PlayerId { get; set; }
+        public string? FumbleRecovery1PlayerId { get; set; }
 
-        public string FumbleRecovery1PlayerName { get; set; }
+        public string? FumbleRecovery1PlayerName { get; set; }
 
-        public string FumbleRecovery2Team { get; set; }
+        public string? FumbleRecovery2Team { get; set; }
 
         public int? FumbleRecovery2Yards { get; set; }
 
-        public string FumbleRecovery2PlayerId { get; set; }
+        public string? FumbleRecovery2PlayerId { get; set; }
 
-        public string FumbleRecovery2PlayerName { get; set; }
+        public string? FumbleRecovery2PlayerName { get; set; }
 
-        public string ReturnTeam { get; set; }
+        public string? ReturnTeam { get; set; }
 
         public int? ReturnYards { get; set; }
 
-        public string PenaltyTeam { get; set; }
+        public string? PenaltyTeam { get; set; }
 
-        public string PenaltyPlayerId { get; set; }
+        public string? PenaltyPlayerId { get; set; }
 
-        public string PenaltyPlayerName { get; set; }
+        public string? PenaltyPlayerName { get; set; }
 
         public int? PenaltyYards { get; set; }
 
         public bool? ReplayOrChallenge { get; set; }
 
-        public string ReplayOrChallengeResult { get; set; }
+        public string? ReplayOrChallengeResult { get; set; }
 
-        public string PenaltyType { get; set; }
+        public string? PenaltyType { get; set; }
 
         public bool? DefensiveTwoPointAttempt { get; set; }
 
@@ -308,6 +308,6 @@ namespace Football.Domain.Entities
 
         public bool? DefensiveExtraPointConv { get; set; }
 
-        public Game Game { get; set; }
+        public Game? Game { get; set; }
     }
 }
