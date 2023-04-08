@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  appdb:
+  db:
     container_name: footballscoreboard_appdb
     image: mysql:8.0.28
     command: --default-authentication-plugin=mysql_native_password
@@ -11,10 +11,10 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: football_db
     volumes:
-      - path/to/mysql:/var/lib/mysql
+      - ~/code/databases/mysql:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
     networks:
-      - db
+      - dbnet
 
   appdb_viewer:
     container_name: footballscoreboard_appdb_viewer
@@ -22,10 +22,10 @@ services:
     ports:
       - 8080:8080
     networks:
-      - db
+      - dbnet
     depends_on:
       - db
 
 networks:
-  db:
+  dbnet:
     driver: bridge
