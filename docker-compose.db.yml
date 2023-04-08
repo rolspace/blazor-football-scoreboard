@@ -11,7 +11,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: football_db
     volumes:
-      - ~/code/databases/mysql:/var/lib/mysql
+      - path/to/mysql:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
     networks:
       - dbnet
