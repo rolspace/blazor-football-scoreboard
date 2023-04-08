@@ -12,19 +12,27 @@ public class HubManager : IHubManager
         _hubConnection = new HubConnectionBuilder().WithUrl(hubUri).Build();
     }
 
-    public async Task StartAsync()
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         if (_hubConnection.State == HubConnectionState.Disconnected)
         {
-            await _hubConnection.StartAsync();
+            await _hubConnection.StartAsync(cancellationToken);
         }
     }
 
-    public async Task StopAsync()
+    public async Task StopAsync(CancellationToken cancellationToken)
     {
         if (_hubConnection.State == HubConnectionState.Connected)
         {
-            await _hubConnection.StopAsync();
+            await _hubConnection.StopAsync(cancellationToken);
+        }
+    }
+
+    public async Task SendAsync<T>(string methodName, T? arg1, CancellationToken cancellationToken)
+    {
+        if (_hubConnection.State == HubConnectionState.Connected)
+        {
+            await _hubConnection.SendAsync(methodName, arg1, cancellationToken);
         }
     }
 

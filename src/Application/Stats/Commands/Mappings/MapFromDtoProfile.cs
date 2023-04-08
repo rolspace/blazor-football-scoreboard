@@ -24,8 +24,8 @@ public class MapFromDtoProfile : Profile
                         Score = s.AwayScore,
                         YardsGained = s.AwayTeamOnOffense ? s.YardsGained : 0,
                         Sacks = s.HomeTeamOnOffense && Convert.ToBoolean(s.Sack) ? 1 : 0,
-                        ReturnYards = s.Kickoff && s.HomeTeamPossession && s.ReturnYards != null ? (int)s.ReturnYards : 0,
-                        Punts = s.Punt && s.HomeTeamPossession && Convert.ToBoolean(s.PuntAttempt) ? 1 : 0
+                        ReturnYards = s.Kickoff && !s.HomeTeamPossession && s.ReturnYards != null ? (int)s.ReturnYards : 0,
+                        Punts = s.Punt && !s.HomeTeamPossession && Convert.ToBoolean(s.PuntAttempt) ? 1 : 0
                     }
                 }
             )

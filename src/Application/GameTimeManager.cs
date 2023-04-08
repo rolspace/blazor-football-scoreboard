@@ -7,44 +7,53 @@ public class GameTimeManager : IGameTimeManager
 {
     private readonly object _locker = new object();
 
-    private int _gamesOver = 0;
+    private int _gamesOver;
 
-    private int _secondsRemaining = 50;
+    private int _quarterSecondsRemaining;
 
-    private int _quarter = 4;
+    private int _quarter;
+
+    public GameTimeManager()
+        : this(Constants.FIRST_QUARTER, Constants.SECONDS_IN_QUARTER) { }
+
+    public GameTimeManager(int quarter, int quarterSecondsRemaining)
+    {
+        _quarter = quarter;
+        _quarterSecondsRemaining = quarterSecondsRemaining;
+    }
 
     public int GetQuarter() => _quarter;
 
-    public int GetQuarterSecondsRemaining() => _secondsRemaining;
+    public int GetQuarterSecondsRemaining() => _quarterSecondsRemaining;
 
     public void SetTime()
     {
         lock (_locker)
         {
-            if (AreAllGamesOver())
+            if (_gamesOver == Constants.GAMES_PER_WEEK)
             {
                 Interlocked.Exchange(ref _quarter, -1);
-                Interlocked.Exchange(ref _secondsRemaining, -1);
+                Interlocked.Exchange(ref _quarterSecondsRemaining, -1);
                 return;
             }
 
-            if (_secondsRemaining > 0)
+            if (_quarterSecondsRemaining > 0)
             {
-                Interlocked.Decrement(ref _secondsRemaining);
+                Interlocked.Decrement(ref _quarterSecondsRemaining);
                 return;
             }
 
-            if (_secondsRemaining == 0 && _quarter < Constants.FOURTH_QUARTER)
-            {
-                Interlocked.Increment(ref _quarter);
-                Interlocked.Exchange(ref _secondsRemaining, 900);
-                return;
-            }
-
-            if (_secondsRemaining == 0 && _quarter == Constants.FOURTH_QUARTER)
+            if (_quarterSecondsRemaining == 0 && _quarter < Constants.FOURTH_QUARTER)
             {
                 Interlocked.Increment(ref _quarter);
-                Interlocked.Exchange(ref _secondsRemaining, 600);
+                Interlocked.Exchange(ref _quarterSecondsRemaining, 900);
+                return;
+            }
+
+            if (_quarterSecondsRemaining == 0 && _quarter == Constants.FOURTH_QUARTER)
+            {
+                Interlocked.Increment(ref _quarter);
+                Interlocked.Exchange(ref _quarterSecondsRemaining, 600);
                 return;
             }
         }
@@ -56,10 +65,5 @@ public class GameTimeManager : IGameTimeManager
         {
             Interlocked.Add(ref _gamesOver, count);
         }
-    }
-
-    private bool AreAllGamesOver()
-    {
-        return _gamesOver == Constants.GAMES_PER_WEEK;
     }
 }

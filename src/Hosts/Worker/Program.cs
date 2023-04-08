@@ -19,7 +19,7 @@ builder.Host.UseDefaultServiceProvider(options =>
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-builder.Services.AddHostedService<PlayLogHostedService>();
+builder.Services.AddHostedService<PlayLogBackgroundService>();
 
 var app = builder.Build();
 

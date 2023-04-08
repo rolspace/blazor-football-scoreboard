@@ -1,9 +1,11 @@
 namespace Football.Application.Interfaces;
-internal interface IGameTimeManager
+public interface IGameTimeManager
 {
     int GetQuarter();
 
     int GetQuarterSecondsRemaining();
 
     void SetTime();
+
+    void IncrementGamesOver(int count);
 }
