@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    container_name: footballscoreboard_appdb
+    container_name: footballscoreboard_db
     image: mysql:8.0.28
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -17,7 +17,7 @@ services:
       - dbnet
 
   appdb_viewer:
-    container_name: footballscoreboard_appdb_viewer
+    container_name: footballscoreboard_dbviewer
     image: adminer
     ports:
       - 8080:8080

@@ -32,11 +32,13 @@ public sealed class PlayDto
 
     public bool AwayTeamOnOffense { get; set; }
 
+    public string? PlayType { get; set; }
+
     public int YardsGained { get; set; }
 
-    public bool? Sack { get; set; }
-
     public int? ReturnYards { get; set; }
+
+    public bool? Sack { get; set; }
 
     public bool? PuntAttempt { get; set; }
 

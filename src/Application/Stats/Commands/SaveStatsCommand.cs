@@ -24,7 +24,7 @@ public class SaveStatsCommandItem
 
     public int Score { get; set; }
 
-    public int YardsGained { get; set; }
+    public int PassingYards { get; set; }
 
     public int Sacks { get; set; }
 
@@ -60,7 +60,7 @@ public class SaveStatsCommandHandler : IRequestHandler<SaveStatsCommand, int>
             if (stat is not null)
             {
                 stat.Score = saveStatCommandItem.Score;
-                stat.YardsGained += saveStatCommandItem.YardsGained;
+                stat.PassingYards += saveStatCommandItem.PassingYards;
                 stat.Sacks += saveStatCommandItem.Sacks;
                 stat.ReturnYards += saveStatCommandItem.ReturnYards;
                 stat.Punts += saveStatCommandItem.Punts;
@@ -71,7 +71,7 @@ public class SaveStatsCommandHandler : IRequestHandler<SaveStatsCommand, int>
                 {
                     Team = saveStatCommandItem.Team,
                     Score = saveStatCommandItem.Score,
-                    YardsGained = saveStatCommandItem.YardsGained,
+                    PassingYards = saveStatCommandItem.PassingYards,
                     Sacks = saveStatCommandItem.Sacks,
                     ReturnYards = saveStatCommandItem.ReturnYards,
                     Punts = saveStatCommandItem.Punts
