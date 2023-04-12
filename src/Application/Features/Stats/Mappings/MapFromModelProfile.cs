@@ -1,11 +1,11 @@
 using AutoMapper;
 using Football.Application.Models;
 
-namespace Football.Application.Stats.Commands.Mappings;
+namespace Football.Application.Features.Stats.Mappings;
 
-public class MapFromDtoProfile : Profile
+public class MapFromModelProfile : Profile
 {
-    public MapFromDtoProfile()
+    public MapFromModelProfile()
     {
         CreateMap<PlayDto, SaveStatsCommand>()
             .ForMember(d => d.SaveStatCommandItems, o => o.MapFrom(s =>

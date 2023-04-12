@@ -3,7 +3,7 @@ using Football.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Football.Application.Stats.Commands;
+namespace Football.Application.Features.Stats;
 
 public record SaveStatsCommand : IRequest<int>
 {

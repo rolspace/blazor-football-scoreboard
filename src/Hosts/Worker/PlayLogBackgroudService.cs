@@ -1,9 +1,9 @@
 using AutoMapper;
-using Football.Application;
+using Football.Application.Features.Plays;
+using Football.Application.Features.Stats;
 using Football.Application.Interfaces;
 using Football.Application.Models;
-using Football.Application.Plays.Queries;
-using Football.Application.Stats.Commands;
+using Football.Application.Services;
 using MediatR;
 
 namespace Football.Worker;

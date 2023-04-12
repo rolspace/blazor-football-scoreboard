@@ -1,7 +1,7 @@
 using Football.Application;
 using Football.Application.Interfaces;
 
-namespace Football.Application;
+namespace Football.Application.Services;
 
 public class GameTimeManager : IGameTimeManager
 {

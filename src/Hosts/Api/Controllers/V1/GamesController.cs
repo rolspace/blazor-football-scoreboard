@@ -1,4 +1,4 @@
-using Football.Application.Games.Queries;
+using Football.Application.Features.Games;
 using Football.Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
