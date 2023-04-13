@@ -1,7 +1,7 @@
 using Football.Application.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
 
-namespace Football.Infrastructure.Communication;
+namespace Football.Infrastructure.Hub;
 
 public class HubManager : IHubManager
 {

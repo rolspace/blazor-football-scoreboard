@@ -1,5 +1,5 @@
 using Football.Application.Interfaces;
-using Football.Infrastructure.Communication;
+using Football.Infrastructure.Hub;
 using Football.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,9 +19,9 @@ public static class ConfigureServices
 
         services.AddTransient<IHubManager>((serviceProvider) =>
         {
-            var hubSettings = configuration.GetSection(HubSettings.Hub).Get<HubSettings>();
+            var hubSettings = configuration.GetSection(HubSettings.HubSection).Get<HubSettings>();
 
-            var hubUri = new Uri(hubSettings != null ? hubSettings.Endpoint : string.Empty);
+            var hubUri = new Uri(hubSettings != null ? hubSettings.HubUrl : string.Empty);
             return new HubManager(hubUri);
         });
 
