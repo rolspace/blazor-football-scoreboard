@@ -1,17 +1,20 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+<div id="root">
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <span class="mdc-top-app-bar__title">Blazor Football Scoreboard</span>
+            </section>
         </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+    </header>
+    <div class="mdc-top-app-bar--fixed-adjust">
+        <div class="mdc-layout-grid">
+            <div class="mdc-layout-grid__inner">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                    @Body
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
