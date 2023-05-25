@@ -21,6 +21,7 @@ public static class ConfigureServices
         {
             var hubSettings = configuration.GetSection(HubSettings.HubSection).Get<HubSettings>();
 
+            // TODO: review this later, Hub initialization is not needed everywhere
             var hubUri = new Uri(hubSettings != null ? hubSettings.HubUrl : string.Empty);
             return new HubManager(hubUri);
         });
