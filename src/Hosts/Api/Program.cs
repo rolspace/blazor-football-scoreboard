@@ -71,7 +71,11 @@ try
     app.UseSerilogRequestLogging();
     app.UseHttpsRedirection();
     app.UseRouting();
-    app.UseCors();
+
+    if (corsSettings is not null)
+    {
+        app.UseCors(corsSettings.PolicyName);
+    }
 
     app.UseEndpoints(endpoints =>
     {
