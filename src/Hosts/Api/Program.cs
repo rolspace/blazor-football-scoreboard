@@ -1,10 +1,12 @@
 using System.Reflection;
 using Football.Api.Hubs;
+using Football.Api.Settings;
 using Football.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .Enrich.FromLogContext()
     .WriteTo.Console()
@@ -33,6 +35,7 @@ try
         .Enrich.FromLogContext()
     );
 
+
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
 
@@ -41,6 +44,21 @@ try
     builder.Services.AddHealthChecks();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    CorsSettings? corsSettings = builder.Configuration.GetSection(CorsSettings.CorsSection).Get<CorsSettings>();
+    if (corsSettings is not null)
+    {
+        builder.Services.AddCors(corsOptions =>
+        {
+            corsOptions.AddPolicy(name: corsSettings.PolicyName, poliyBuilder =>
+            {
+                poliyBuilder
+                    .WithOrigins(corsSettings.AllowedOrigins)
+                    .WithMethods(corsSettings.AllowedMethods)
+                    .AllowAnyHeader();
+            });
+        });
+    }
 
     var app = builder.Build();
 
@@ -53,6 +71,7 @@ try
     app.UseSerilogRequestLogging();
     app.UseHttpsRedirection();
     app.UseRouting();
+    app.UseCors();
 
     app.UseEndpoints(endpoints =>
     {
