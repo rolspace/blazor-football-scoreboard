@@ -1,9 +1,10 @@
 @page "/game/{GameId:int}"
 
 @using System.Net.Http
+@using Football.Application.Models
+@using Football.Blazor.Shared.Components
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Logging
-@using Football.Blazor.Shared.Components
 
 @inject Settings.ScoreboardSettings ScoreboardSettings
 @inject HttpClient Http
@@ -12,27 +13,26 @@
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
-    @if (gameState is null && !errorOcurred)
+    @if (play is null && !errorOcurred)
     {
         <div>Loading</div>
     }
-    else if (gameState is null && errorOcurred)
+    else if (play is null && errorOcurred)
     {
         <div>An error ocurred. The game could not be loaded.</div>
     }
-    else if (gameState is not null)
+    else if (play is not null)
     {
         <!-- Title row -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">Game Page @gameState.AwayTeam vs.
-        @gameState.HomeTeam</div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">Game Page @play.AwayTeam vs. @play.HomeTeam</div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
         <!-- Game Card row -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-            <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
-            HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
-            QuarterTimeRemaining="@gameState.QuarterTimeRemaining" LastPlayDescription="@gameState.PlayDescription" />
+            <GameCard GameId="@play.Id" AwayTeam="@play.AwayTeam" AwayScore=@play.AwayScore
+            HomeTeam="@play.HomeTeam" HomeScore=@play.HomeScore
+            QuarterTimeRemaining="@play.QuarterTimeRemaining" LastPlayDescription="@play.Description" />
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
     }
@@ -43,7 +43,7 @@
 
     private HubConnection? hubConnection;
 
-    private GameState? gameState = null;
+    private PlayDto? play = null;
 
     [Parameter]
     public int GameId { get; set; }
@@ -52,45 +52,42 @@
     {
         try
         {
-            var apiUri = new Uri(AppSettings.ApiEndpoint ?? throw new Exception("ApiEndpoint missing"));
-            var game = await Http.GetFromJsonAsync<Game>(new Uri(apiUri, $"games/{GameId}"));
+            Uri apiUri = new Uri(ScoreboardSettings.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
+            GameDto? game = await Http.GetFromJsonAsync<GameDto>(new Uri(apiUri, $"games/{GameId}"));
 
-            if (game is null) throw new Exception("Game cannot be null");
+            if (game is null) throw new Exception("Game not found.");
 
-            Stat? homeStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.HomeTeam);
-            Stat? awayStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.AwayTeam);
-
-            gameState = new GameState
+            play = new PlayDto
             {
                 Id = game.Id,
-                Week = game.Week,
                 HomeTeam = game.HomeTeam,
-                HomeScore = homeStat?.Score ?? 0,
+                HomeScore = game.HomeScore,
                 AwayTeam = game.AwayTeam,
-                AwayScore = awayStat?.Score ?? 0,
-                Quarter = game.Time?.Quarter ?? 1,
-                QuarterSecondsRemaining = game.Time?.QuarterSecondsRemaining ?? 900,
+                AwayScore = game.AwayScore,
+                Quarter = game.Quarter,
+                QuarterSecondsRemaining = game.QuarterSecondsRemaining,
             };
 
-            Uri hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEnpoint missing"));
+            Uri hubUri = new Uri(ScoreboardSettings.HubUrl ?? throw new Exception("HubUrl setting is not defined."));
 
-            hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(loggingBuilder =>
-            loggingBuilder.AddProvider(LoggerProvider)).Build();
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl(hubUri)
+                .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
 
-            hubConnection.On<Play>("ReceivePlay", (play) =>
+            hubConnection.On<PlayDto>("ReceivePlay", (play) =>
             {
-                if (GameId == play.Game.Id)
+                if (GameId == play.Id)
                 {
-                    gameState = new GameState
+                    this.play = new PlayDto
                     {
-                        Id = play.Game.Id,
-                        HomeTeam = play.Game.HomeTeam,
+                        Id = play.Id,
+                        HomeTeam = play.HomeTeam,
                         HomeScore = play.HomeScore,
-                        AwayTeam = play.Game.AwayTeam,
+                        AwayTeam = play.AwayTeam,
                         AwayScore = play.AwayScore,
                         Quarter = play.Quarter,
                         QuarterSecondsRemaining = play.QuarterSecondsRemaining,
-                        PlayDescription = play.Description
+                        Description = play.Description
                     };
                 };
 

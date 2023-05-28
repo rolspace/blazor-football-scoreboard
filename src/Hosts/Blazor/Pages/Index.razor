@@ -1,9 +1,10 @@
 ﻿@page "/"
 
 @using System.Net.Http
+@using Football.Application.Models
+@using Football.Blazor.Shared.Components
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Logging
-@using Football.Blazor.Shared.Components
 
 @inject Settings.ScoreboardSettings ScoreboardSettings
 @inject HttpClient Http
@@ -15,22 +16,22 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8">
         <div class="mdc-layout-grid__inner score-grid">
-            @if (gameStates.Count() == 0 && !errorOcurred)
+            @if (plays.Count() == 0 && !errorOcurred)
             {
                 <div>Loading</div>
             }
-            else if (gameStates.Count() == 0 && errorOcurred)
+            else if (plays.Count() == 0 && errorOcurred)
             {
                 <div>An error ocurred. The game could not be loaded.</div>
             }
-            else if (gameStates.Count() > 0)
+            else if (plays.Count() > 0)
             {
-                foreach (var gameState in gameStates)
+                foreach (var currentPlay in plays)
                 {
-                    <GameCard GameId="@gameState.Id" AwayTeam="@gameState.AwayTeam" AwayScore=@gameState.AwayScore
-                HomeTeam="@gameState.HomeTeam" HomeScore=@gameState.HomeScore
-                QuarterTimeRemaining="@gameState.QuarterTimeRemaining"
-                LastPlayDescription="@gameState.PlayDescription" />
+                    <GameCard GameId="@currentPlay.Id" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
+                        HomeTeam="@currentPlay.HomeTeam" HomeScore=@currentPlay.HomeScore
+                        QuarterTimeRemaining="@currentPlay.QuarterTimeRemaining"
+                        LastPlayDescription="@currentPlay.Description" />
                 }
             }
         </div>
@@ -42,48 +43,45 @@
 
     private HubConnection? hubConnection;
 
-    private IReadOnlyList<GameState> gameStates = new List<GameState>();
+    private IReadOnlyList<PlayDto> plays = new List<PlayDto>();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var apiUri = new Uri(AppSettings.ApiEndpoint ?? throw new Exception("ApiEndpoint missing"));
-            var games = await Http.GetFromJsonAsync<Game[]>(new Uri(apiUri, $"games/week/{AppSettings.GameWeek}"));
+            Uri apiUri = new Uri(ScoreboardSettings.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
+            var games = await Http.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games?week={ScoreboardSettings.Week}"));
 
             if (games is not null && games.Count() > 0)
             {
-                gameStates = games.Select(game =>
+                plays = games.Select(game =>
                 {
-                    Stat? homeStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.HomeTeam);
-                    Stat? awayStat = game.Stats?.FirstOrDefault(stat => stat.Team == game.AwayTeam);
-
-                    return new GameState
+                    return new PlayDto
                     {
                         Id = game.Id,
-                        Week = game.Week,
                         HomeTeam = game.HomeTeam,
-                        HomeScore = homeStat?.Score ?? 0,
+                        HomeScore = game.HomeScore,
                         AwayTeam = game.AwayTeam,
-                        AwayScore = awayStat?.Score ?? 0,
-                        Quarter = game.Time?.Quarter ?? 1,
-                        QuarterSecondsRemaining = game.Time?.QuarterSecondsRemaining ?? 900,
+                        AwayScore = game.AwayScore,
+                        Quarter = game.Quarter,
+                        QuarterSecondsRemaining = game.QuarterSecondsRemaining,
                     };
                 }).ToList();
 
-                var hubUri = new Uri(AppSettings.HubEndpoint ?? throw new Exception("HubEndpoint missing"));
+                var hubUri = new Uri(ScoreboardSettings.HubUrl ?? throw new Exception("HubUrl setting is not defined."));
 
-                hubConnection = new HubConnectionBuilder().WithUrl(hubUri).ConfigureLogging(loggingBuilder =>
-                loggingBuilder.AddProvider(LoggerProvider)).Build();
+                hubConnection = new HubConnectionBuilder()
+                    .WithUrl(hubUri)
+                    .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
 
-                hubConnection.On<Play>("ReceivePlay", (play) =>
+                hubConnection.On<PlayDto>("ReceivePlay", (play) =>
                 {
-                    var game = gameStates.Single(game => game.Id == play.Game.Id);
-                    game.HomeScore = play.HomeScore;
-                    game.AwayScore = play.AwayScore;
-                    game.Quarter = play.Quarter;
-                    game.QuarterSecondsRemaining = play.QuarterSecondsRemaining;
-                    game.PlayDescription = play.Description;
+                    PlayDto newPlay = plays.Single(game => game.Id == play.Id);
+                    newPlay.HomeScore = play.HomeScore;
+                    newPlay.AwayScore = play.AwayScore;
+                    newPlay.Quarter = play.Quarter;
+                    newPlay.QuarterSecondsRemaining = play.QuarterSecondsRemaining;
+                    newPlay.Description = play.Description;
 
                     StateHasChanged();
                 });
