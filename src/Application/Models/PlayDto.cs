@@ -1,5 +1,6 @@
 namespace Football.Application.Models;
 
+// TODO: improve DTO definition
 public sealed class PlayDto
 {
     public int Id { get; set; }
@@ -17,6 +18,8 @@ public sealed class PlayDto
     public int Quarter { get; set; }
 
     public int QuarterSecondsRemaining { get; set; }
+
+    public string QuarterTimeRemaining => TimeSpan.FromSeconds(QuarterSecondsRemaining).ToString(@"mm\:ss");
 
     public bool GameOver { get; set; }
 

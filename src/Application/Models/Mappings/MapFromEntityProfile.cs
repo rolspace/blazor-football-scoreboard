@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using Football.Domain.Entities;
 
@@ -7,9 +8,21 @@ public class MapFromEntityProfile : Profile
 {
     public MapFromEntityProfile()
     {
-        CreateMap<Game, GameDto>();
+        // TODO: find a way to improve this with projection specific behavior, for now it does the job
+        CreateProjection<Game, GameDto>()
+            .ForMember(d => d.HomeScore,
+                o => o.MapFrom(g => g.Stats.SingleOrDefault(s => s.Team == g.HomeTeam) != null
+                    ? g.Stats.SingleOrDefault(s => s.Team == g.HomeTeam)!.Score
+                    : 0))
+            .ForMember(d => d.AwayScore,
+                o => o.MapFrom(g => g.Stats.SingleOrDefault(s => s.Team == g.AwayTeam) != null
+                    ? g.Stats.SingleOrDefault(s => s.Team == g.AwayTeam)!.Score
+                    : 0))
+            .ForMember(d => d.Quarter, o => o.NullSubstitute(1))
+            .ForMember(d => d.QuarterSecondsRemaining, o => o.NullSubstitute(900));
 
-        CreateMap<Play, PlayDto>()
+        // TODO: verify that this projection generates a good query, for now it does the job
+        CreateProjection<Play, PlayDto>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.PlayId))
             .ForMember(d => d.HomeScore, o => o.MapFrom(s => s.TotalHomeScore))
             .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))
