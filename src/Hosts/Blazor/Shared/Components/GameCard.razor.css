@@ -10,6 +10,12 @@
     text-align: right;
 }
 
+.score-card .mdc-card__primary .mdc-layout-grid__inner {
+    --mdc-layout-grid-gutter-desktop: 10px;
+    --mdc-layout-grid-gutter-tablet: 10px;
+    --mdc-layout-grid-gutter-phone: 10px;
+}
+
 .score-card .mdc-card__secondary {
     margin-top: 10px;
 }
