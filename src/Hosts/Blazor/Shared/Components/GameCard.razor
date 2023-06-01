@@ -1,5 +1,5 @@
 <div class="score-card mdc-layout-grid__cell mdc-layout-grid__cell--span-6-desktop mdc-layout-grid__cell--span-7-tablet">
-    <a href="game/@GameId">
+    <NavLink href=@($"/game/{GameId}")>
         <div class="mdc-card mdc-card--outlined">
             <div class="mdc-card__primary">
                 <div class="mdc-layout-grid__inner">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-    </a>
+    </NavLink>
 </div>
 
 @code {

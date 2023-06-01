@@ -22,18 +22,16 @@
     }
     else if (play is not null)
     {
-        <!-- Title row -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">Game Page @play.AwayTeam vs. @play.HomeTeam</div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
+        <!-- Back button row -->
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12"><NavLink href="/">Back</NavLink></div>
         <!-- Game Card row -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"></div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
             <GameCard GameId="@play.Id" AwayTeam="@play.AwayTeam" AwayScore=@play.AwayScore
-            HomeTeam="@play.HomeTeam" HomeScore=@play.HomeScore
-            QuarterTimeRemaining="@play.QuarterTimeRemaining" LastPlayDescription="@play.Description" />
+                HomeTeam="@play.HomeTeam" HomeScore=@play.HomeScore
+                QuarterTimeRemaining="@play.QuarterTimeRemaining" LastPlayDescription="@play.Description" />
         </div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4"></div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"></div>
     }
 </div>
 

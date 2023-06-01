@@ -1,4 +1,4 @@
-.score-card a {
+::deep a {
     text-decoration: none;
 }
 
