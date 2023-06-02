@@ -14,24 +14,26 @@
 <div class="mdc-layout-grid__inner">
     @if (play is null && !errorOcurred)
     {
-        <div>Loading</div>
+            <div>Loading</div>
     }
     else if (play is null && errorOcurred)
     {
-        <div>An error ocurred. The game could not be loaded.</div>
+            <div>An error ocurred. The game could not be loaded.</div>
     }
     else if (play is not null)
     {
-        <!-- Back button row -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12"><NavLink href="/">Back</NavLink></div>
-        <!-- Game Card row -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-6">
-            <GameCard GameId="@play.Id" AwayTeam="@play.AwayTeam" AwayScore=@play.AwayScore
-                HomeTeam="@play.HomeTeam" HomeScore=@play.HomeScore
-                QuarterTimeRemaining="@play.QuarterTimeRemaining" LastPlayDescription="@play.Description" />
-        </div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3"></div>
+            <!-- Back button row -->
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12"><NavLink href="/">Back</NavLink></div>
+            <!-- GameCast title -->
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">@play.AwayTeam @@ @play.HomeTeam</div>
+            <!-- GameCast row -->
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-desktop">
+                <GameCard GameId="@play.Id" AwayTeam="@play.AwayTeam" AwayScore=@play.AwayScore
+                    HomeTeam="@play.HomeTeam" HomeScore=@play.HomeScore
+                    QuarterTimeRemaining="@play.QuarterTimeRemaining" LastPlayDescription="@play.Description" />
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
     }
 </div>
 
