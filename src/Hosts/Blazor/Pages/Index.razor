@@ -13,8 +13,8 @@
 
 <div class="mdc-layout-grid__inner">
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Week @ScoreboardSettings.Week Games</div>
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-3-desktop"></div>
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-6-desktop">
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner score-grid">
             @if (plays.Count() == 0 && !errorOcurred)
             {
@@ -36,6 +36,7 @@
             }
         </div>
     </div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
 </div>
 
 @code {
