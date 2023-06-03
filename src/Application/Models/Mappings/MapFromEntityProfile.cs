@@ -24,6 +24,7 @@ public class MapFromEntityProfile : Profile
         // TODO: verify that this projection generates a good query, for now it does the job
         CreateProjection<Play, PlayDto>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.PlayId))
+            .ForMember(d => d.GameId, o => o.MapFrom(s => s.GameId))
             .ForMember(d => d.HomeScore, o => o.MapFrom(s => s.TotalHomeScore))
             .ForMember(d => d.AwayScore, o => o.MapFrom(s => s.TotalAwayScore))
             .ForMember(d => d.Quarter, o => o.MapFrom(s => s.Qtr))

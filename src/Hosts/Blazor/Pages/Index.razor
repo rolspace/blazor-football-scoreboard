@@ -16,19 +16,19 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner score-grid">
-            @if (plays.Count() == 0 && !errorOcurred)
+            @if (currentPlays.Count() == 0 && !errorOcurred)
             {
                 <div>Loading</div>
             }
-            else if (plays.Count() == 0 && errorOcurred)
+            else if (currentPlays.Count() == 0 && errorOcurred)
             {
                 <div>An error ocurred. The game could not be loaded.</div>
             }
-            else if (plays.Count() > 0)
+            else if (currentPlays.Count() > 0)
             {
-                foreach (var currentPlay in plays)
+                foreach (var currentPlay in currentPlays)
                 {
-                    <GameCard GameId="@currentPlay.Id" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
+                    <GameCard GameId="@currentPlay.GameId" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
                         HomeTeam="@currentPlay.HomeTeam" HomeScore=@currentPlay.HomeScore
                         QuarterTimeRemaining="@currentPlay.QuarterTimeRemaining"
                         LastPlayDescription="@currentPlay.Description" />
@@ -44,7 +44,7 @@
 
     private HubConnection? hubConnection;
 
-    private IReadOnlyList<PlayDto> plays = new List<PlayDto>();
+    private IReadOnlyList<PlayDto> currentPlays = new List<PlayDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,11 +55,12 @@
 
             if (games is not null && games.Count() > 0)
             {
-                plays = games.Select(game =>
+                currentPlays = games.Select(game =>
                 {
                     return new PlayDto
                     {
-                        Id = game.Id,
+                        Id = 0,
+                        GameId = game.Id,
                         HomeTeam = game.HomeTeam,
                         HomeScore = game.HomeScore,
                         AwayTeam = game.AwayTeam,
@@ -75,15 +76,15 @@
                     .WithUrl(hubUri)
                     .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
 
-                hubConnection.On<PlayDto>("ReceivePlay", (play) =>
+                hubConnection.On<PlayDto>("ReceivePlay", (nextPlay) =>
                 {
-                    PlayDto newPlay = plays.Single(game => game.Id == play.Id);
-                    newPlay.HomeScore = play.HomeScore;
-                    newPlay.AwayScore = play.AwayScore;
-                    newPlay.Quarter = play.Quarter;
-                    newPlay.QuarterSecondsRemaining = play.QuarterSecondsRemaining;
-                    newPlay.Description = play.Description;
-
+                    PlayDto newPlay = currentPlays.Single(play => play.GameId == nextPlay.GameId);
+                    newPlay.HomeScore = nextPlay.HomeScore;
+                    newPlay.AwayScore = nextPlay.AwayScore;
+                    newPlay.Quarter = nextPlay.Quarter;
+                    newPlay.QuarterSecondsRemaining = nextPlay.QuarterSecondsRemaining;
+                    newPlay.Description = nextPlay.Description;
+                    
                     StateHasChanged();
                 });
 
