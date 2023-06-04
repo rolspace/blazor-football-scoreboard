@@ -19,3 +19,7 @@
 .score-card .mdc-card__secondary {
     margin-top: 10px;
 }
+
+.score-card .score-card-description {
+    min-height: 19px;
+}
