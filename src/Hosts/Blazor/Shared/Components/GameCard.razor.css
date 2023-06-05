@@ -21,5 +21,7 @@
 }
 
 .score-card .score-card-description {
-    min-height: 0.95rem;
+    font-size: 0.6rem;
+    margin-top: 0.2rem;
+    min-height: 1.45rem;
 }
