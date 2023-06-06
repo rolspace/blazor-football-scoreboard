@@ -56,8 +56,6 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
             {
                 using (IServiceScope scope = _scopeFactory.CreateScope())
                 {
-                    var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
-
                     int quarter = _gameTimeManager.GetQuarter();
                     int quarterSecondsRemaining = _gameTimeManager.GetQuarterSecondsRemaining();
                     var query = new GetPlaysQuery()
@@ -67,6 +65,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                         QuarterSecondsRemaining = quarterSecondsRemaining
                     };
 
+                    var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
                     IEnumerable<PlayDto> playDtos = await mediator.Send(query);
 
                     int gameOverCount = playDtos.Count(p => p.GameOver);
