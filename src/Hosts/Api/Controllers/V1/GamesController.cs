@@ -1,4 +1,5 @@
 using Football.Application.Features.Games;
+using Football.Application.Features.Stats;
 using Football.Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -44,5 +45,20 @@ public class GamesController : ControllerBase
         if (games.Count() == 0) return NotFound();
 
         return Ok(games);
+    }
+
+    [HttpGet("{id}/stats")]
+    [ProducesResponseType(typeof(GameStatDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<GameStatDto>> GetStatsByGame([FromRoute] GetGameStatsQuery query)
+    {
+        if (query is null) return BadRequest();
+
+        GameStatDto gameStats = await _mediator.Send(query);
+
+        if (gameStats is null) return NotFound();
+
+        return Ok(gameStats);
     }
 }
