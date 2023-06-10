@@ -12,28 +12,29 @@
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
-    @if (play is null && !errorOcurred)
+    @if (currentPlay is null && !errorOcurred)
     {
             <div>Loading</div>
     }
-    else if (play is null && errorOcurred)
+    else if (currentPlay is null && errorOcurred)
     {
             <div>An error ocurred. The game could not be loaded.</div>
     }
-    else if (play is not null)
+    else if (currentPlay is not null)
     {
             <!-- Back button row -->
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12"><NavLink href="/">Back</NavLink></div>
             <!-- GameCast title -->
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">@play.AwayTeam @@ @play.HomeTeam</div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">@currentPlay.AwayTeam @@ @currentPlay.HomeTeam</div>
             <!-- GameCast row -->
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-desktop">
-                <GameCard GameId="@play.Id" AwayTeam="@play.AwayTeam" AwayScore=@play.AwayScore
-                    HomeTeam="@play.HomeTeam" HomeScore=@play.HomeScore
-                    QuarterTimeRemaining="@play.QuarterTimeRemaining" LastPlayDescription="@play.Description" />
+                <GameCard GameId="@currentPlay.Id" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
+                    HomeTeam="@currentPlay.HomeTeam" HomeScore=@currentPlay.HomeScore
+                    QuarterTimeRemaining="@currentPlay.QuarterTimeRemaining" LastPlayDescription="@currentPlay.Description" />
             </div>
             <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
+            <!-- STATS -->
     }
 </div>
 
@@ -42,7 +43,7 @@
 
     private HubConnection? hubConnection;
 
-    private PlayDto? play = null;
+    private PlayDto? currentPlay = null;
 
     [Parameter]
     public int GameId { get; set; }
@@ -56,9 +57,10 @@
 
             if (game is null) throw new Exception("Game not found.");
 
-            play = new PlayDto
+            currentPlay = new PlayDto
             {
-                Id = game.Id,
+                Id = 0,
+                GameId = game.Id,
                 HomeTeam = game.HomeTeam,
                 HomeScore = game.HomeScore,
                 AwayTeam = game.AwayTeam,
@@ -73,21 +75,23 @@
                 .WithUrl(hubUri)
                 .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
 
-            hubConnection.On<PlayDto>("ReceivePlay", (play) =>
+            hubConnection.On<PlayDto>("ReceivePlay", (nextPlay) =>
             {
-                if (GameId == play.Id)
+                if (GameId == nextPlay.GameId)
                 {
-                    this.play = new PlayDto
+                    currentPlay = new PlayDto
                     {
-                        Id = play.Id,
-                        HomeTeam = play.HomeTeam,
-                        HomeScore = play.HomeScore,
-                        AwayTeam = play.AwayTeam,
-                        AwayScore = play.AwayScore,
-                        Quarter = play.Quarter,
-                        QuarterSecondsRemaining = play.QuarterSecondsRemaining,
-                        Description = play.Description
+                        Id = nextPlay.Id,
+                        HomeTeam = nextPlay.HomeTeam,
+                        HomeScore = nextPlay.HomeScore,
+                        AwayTeam = nextPlay.AwayTeam,
+                        AwayScore = nextPlay.AwayScore,
+                        Quarter = nextPlay.Quarter,
+                        QuarterSecondsRemaining = nextPlay.QuarterSecondsRemaining,
+                        Description = nextPlay.Description
                     };
+
+                    // Request game stats
                 };
 
                 StateHasChanged();
