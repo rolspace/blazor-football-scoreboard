@@ -32,8 +32,8 @@
         <!-- GameCast layout -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-desktop">
-            <GameCard GameId="@currentPlay.GameId" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
-                HomeTeam="@currentPlay.HomeTeam" HomeScore=@currentPlay.HomeScore
+            <GameCard GameId="@currentPlay.GameId" AwayTeam="@currentPlay.AwayTeam" AwayScore="@currentPlay.AwayScore"
+                HomeTeam="@currentPlay.HomeTeam" HomeScore="@currentPlay.HomeScore"
                 QuarterTimeRemaining="@currentPlay.QuarterTimeRemaining" LastPlayDescription="@currentPlay.Description" />
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
@@ -66,38 +66,38 @@
             if (game is null) throw new Exception("Game not found.");
 
             currentPlay = new PlayDto
-                {
-                    Id = 0,
-                    GameId = game.Id,
-                    HomeTeam = game.HomeTeam,
-                    HomeScore = game.HomeScore,
-                    AwayTeam = game.AwayTeam,
-                    AwayScore = game.AwayScore,
-                    Quarter = game.Quarter,
-                    QuarterSecondsRemaining = game.QuarterSecondsRemaining
-                };
+            {
+                Id = 0,
+                GameId = game.Id,
+                HomeTeam = game.HomeTeam,
+                HomeScore = game.HomeScore,
+                AwayTeam = game.AwayTeam,
+                AwayScore = game.AwayScore,
+                Quarter = game.Quarter,
+                QuarterSecondsRemaining = game.QuarterSecondsRemaining
+            };
 
             Uri hubUri = new Uri(ScoreboardSettings.HubUrl ?? throw new Exception("HubUrl setting is not defined."));
 
             hubConnection = new HubConnectionBuilder()
-            .WithUrl(hubUri)
-            .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
+                .WithUrl(hubUri)
+                .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
 
             hubConnection.On<PlayDto>("ReceivePlay", (nextPlay) =>
             {
                 if (GameId == nextPlay.GameId)
                 {
                     currentPlay = new PlayDto
-                        {
-                            Id = nextPlay.Id,
-                            HomeTeam = nextPlay.HomeTeam,
-                            HomeScore = nextPlay.HomeScore,
-                            AwayTeam = nextPlay.AwayTeam,
-                            AwayScore = nextPlay.AwayScore,
-                            Quarter = nextPlay.Quarter,
-                            QuarterSecondsRemaining = nextPlay.QuarterSecondsRemaining,
-                            Description = nextPlay.Description
-                        };
+                    {
+                        Id = nextPlay.Id,
+                        HomeTeam = nextPlay.HomeTeam,
+                        HomeScore = nextPlay.HomeScore,
+                        AwayTeam = nextPlay.AwayTeam,
+                        AwayScore = nextPlay.AwayScore,
+                        Quarter = nextPlay.Quarter,
+                        QuarterSecondsRemaining = nextPlay.QuarterSecondsRemaining,
+                        Description = nextPlay.Description
+                    };
 
                     // Request game stats
                 };

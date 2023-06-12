@@ -12,7 +12,8 @@
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Week @ScoreboardSettings.Week Games</div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Week
+        @ScoreboardSettings.Week Games</div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner score-grid">
@@ -28,11 +29,12 @@
             {
                 foreach (var currentPlay in currentPlays)
                 {
-                    <GameCard GameId="@currentPlay.GameId" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
-                        HomeTeam="@currentPlay.HomeTeam" HomeScore=@currentPlay.HomeScore
-                        Quarter="@currentPlay.Quarter"
-                        QuarterTimeRemaining="@currentPlay.QuarterTimeRemaining"
-                        LastPlayDescription="@currentPlay.Description" />
+                    <div class="score-card mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-6-desktop">
+                        <GameCard GameId="@currentPlay.GameId" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
+                            HomeTeam="@currentPlay.HomeTeam" HomeScore="@currentPlay.HomeScore" Quarter="@currentPlay.Quarter"
+                            QuarterTimeRemaining="@currentPlay.QuarterTimeRemaining"
+                            LastPlayDescription="@currentPlay.Description" />
+                    </div>
                 }
             }
         </div>
@@ -85,7 +87,7 @@
                     newPlay.Quarter = nextPlay.Quarter;
                     newPlay.QuarterSecondsRemaining = nextPlay.QuarterSecondsRemaining;
                     newPlay.Description = nextPlay.Description;
-                    
+
                     StateHasChanged();
                 });
 
