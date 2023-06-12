@@ -1,35 +1,37 @@
-<NavLink href=@($"/game/{GameId}")>
-    <div class="mdc-card mdc-card--outlined">
-        <div class="mdc-card__primary">
-            <div class="mdc-layout-grid__inner">
-                <div
-                    class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-phone mdc-layout-grid__cell--span-10-desktop">
-                    @AwayTeam
+<div class="score-card">
+    <NavLink href=@($"/game/{GameId}")>
+        <div class="mdc-card mdc-card--outlined">
+            <div class="mdc-card__primary">
+                <div class="mdc-layout-grid__inner">
+                    <div
+                        class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-phone mdc-layout-grid__cell--span-10-desktop">
+                        @AwayTeam
+                    </div>
+                    <div
+                        class="score-card__score mdc-layout-grid__cell mdc-layout-grid__cell--span-1-phone mdc-layout-grid__cell--span-2-desktop">
+                        @AwayScore
+                    </div>
+                    <div
+                        class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-3-phone">
+                        @HomeTeam
+                    </div>
+                    <div
+                        class="score-card__score mdc-layout-grid__cell mdc-layout-grid__cell--span-1-phone mdc-layout-grid__cell--span-2-desktop">
+                        @HomeScore
+                    </div>
                 </div>
-                <div
-                    class="score-card__score mdc-layout-grid__cell mdc-layout-grid__cell--span-1-phone mdc-layout-grid__cell--span-2-desktop">
-                    @AwayScore
+            </div>
+            <div class="mdc-card__secondary">
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                    @GetQuarterText(Quarter) - @QuarterTimeRemaining
                 </div>
-                <div
-                    class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-3-phone">
-                    @HomeTeam
-                </div>
-                <div
-                    class="score-card__score mdc-layout-grid__cell mdc-layout-grid__cell--span-1-phone mdc-layout-grid__cell--span-2-desktop">
-                    @HomeScore
+                <div class="score-card-description mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                    @LastPlayDescription
                 </div>
             </div>
         </div>
-        <div class="mdc-card__secondary">
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                @GetQuarterText(Quarter) - @QuarterTimeRemaining
-            </div>
-            <div class="score-card-description mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                @LastPlayDescription
-            </div>
-        </div>
-    </div>
-</NavLink>
+    </NavLink>
+</div>
 
 @code {
     [Parameter]

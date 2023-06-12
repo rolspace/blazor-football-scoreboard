@@ -16,7 +16,7 @@
         @ScoreboardSettings.Week Games</div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
-        <div class="mdc-layout-grid__inner score-grid">
+        <div class="mdc-layout-grid__inner">
             @if (currentPlays.Count() == 0 && !errorOcurred)
             {
                 <div>Loading</div>
@@ -29,7 +29,7 @@
             {
                 foreach (var currentPlay in currentPlays)
                 {
-                    <div class="score-card mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-6-desktop">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-6-desktop">
                         <GameCard GameId="@currentPlay.GameId" AwayTeam="@currentPlay.AwayTeam" AwayScore=@currentPlay.AwayScore
                             HomeTeam="@currentPlay.HomeTeam" HomeScore="@currentPlay.HomeScore" Quarter="@currentPlay.Quarter"
                             QuarterTimeRemaining="@currentPlay.QuarterTimeRemaining"
