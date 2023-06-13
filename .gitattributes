@@ -92,3 +92,8 @@ https://github.com/alexkaratarakis/gitattributes
 *.csx      text diff=csharp
 *.sln      text eol=crlf
 *.csproj   text eol=crlf
+
+# Basic .gitattributes for sql files
+
+*.sql linguist-detectable=true
+*.sql linguist-language=sql
