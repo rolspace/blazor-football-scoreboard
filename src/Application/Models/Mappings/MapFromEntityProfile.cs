@@ -36,6 +36,8 @@ public class MapFromEntityProfile : Profile
             .ForMember(d => d.HomeTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.HomeTeam && (s.PlayType != "kickoff" || s.PlayType != "punt")))
             .ForMember(d => d.AwayTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.AwayTeam && (s.PlayType != "kickoff" || s.PlayType != "punt")));
 
-        CreateProjection<Stat, StatDto>();
+        // TODO: find a way to improve this with projection specific behavior, for now it does the job
+        CreateProjection<Stat, StatDto>()
+            .ForMember(d => d.Home, o => o.MapFrom(s => s.Game != null && s.Game.HomeTeam == s.Team));
     }
 }
