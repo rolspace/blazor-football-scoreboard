@@ -9,3 +9,7 @@
 .mdc-data-table__cell {
     --mdc-typography-body2-font-size: 0.75rem;
 }
+
+.mdc-data-table__cell.stat-title {
+    padding-left: 2rem;
+}
