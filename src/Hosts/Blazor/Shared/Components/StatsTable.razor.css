@@ -1,3 +1,11 @@
 .mdc-data-table {
     width: 100%;
 }
+
+.mdc-data-table__header-cell {
+    --mdc-typography-subtitle2-font-size: 0.75rem;
+}
+
+.mdc-data-table__cell {
+    --mdc-typography-body2-font-size: 0.75rem;
+}
