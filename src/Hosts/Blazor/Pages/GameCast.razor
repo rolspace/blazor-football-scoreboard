@@ -41,13 +41,11 @@
             </div>
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
-        <!-- GameStats layout -->
+        <!-- GameCast title -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">Stats</div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"></div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop">
-            <StatsTable AwayTeam="@currentPlay.AwayTeam" HomeTeam="@currentPlay.HomeTeam" />
-        </div>
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"></div>
+        <!-- GameStats layout -->
+        <StatsTable TeamStats=@homeTeamStats />
+        <StatsTable TeamStats=@awayTeamStats />
     }
 </div>
 
@@ -58,6 +56,10 @@
 
     private PlayDto? currentPlay = null;
 
+    private StatDto? homeTeamStats = null;
+
+    private StatDto? awayTeamStats = null;
+
     [Parameter]
     public int GameId { get; set; }
 
@@ -67,9 +69,9 @@
         {
             Uri apiUri = new Uri(ScoreboardSettings.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
             GameDto? game = await Http.GetFromJsonAsync<GameDto>(new Uri(apiUri, $"games/{GameId}"));
-
+            
             if (game is null) throw new Exception("Game not found.");
-
+            
             currentPlay = new PlayDto
             {
                 Id = 0,
@@ -81,6 +83,10 @@
                 Quarter = game.Quarter,
                 QuarterSecondsRemaining = game.QuarterSecondsRemaining
             };
+
+            GameStatDto? gameStats = await Http.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
+            homeTeamStats = gameStats?.Stats.Find(s => s.Home);
+            awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
             Uri hubUri = new Uri(ScoreboardSettings.HubUrl ?? throw new Exception("HubUrl setting is not defined."));
 
