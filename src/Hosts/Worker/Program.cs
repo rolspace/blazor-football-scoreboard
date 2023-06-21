@@ -1,6 +1,6 @@
-using System.Reflection;
 using Football.Infrastructure.Extensions;
 using Football.Worker;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -13,7 +13,7 @@ public sealed class StatDto
 
     public int Score { get; set; }
 
-    public bool Home {get; set; }
+    public bool Home { get; set; }
 
     public int PassingYards { get; set; }
 

@@ -1,4 +1,3 @@
-using Football.Application;
 using Football.Application.Interfaces;
 
 namespace Football.Application.Services;

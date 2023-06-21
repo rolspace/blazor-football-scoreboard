@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Football.Application.Models;
 using Microsoft.AspNetCore.SignalR;
 
