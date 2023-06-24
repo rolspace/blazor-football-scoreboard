@@ -29,8 +29,6 @@ public class GetGameStatsQueryHandler : IRequestHandler<GetGameStatsQuery, GameS
             .ProjectTo<StatDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
-        if (gameStats.Count == 0) return null;
-
         return new GameStatDto()
         {
             GameId = request.Id,

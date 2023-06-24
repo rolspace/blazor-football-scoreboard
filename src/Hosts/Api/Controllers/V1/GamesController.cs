@@ -50,14 +50,11 @@ public class GamesController : ControllerBase
     [HttpGet("{id}/stats")]
     [ProducesResponseType(typeof(GameStatDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GameStatDto>> GetStatsByGame([FromRoute] GetGameStatsQuery query)
     {
         if (query is null) return BadRequest();
 
         GameStatDto gameStats = await _mediator.Send(query);
-
-        if (gameStats is null) return NotFound();
 
         return Ok(gameStats);
     }
