@@ -44,8 +44,8 @@
         <!-- GameCast title -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">Stats</div>
         <!-- GameStats layout -->
-        <StatsTable TeamStats=@homeTeamStats />
-        <StatsTable TeamStats=@awayTeamStats />
+        <StatsTable Team="@currentPlay.HomeTeam" TeamStats=@homeTeamStats  />
+        <StatsTable Team="@currentPlay.AwayTeam" TeamStats=@awayTeamStats />
     }
 </div>
 
@@ -69,9 +69,9 @@
         {
             Uri apiUri = new Uri(ScoreboardSettings.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
             GameDto? game = await Http.GetFromJsonAsync<GameDto>(new Uri(apiUri, $"games/{GameId}"));
-            
+
             if (game is null) throw new Exception("Game not found.");
-            
+
             currentPlay = new PlayDto
             {
                 Id = 0,
@@ -94,7 +94,7 @@
                 .WithUrl(hubUri)
                 .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
 
-            hubConnection.On<PlayDto>("ReceivePlay", (nextPlay) =>
+            hubConnection.On<PlayDto>("ReceivePlay", async (nextPlay) =>
             {
                 if (GameId == nextPlay.GameId)
                 {
@@ -110,7 +110,9 @@
                         Description = nextPlay.Description
                     };
 
-                    // Request game stats
+                    GameStatDto? updatedGameStats = await Http.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
+                    homeTeamStats = updatedGameStats?.Stats.Find(s => s.Home);
+                    awayTeamStats = updatedGameStats?.Stats.Find(s => !s.Home);
                 };
 
                 StateHasChanged();

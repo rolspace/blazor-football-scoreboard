@@ -10,7 +10,7 @@
                         <thead>
                             <tr class="mdc-data-table__header-row">
                                 <th class="mdc-data-table__header-cell" role="columnheader" scope="col" colspan="2">
-                                    @TeamStats.Team
+                                    @Team
                                 </th>
                             </tr>
                         </thead>
@@ -20,21 +20,21 @@
                             </tr>
                             <tr class="mdc-data-table__row">
                                 <td class="mdc-data-table__cell stat-title">Passing Yards</td>
-                                <td class="mdc-data-table__cell mdc-data-table__cell--numeric">@TeamStats.PassingYards</td>
+                                <td class="mdc-data-table__cell mdc-data-table__cell--numeric">@(TeamStats?.PassingYards ?? 0)</td>
                             </tr>
                             <tr class="mdc-data-table__row">
                                 <td class="mdc-data-table__cell" colspan="2">Defense</td>
                             </tr>
                             <tr class="mdc-data-table__row">
                                 <td class="mdc-data-table__cell stat-title">Sacks</td>
-                                <td class="mdc-data-table__cell mdc-data-table__cell--numeric">@TeamStats.Sacks</td>
+                                <td class="mdc-data-table__cell mdc-data-table__cell--numeric">@(TeamStats?.Sacks ?? 0)</td>
                             </tr>
                             <tr class="mdc-data-table__row">
                                 <td class="mdc-data-table__cell" colspan="2">Special Teams</td>
                             </tr>
                             <tr class="mdc-data-table__row">
                                 <td class="mdc-data-table__cell stat-title">Punts</td>
-                                <td class="mdc-data-table__cell mdc-data-table__cell--numeric">@TeamStats.Punts</td>
+                                <td class="mdc-data-table__cell mdc-data-table__cell--numeric">@(TeamStats?.Punts ?? 0)</td>
                             </tr>
                         </tbody>
                     </table>
@@ -46,5 +46,7 @@
 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-desktop"></div>
 
 @code {
+    [Parameter] public string Team { get; set; } = string.Empty;
+
     [Parameter] public StatDto TeamStats { get; set; } = new StatDto();
 }
