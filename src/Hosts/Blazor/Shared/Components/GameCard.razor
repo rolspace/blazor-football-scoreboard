@@ -1,3 +1,5 @@
+@using Football.Application.Models
+
 <div class="score-card">
     <NavLink href=@($"/game/{GameId}")>
         <div class="mdc-card mdc-card--outlined">
@@ -5,28 +7,28 @@
                 <div class="mdc-layout-grid__inner">
                     <div
                         class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3-phone mdc-layout-grid__cell--span-10-desktop">
-                        @AwayTeam
+                        @Play.AwayTeam
                     </div>
                     <div
                         class="score-card__score mdc-layout-grid__cell mdc-layout-grid__cell--span-1-phone mdc-layout-grid__cell--span-2-desktop">
-                        @AwayScore
+                        @Play.AwayScore
                     </div>
                     <div
                         class="mdc-layout-grid__cell mdc-layout-grid__cell--span-10-desktop mdc-layout-grid__cell--span-3-phone">
-                        @HomeTeam
+                        @Play.HomeTeam
                     </div>
                     <div
                         class="score-card__score mdc-layout-grid__cell mdc-layout-grid__cell--span-1-phone mdc-layout-grid__cell--span-2-desktop">
-                        @HomeScore
+                        @Play.HomeScore
                     </div>
                 </div>
             </div>
             <div class="mdc-card__secondary">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                    @GetQuarterText(Quarter) - @QuarterTimeRemaining
+                    @GetQuarterText(Play.Quarter) - @Play.QuarterTimeRemaining
                 </div>
                 <div class="score-card-description mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-                    @LastPlayDescription
+                    @Play.Description
                 </div>
             </div>
         </div>
@@ -38,25 +40,7 @@
     public int GameId { get; set; }
 
     [Parameter]
-    public string AwayTeam { get; set; } = "";
-
-    [Parameter]
-    public int AwayScore { get; set; } = 0;
-
-    [Parameter]
-    public string HomeTeam { get; set; } = "";
-
-    [Parameter]
-    public int HomeScore { get; set; } = 0;
-
-    [Parameter]
-    public string LastPlayDescription { get; set; } = "Last play";
-
-    [Parameter]
-    public int Quarter { get; set; } = 1;
-
-    [Parameter]
-    public string QuarterTimeRemaining { get; set; } = "";
+    public PlayDto Play { get; set; } = new PlayDto();
 
     string GetQuarterText(int quarter) => quarter switch
     {
