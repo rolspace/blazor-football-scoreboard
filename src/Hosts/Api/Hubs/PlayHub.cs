@@ -1,4 +1,4 @@
-using Football.Application.Models;
+using Football.Application.Features.Plays.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Football.Api.Hubs

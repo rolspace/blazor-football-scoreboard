@@ -1,4 +1,4 @@
-namespace Football.Application.Models;
+namespace Football.Application.Features.Games.Models;
 
 // TODO: improve DTO definition
 public sealed class GameDto

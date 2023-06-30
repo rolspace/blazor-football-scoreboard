@@ -1,5 +1,5 @@
 using AutoMapper;
-using Football.Application.Models;
+using Football.Application.Features.Plays.Models;
 
 namespace Football.Application.Features.Stats.Mappings;
 

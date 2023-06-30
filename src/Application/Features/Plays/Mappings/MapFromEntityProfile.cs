@@ -1,25 +1,13 @@
 using AutoMapper;
+using Football.Application.Features.Plays.Models;
 using Football.Domain.Entities;
 
-namespace Football.Application.Models.Mappings;
+namespace Football.Application.Features.Plays.Mappings;
 
 public class MapFromEntityProfile : Profile
 {
     public MapFromEntityProfile()
     {
-        // TODO: find a way to improve this with projection specific behavior, for now it does the job
-        CreateProjection<Game, GameDto>()
-            .ForMember(d => d.HomeScore,
-                o => o.MapFrom(g => g.Stats.SingleOrDefault(s => s.Team == g.HomeTeam) != null
-                    ? g.Stats.SingleOrDefault(s => s.Team == g.HomeTeam)!.Score
-                    : 0))
-            .ForMember(d => d.AwayScore,
-                o => o.MapFrom(g => g.Stats.SingleOrDefault(s => s.Team == g.AwayTeam) != null
-                    ? g.Stats.SingleOrDefault(s => s.Team == g.AwayTeam)!.Score
-                    : 0))
-            .ForMember(d => d.Quarter, o => o.NullSubstitute(1))
-            .ForMember(d => d.QuarterSecondsRemaining, o => o.NullSubstitute(900));
-
         // TODO: verify that this projection generates a good query, for now it does the job
         CreateProjection<Play, PlayDto>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.PlayId))
@@ -34,9 +22,5 @@ public class MapFromEntityProfile : Profile
             .ForMember(d => d.HomeTeamPossession, o => o.MapFrom(s => s.Posteam == s.HomeTeam))
             .ForMember(d => d.HomeTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.HomeTeam && (s.PlayType != "kickoff" || s.PlayType != "punt")))
             .ForMember(d => d.AwayTeamOnOffense, o => o.MapFrom(s => s.Posteam == s.AwayTeam && (s.PlayType != "kickoff" || s.PlayType != "punt")));
-
-        // TODO: find a way to improve this with projection specific behavior, for now it does the job
-        CreateProjection<Stat, StatDto>()
-            .ForMember(d => d.Home, o => o.MapFrom(s => s.Game != null && s.Game.HomeTeam == s.Team));
     }
 }

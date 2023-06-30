@@ -1,8 +1,8 @@
 using AutoMapper;
 using Football.Application.Features.Plays;
+using Football.Application.Features.Plays.Models;
 using Football.Application.Features.Stats;
 using Football.Application.Interfaces;
-using Football.Application.Models;
 using Football.Application.Services;
 using MediatR;
 

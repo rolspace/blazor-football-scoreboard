@@ -1,12 +1,13 @@
 using Football.Api.Controllers.V1;
-using Football.Application.Models;
+using Football.Application.Features.Games;
+using Football.Application.Features.Games.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace Football.Api.UnitTests;
 
-public class UnitTest1
+public class GamesControllerTest
 {
     [Fact]
     public async Task GetGamesById_ValidGameId_ReturnsHttpOkAndGameDto()

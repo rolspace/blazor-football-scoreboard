@@ -1,4 +1,4 @@
-namespace Football.Application.Models;
+namespace Football.Application.Features.Stats.Models;
 
 public sealed class GameStatDto
 {

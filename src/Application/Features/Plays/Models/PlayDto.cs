@@ -1,4 +1,4 @@
-namespace Football.Application.Models;
+namespace Football.Application.Features.Plays.Models;
 
 // TODO: improve DTO definition
 public sealed class PlayDto
@@ -25,25 +25,25 @@ public sealed class PlayDto
 
     public string Description { get; set; } = string.Empty;
 
+    public string? PlayType { get; set; }
+
+    public int YardsGained { get; set; }
+
+    public bool? Sack { get; set; }
+
     public bool Kickoff { get; set; }
 
+    public bool? PuntAttempt { get; set; }
+
     public bool Punt { get; set; }
+
+    public int? ReturnYards { get; set; }
 
     public bool HomeTeamPossession { get; set; }
 
     public bool HomeTeamOnOffense { get; set; }
 
     public bool AwayTeamOnOffense { get; set; }
-
-    public string? PlayType { get; set; }
-
-    public int YardsGained { get; set; }
-
-    public int? ReturnYards { get; set; }
-
-    public bool? Sack { get; set; }
-
-    public bool? PuntAttempt { get; set; }
 
     public override string ToString()
     {

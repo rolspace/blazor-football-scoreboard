@@ -1,7 +1,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Football.Application.Features.Stats.Models;
 using Football.Application.Interfaces;
-using Football.Application.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
