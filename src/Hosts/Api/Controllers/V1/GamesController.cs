@@ -51,7 +51,7 @@ public class GamesController : ControllerBase
     [HttpGet("{id}/stats")]
     [ProducesResponseType(typeof(GameStatDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GameStatDto>> GetStatsByGame([FromRoute] GetGameStatsQuery query)
+    public async Task<ActionResult<GameStatDto>> GetStatsById([FromRoute] GetGameStatsQuery query)
     {
         if (query is null) return BadRequest();
 
