@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  apptestdb:
-    container_name: footballscoreboard_apptestdb
+  testdb:
+    container_name: footballscoreboard_testdb
     image: mysql:8.0.28
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -14,18 +14,18 @@ services:
       - path/to/mysql:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
     networks:
-      - testdb
+      - testdbnet
 
-  apptestdb_viewer:
-    container_name: footballscoreboard_apptestdb_viewer
+  testdb_viewer:
+    container_name: footballscoreboard_testdb_viewer
     image: adminer
     ports:
       - 8081:8080
     networks:
-      - testdb
+      - testdbnet
     depends_on:
       - testdb
 
 networks:
-  testdb:
+  testdbnet:
     driver: bridge
