@@ -96,4 +96,5 @@ https://github.com/alexkaratarakis/gitattributes
 # Basic .gitattributes for sql files
 
 *.sql linguist-detectable=true
+**/football_db.sql linguist-detectable=false
 *.sql linguist-language=sql
