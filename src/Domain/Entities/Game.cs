@@ -10,11 +10,11 @@ namespace Football.Domain.Entities
 
         public string AwayTeam { get; set; } = string.Empty;
 
-        public GameState? State { get; set; }
-
         public int? Quarter { get; set; }
 
         public int? QuarterSecondsRemaining { get; set; }
+
+        public GameState? State { get; set; }
 
         public IList<Play> Plays { get; private set; } = new List<Play>();
 
