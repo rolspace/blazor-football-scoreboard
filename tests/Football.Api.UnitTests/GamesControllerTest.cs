@@ -12,7 +12,7 @@ namespace Football.Api.UnitTests;
 public class GamesControllerTest
 {
     [Fact]
-    public async Task GetGamesById_ValidGameId_ReturnsHttpOkAndGameDto()
+    public async Task GetGamesById_GameIdFound_ReturnsHttpOkAndGameDto()
     {
         var getGameQuery = new GetGameQuery { Id = 1 };
         var gameDto = new GameDto
@@ -35,7 +35,7 @@ public class GamesControllerTest
     }
 
     [Fact]
-    public async Task GetGamesById_NonExistingGameId_ReturnsNotFound()
+    public async Task GetGamesById_GameIdNotFound_ReturnsNotFound()
     {
         var getGameQuery = new GetGameQuery { Id = 0 };
 
@@ -64,7 +64,7 @@ public class GamesControllerTest
     }
 
     [Fact]
-    public async Task GetGamesByWeek_WeekExists_ReturnsHttpOkAndGameDtoList()
+    public async Task GetGamesByWeek_WeekFound_ReturnsHttpOkAndGameDtoList()
     {
         var getGamesQuery = new GetGamesQuery { Week = 1 };
         var gameDtos = new List<GameDto> {
@@ -96,7 +96,7 @@ public class GamesControllerTest
     }
 
     [Fact]
-    public async Task GetGamesByWeek_NonExistingWeek_ReturnsNotFound()
+    public async Task GetGamesByWeek_WeekNotFound_ReturnsNotFound()
     {
         var getGamesQuery = new GetGamesQuery { Week = 0 };
 
@@ -125,7 +125,7 @@ public class GamesControllerTest
     }
 
     [Fact]
-    public async Task GetStatsById_ValidGameId_ReturnsGameStatsDtoModel()
+    public async Task GetStatsById_GameIdFound_ReturnsGameStatsDtoModel()
     {
         var getGameStatsQuery = new GetGameStatsQuery() { Id = 1 };
         var gameStatDto = new GameStatDto
