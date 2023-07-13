@@ -73,8 +73,8 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
                     foreach (PlayDto playDto in playDtos)
                     {
-                        var saveStatsCommand = _mapper.Map<SaveStatsCommand>(playDto);
-                        await mediator.Send(saveStatsCommand);
+                        var saveGameStatsCommand = _mapper.Map<SaveGameStatsCommand>(playDto);
+                        await mediator.Send(saveGameStatsCommand);
 
                         await _hubManager.SendAsync<PlayDto>("SendPlay", playDto, stoppingToken);
                         _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {playDto.ToString()}");
