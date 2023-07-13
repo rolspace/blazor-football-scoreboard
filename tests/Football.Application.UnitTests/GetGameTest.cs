@@ -29,7 +29,7 @@ public class GetGameTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGame_IdExists_ReturnsGame()
+    public async Task GetGame_IdFound_ReturnsGame()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
@@ -54,6 +54,21 @@ public class GetGameTest : IClassFixture<TestDatabaseFixture>
         }, new CancellationToken());
 
         result.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public async Task GetGame_IdNotFound_ReturnsNull()
+    {
+        using FootballDbContext dbContext = Fixture.CreateContext();
+
+        GetGameQueryHandler handler = new(dbContext, _mapper);
+
+        GameDto? result = await handler.Handle(new GetGameQuery
+        {
+            Id = 0
+        }, new CancellationToken());
+
+        result.Should().BeNull();
     }
 }
 
