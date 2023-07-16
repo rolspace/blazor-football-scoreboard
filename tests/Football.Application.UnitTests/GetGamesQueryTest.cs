@@ -71,6 +71,6 @@ public class GetGamesQueryTest : IClassFixture<TestDatabaseFixture>
             Week = 0
         }, new CancellationToken());
 
-        result.Should().BeEquivalentTo(Enumerable.Empty<GameDto>());
+        result.Should().BeEmpty();
     }
 }
