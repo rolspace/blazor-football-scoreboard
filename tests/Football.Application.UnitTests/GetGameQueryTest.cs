@@ -7,13 +7,13 @@ using Football.Infrastructure.Persistence;
 
 namespace Football.Application;
 
-public class GetGameTest : IClassFixture<TestDatabaseFixture>
+public class GetGameQueryTest : IClassFixture<TestDatabaseFixture>
 {
     private readonly IMapper _mapper;
 
     public TestDatabaseFixture Fixture { get; }
 
-    public GetGameTest(TestDatabaseFixture fixture)
+    public GetGameQueryTest(TestDatabaseFixture fixture)
     {
         Fixture = fixture;
 
