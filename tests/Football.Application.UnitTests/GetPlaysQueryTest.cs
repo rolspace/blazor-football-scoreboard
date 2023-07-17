@@ -29,7 +29,7 @@ public class GetPlaysQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetPlays_ParametersFound_ReturnsPlaysList()
+    public async Task GetPlays_PlaysFound_ReturnsPlayDtoCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
