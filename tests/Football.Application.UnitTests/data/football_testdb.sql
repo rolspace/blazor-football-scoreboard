@@ -266,6 +266,8 @@ CREATE TABLE `stat` (
 
 LOCK TABLES `stat` WRITE;
 /*!40000 ALTER TABLE `stat` DISABLE KEYS */;
+INSERT INTO `stat` (`game_id`, `team`, `score`, `passing_yards`, `return_yards`, `sacks`, `punts`) VALUES ('2019090500', 'CHI', '7', '100', '50', '4', '2');
+INSERT INTO `stat` (`game_id`, `team`, `score`, `passing_yards`, `return_yards`, `sacks`, `punts`) VALUES ('2019090500', 'GB', '7', '50', '25', '2', '1');
 /*!40000 ALTER TABLE `stat` ENABLE KEYS */;
 UNLOCK TABLES;
 
