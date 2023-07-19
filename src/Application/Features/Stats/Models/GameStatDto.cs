@@ -17,9 +17,9 @@ public sealed class StatDto
 
     public int PassingYards { get; set; }
 
-    public int ReturnYards { get; set; }
-
     public int Sacks { get; set; }
 
     public int Punts { get; set; }
+
+    public int ReturnYards { get; set; }
 }
