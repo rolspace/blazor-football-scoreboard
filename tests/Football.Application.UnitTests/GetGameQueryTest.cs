@@ -38,9 +38,9 @@ public class GetGameQueryTest : IClassFixture<TestDatabaseFixture>
             Id = 2019090500,
             Week = 1,
             HomeTeam = "CHI",
-            HomeScore = 0,
+            HomeScore = 7,
             AwayTeam = "GB",
-            AwayScore = 0,
+            AwayScore = 7,
             State = string.Empty,
             Quarter = 1,
             QuarterSecondsRemaining = 900
