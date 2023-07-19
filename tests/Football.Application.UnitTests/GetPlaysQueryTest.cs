@@ -92,4 +92,20 @@ public class GetPlaysQueryTest : IClassFixture<TestDatabaseFixture>
 
         result.Should().BeEquivalentTo(expected);
     }
+
+    public async Task GetPlays_NoPlaysFound_ReturnsEmptyCollection()
+    {
+        using FootballDbContext dbContext = Fixture.CreateContext();
+
+        GetPlaysQueryHandler handler = new(dbContext, _mapper);
+
+        IEnumerable<PlayDto> result = await handler.Handle(new GetPlaysQuery
+        {
+            Week = 1,
+            Quarter = 1,
+            QuarterSecondsRemaining = 1000
+        }, new CancellationToken());
+
+        result.Should().BeEquivalentTo(Enumerable.Empty<PlayDto>());
+    }
 }
