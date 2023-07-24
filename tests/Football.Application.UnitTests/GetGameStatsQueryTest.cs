@@ -70,4 +70,25 @@ public class GetGameStatsQueryTest : IClassFixture<TestDatabaseFixture>
 
         result.Should().BeEquivalentTo(expected);
     }
+
+    [Fact]
+    public async Task GetGameStats_GameNotFound_ReturnsGameStatsDtoWithEmptyGameStatsCollection()
+    {
+        using FootballDbContext dbContext = Fixture.CreateContext();
+
+        GameStatDto expected = new()
+        {
+            GameId = 1,
+            Stats = Enumerable.Empty<StatDto>().ToList()
+        };
+
+        GetGameStatsQueryHandler handler = new(dbContext, _mapper);
+
+        GameStatDto? result = await handler.Handle(new GetGameStatsQuery
+        {
+            Id = 1
+        }, new CancellationToken());
+
+        result.Should().BeEquivalentTo(expected);
+    }
 }
