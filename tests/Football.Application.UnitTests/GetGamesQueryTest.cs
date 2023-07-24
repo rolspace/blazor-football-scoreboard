@@ -60,7 +60,7 @@ public class GetGamesQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGames_GamesNotFound_ReturnEmptyCollection()
+    public async Task GetGames_GamesNotFound_ReturnsEmptyCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
