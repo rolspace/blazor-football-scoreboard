@@ -93,6 +93,7 @@ public class GetPlaysQueryTest : IClassFixture<TestDatabaseFixture>
         result.Should().BeEquivalentTo(expected);
     }
 
+    [Fact]
     public async Task GetPlays_NoPlaysFound_ReturnsEmptyCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
