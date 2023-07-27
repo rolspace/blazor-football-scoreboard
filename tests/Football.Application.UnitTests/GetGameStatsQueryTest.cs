@@ -29,7 +29,7 @@ public class GetGameStatsQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGameStats_GameFound_ReturnsGameStatsDto()
+    public async Task GetGameStats_GameStatsFoundForGameId_ReturnsGameStatsDto()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
@@ -72,7 +72,7 @@ public class GetGameStatsQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGameStats_GameNotFound_ReturnsGameStatsDtoWithEmptyGameStatsCollection()
+    public async Task GetGameStats_GameStatsNotFoundForGameId_ReturnsGameStatsDtoWithEmptyGameStatsCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 

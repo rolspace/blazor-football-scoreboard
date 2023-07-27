@@ -29,7 +29,7 @@ public class GetGamesQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGames_GamesFound_ReturnsGameDtoCollection()
+    public async Task GetGames_GamesFoundForWeek_ReturnsGameDtoCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
@@ -60,7 +60,7 @@ public class GetGamesQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGames_GamesNotFound_ReturnsEmptyCollection()
+    public async Task GetGames_GamesNotFoundForWeek_ReturnsEmptyCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
