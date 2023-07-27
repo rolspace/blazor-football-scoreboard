@@ -33,11 +33,11 @@ public class SaveGameStatsCommandItem
     public int ReturnYards { get; set; }
 }
 
-public class SaveStatsCommandHandler : IRequestHandler<SaveGameStatsCommand, int>
+public class SaveGameStatsCommandHandler : IRequestHandler<SaveGameStatsCommand, int>
 {
     private readonly IFootballDbContext _footballDbContext;
 
-    public SaveStatsCommandHandler(IFootballDbContext footballDbContext)
+    public SaveGameStatsCommandHandler(IFootballDbContext footballDbContext)
     {
         _footballDbContext = footballDbContext;
     }
