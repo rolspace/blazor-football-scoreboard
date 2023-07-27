@@ -62,8 +62,8 @@ public class SaveStatsCommandHandler : IRequestHandler<SaveGameStatsCommand, int
                 stat.Score = saveGameStatCommandItem.Score;
                 stat.PassingYards += saveGameStatCommandItem.PassingYards;
                 stat.Sacks += saveGameStatCommandItem.Sacks;
-                stat.ReturnYards += saveGameStatCommandItem.ReturnYards;
                 stat.Punts += saveGameStatCommandItem.Punts;
+                stat.ReturnYards += saveGameStatCommandItem.ReturnYards;
             }
             else
             {
@@ -73,8 +73,8 @@ public class SaveStatsCommandHandler : IRequestHandler<SaveGameStatsCommand, int
                     Score = saveGameStatCommandItem.Score,
                     PassingYards = saveGameStatCommandItem.PassingYards,
                     Sacks = saveGameStatCommandItem.Sacks,
-                    ReturnYards = saveGameStatCommandItem.ReturnYards,
-                    Punts = saveGameStatCommandItem.Punts
+                    Punts = saveGameStatCommandItem.Punts,
+                    ReturnYards = saveGameStatCommandItem.ReturnYards
                 });
             }
         }

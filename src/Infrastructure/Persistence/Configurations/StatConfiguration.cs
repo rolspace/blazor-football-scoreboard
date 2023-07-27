@@ -24,11 +24,11 @@ public class StatConfiguration : IEntityTypeConfiguration<Stat>
 
         entityTypeBuilder.Property(e => e.PassingYards).HasColumnName("passing_yards");
 
-        entityTypeBuilder.Property(e => e.ReturnYards).HasColumnName("return_yards");
+        entityTypeBuilder.Property(e => e.Sacks).HasColumnName("sacks");
 
         entityTypeBuilder.Property(e => e.Punts).HasColumnName("punts");
 
-        entityTypeBuilder.Property(e => e.Sacks).HasColumnName("sacks");
+        entityTypeBuilder.Property(e => e.ReturnYards).HasColumnName("return_yards");
 
         entityTypeBuilder.HasOne(d => d.Game)
             .WithMany(p => p.Stats)

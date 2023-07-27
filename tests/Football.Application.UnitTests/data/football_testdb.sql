@@ -252,9 +252,9 @@ CREATE TABLE `stat` (
   `team` varchar(3) NOT NULL,
   `score` int NOT NULL,
   `passing_yards` int NOT NULL,
-  `return_yards` int NOT NULL,
   `sacks` int NOT NULL,
   `punts` int NOT NULL,
+  `return_yards` int NOT NULL,
   PRIMARY KEY (`game_id`,`team`),
   CONSTRAINT `stat_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -266,8 +266,8 @@ CREATE TABLE `stat` (
 
 LOCK TABLES `stat` WRITE;
 /*!40000 ALTER TABLE `stat` DISABLE KEYS */;
-INSERT INTO `stat` (`game_id`, `team`, `score`, `passing_yards`, `return_yards`, `sacks`, `punts`) VALUES ('2019090500', 'CHI', '7', '100', '50', '4', '2');
-INSERT INTO `stat` (`game_id`, `team`, `score`, `passing_yards`, `return_yards`, `sacks`, `punts`) VALUES ('2019090500', 'GB', '7', '50', '25', '2', '1');
+INSERT INTO `stat` (`game_id`, `team`, `score`, `passing_yards`, `sacks`, `punts`, `return_yards`) VALUES ('2019090500', 'CHI', '7', '100', '4', '2', '50');
+INSERT INTO `stat` (`game_id`, `team`, `score`, `passing_yards`, `sacks`, `punts`, `return_yards`) VALUES ('2019090500', 'GB', '7', '50', '2', '1', '25');
 /*!40000 ALTER TABLE `stat` ENABLE KEYS */;
 UNLOCK TABLES;
 

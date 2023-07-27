@@ -139,8 +139,8 @@ public class GamesControllerTest
                     Score = 7,
                     PassingYards = 100,
                     Sacks = 3,
-                    ReturnYards = 20,
-                    Punts = 2
+                    Punts = 2,
+                    ReturnYards = 20
                 },
                 new StatDto
                 {
@@ -149,8 +149,8 @@ public class GamesControllerTest
                     Score = 0,
                     PassingYards = 50,
                     Sacks = 1,
-                    ReturnYards = 10,
-                    Punts = 4
+                    Punts = 4,
+                    ReturnYards = 10
                 }
             }
         };
