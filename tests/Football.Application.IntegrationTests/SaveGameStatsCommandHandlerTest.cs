@@ -7,13 +7,13 @@ using Football.Infrastructure.Persistence;
 
 namespace Football.Application.UnitTests;
 
-public class SaveGameStatsCommandTest : IClassFixture<TestDatabaseFixture>
+public class SaveGameStatsCommandHandlerTest : IClassFixture<TestDatabaseFixture>
 {
     private IMapper _mapper;
 
     public TestDatabaseFixture Fixture { get; }
 
-    public SaveGameStatsCommandTest(TestDatabaseFixture fixture)
+    public SaveGameStatsCommandHandlerTest(TestDatabaseFixture fixture)
     {
         Fixture = fixture;
 
@@ -29,9 +29,10 @@ public class SaveGameStatsCommandTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task SaveGameStats_ValidGameStats_SaveSuccessful()
+    public async Task Handle_ValidGameStats_SaveSuccessful()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
+
         await dbContext.Database.BeginTransactionAsync();
 
         SaveGameStatsCommand saveGameStatsCommand = new()

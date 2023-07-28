@@ -7,13 +7,13 @@ using Football.Infrastructure.Persistence;
 
 namespace Football.Application.UnitTests;
 
-public class GetPlaysQueryTest : IClassFixture<TestDatabaseFixture>
+public class GetPlaysQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 {
     private IMapper _mapper;
 
     public TestDatabaseFixture Fixture { get; }
 
-    public GetPlaysQueryTest(TestDatabaseFixture fixture)
+    public GetPlaysQueryHandlerTest(TestDatabaseFixture fixture)
     {
         Fixture = fixture;
 
@@ -29,7 +29,7 @@ public class GetPlaysQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetPlays_PlaysFoundForSearchParams_ReturnsPlayDtoCollection()
+    public async Task Handle_PlaysFoundForSearchParams_ReturnsPlayDtoCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
@@ -94,7 +94,7 @@ public class GetPlaysQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetPlays_PlaysNotFoundForSearchParams_ReturnsEmptyCollection()
+    public async Task Handle_PlaysNotFoundForSearchParams_ReturnsEmptyCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 

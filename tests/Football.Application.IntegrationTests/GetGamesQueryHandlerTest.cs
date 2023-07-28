@@ -7,13 +7,13 @@ using Football.Infrastructure.Persistence;
 
 namespace Football.Application.UnitTests;
 
-public class GetGamesQueryTest : IClassFixture<TestDatabaseFixture>
+public class GetGamesQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 {
     private IMapper _mapper;
 
     public TestDatabaseFixture Fixture { get; }
 
-    public GetGamesQueryTest(TestDatabaseFixture fixture)
+    public GetGamesQueryHandlerTest(TestDatabaseFixture fixture)
     {
         Fixture = fixture;
 
@@ -29,7 +29,7 @@ public class GetGamesQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGames_GamesFoundForWeek_ReturnsGameDtoCollection()
+    public async Task Handle_GamesFoundForWeek_ReturnsGameDtoCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
@@ -60,7 +60,7 @@ public class GetGamesQueryTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task GetGames_GamesNotFoundForWeek_ReturnsEmptyCollection()
+    public async Task Handle_GamesNotFoundForWeek_ReturnsEmptyCollection()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
 
