@@ -148,6 +148,9 @@ coverage*[.json, .xml, .info]
 *.coverage
 *.coveragexml
 
+# ReportGenerator directory
+coveragereport
+
 # NCrunch
 _NCrunch_*
 .*crunch*.local.xml
