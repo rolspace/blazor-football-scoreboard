@@ -2,6 +2,8 @@
 
 ## Running the tests
 
+Set the current working directory in your terminal of choice to the root of the `Football.Application.IntegrationTests.csproj` file.
+
 Run the tests with the `dotnet test` command.
 
 Run the tests and the default test data collector with the `dotnet test --collect:"XPlat Code Coverage"` command.
