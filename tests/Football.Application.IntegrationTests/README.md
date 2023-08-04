@@ -14,7 +14,7 @@ In order to avoid issues with previous test results and coverage files, clean an
 
 Run the tests and the default test data collector with the `dotnet test --collect:"XPlat Code Coverage"` command.
 
-Move the generate test result file to another location where it is easier to be read by the report generator with `mv -v ./TestResults/*/*.* ./TestResults/`
+Move the generated test result file to another location where it is easier to be read by the report generator with `mv -v ./TestResults/*/*.* ./TestResults/`
 
 Make sure the [ReportGenerator .NET tool](https://www.nuget.org/packages/dotnet-reportgenerator-globaltool) is installed as a global package with `dotnet tool install -g dotnet-reportgenerator-globaltool`.
 
