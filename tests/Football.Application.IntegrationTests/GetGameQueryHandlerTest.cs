@@ -3,9 +3,10 @@ using FluentAssertions;
 using Football.Application.Features.Games;
 using Football.Application.Features.Games.Mappings;
 using Football.Application.Features.Games.Models;
+using Football.Application.IntegrationTests.Fixtures;
 using Football.Infrastructure.Persistence;
 
-namespace Football.Application;
+namespace Football.Application.IntegrationTests;
 
 public class GetGameQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 {

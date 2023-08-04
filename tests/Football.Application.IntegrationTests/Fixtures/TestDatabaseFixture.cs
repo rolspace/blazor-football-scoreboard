@@ -1,6 +1,8 @@
 using Football.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
+namespace Football.Application.IntegrationTests.Fixtures;
+
 public class TestDatabaseFixture
 {
     private const string ConnectionString = @"Server=localhost;Port=3307;Database=football_testdb;Uid=root;Pwd=password;";

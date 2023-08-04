@@ -3,13 +3,14 @@ using FluentAssertions;
 using Football.Application.Features.Games;
 using Football.Application.Features.Games.Mappings;
 using Football.Application.Features.Games.Models;
+using Football.Application.IntegrationTests.Fixtures;
 using Football.Infrastructure.Persistence;
 
-namespace Football.Application.UnitTests;
+namespace Football.Application.IntegrationTests;
 
 public class GetGamesQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 {
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
 
     public TestDatabaseFixture Fixture { get; }
 

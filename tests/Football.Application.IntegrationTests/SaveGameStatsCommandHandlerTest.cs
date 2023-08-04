@@ -2,14 +2,15 @@ using AutoMapper;
 using FluentAssertions;
 using Football.Application.Features.Stats;
 using Football.Application.Features.Stats.Mappings;
+using Football.Application.IntegrationTests.Fixtures;
 using Football.Domain.Entities;
 using Football.Infrastructure.Persistence;
 
-namespace Football.Application.UnitTests;
+namespace Football.Application.IntegrationTests;
 
 public class SaveGameStatsCommandHandlerTest : IClassFixture<TestDatabaseFixture>
 {
-    private IMapper _mapper;
+    private readonly IMapper _mapper;
 
     public TestDatabaseFixture Fixture { get; }
 
