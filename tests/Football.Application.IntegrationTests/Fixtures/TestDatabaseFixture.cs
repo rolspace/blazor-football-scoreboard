@@ -1,15 +1,26 @@
+using System.Reflection;
 using Football.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Football.Application.IntegrationTests.Fixtures;
 
 public class TestDatabaseFixture
 {
-    private const string ConnectionString = @"Server=localhost;Port=3307;Database=football_testdb;Uid=root;Pwd=password;";
+    private readonly string? _connectionString = string.Empty;
+
+    public TestDatabaseFixture()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
+            .AddEnvironmentVariables().Build();
+
+        _connectionString = configuration.GetConnectionString("FootballDbConnection");
+    }
 
     public FootballDbContext CreateContext()
-        => new FootballDbContext(
+        => new(
             new DbContextOptionsBuilder<FootballDbContext>()
-                .UseMySql(ConnectionString, new MySqlServerVersion(new Version(8, 0, 28)))
+                .UseMySql(_connectionString, new MySqlServerVersion(new Version(8, 0, 28)))
                 .Options);
 }
