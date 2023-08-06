@@ -29,3 +29,8 @@ jobs:
             - name: Build
               run: |
                 dotnet build --configuration Release --no-restore
+
+            - name: Run unit tests with coverage
+              run: |
+                cd tests/Football.Api.UnitTests
+                dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
