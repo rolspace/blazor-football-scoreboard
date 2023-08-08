@@ -1,5 +1,5 @@
 name: build-test
-run-name: Running build and tests
+run-name: Run build and tests
 
 on: push
 
@@ -16,6 +16,13 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
+              with:
+                clean: false
+
+            - name: Create test database
+              run: |
+                docker pull mysql:8.0.28
+                docker run --name footballscoreboard_testdb -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }} -e MYSQL_USER=${{ secrets.MYSQL_USER }} -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} -e MYSQL_DATABASE=${{ vars.DB_NAME }} -p 3306:3306 -v ${{github.workspace}}/tests/Football.Application.IntegrationTests/data:/docker-entrypoint-initdb.d -d mysql:8.0.28
 
             - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
               uses: actions/setup-dotnet@v3
@@ -34,3 +41,29 @@ jobs:
               run: |
                 cd tests/Football.Api.UnitTests
                 dotnet test --no-restore --collect:"XPlat Code Coverage"
+
+            - name: Run integration tests with coverage
+              run: |
+                cd tests/Football.Application.IntegrationTests
+                dotnet test --no-restore --collect:"XPlat Code Coverage"
+
+            - name: Upload
+              uses: actions/upload-artifact@v3
+              with:
+                name: build-${{ github.sha }}
+                path:
+                    ${{github.workspace}}/tests
+
+    sonar:
+        name: Test
+        runs-on: ubuntu-latest
+        needs: build
+        strategy:
+            matrix:
+                dotnet-version: ['6.0.x']
+
+        steps:
+            - name: Download
+              uses: actions/download-artifact@v3
+              with:
+                name: build-${{ github.sha }}
