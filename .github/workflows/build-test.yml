@@ -39,4 +39,12 @@ jobs:
               env:
                 MYSQLCONNSTR_FootballDbConnection: Server=localhost;Database=${{ vars.DB_NAME }};Uid=${{ secrets.DB_USER }};Pwd=${{ secrets.DB_PASSWORD }};
               run: |
-                dotnet test --no-restore
+                dotnet tool install --global dotnet-coverage
+                dotnet-coverage collect 'dotnet test --no-restore' -f xml  -o 'coverage.xml'
+
+            - name: Upload coverage
+              uses: actions/upload-artifact@v3
+              with:
+                path: |
+                  coverage.xml
+
