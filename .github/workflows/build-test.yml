@@ -1,7 +1,19 @@
 name: build-test
 run-name: Run build and tests
 
-on: push
+on:
+    push:
+        paths-ignore:
+            - .vscode/**
+            - data/**
+            - README.md
+            - '**/*.md'
+            - .dockerignore
+            - .editorconfig
+            - .git*
+            - Dockerfile
+            - docker-compose
+            - global.json
 
 concurrency: ${{ github.workflow }}
 
