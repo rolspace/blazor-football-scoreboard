@@ -1,23 +1,33 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5001
+
+ENV ASPNETCORE_URLS=http://+:5001
+
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG configuration=Release
 WORKDIR /src
-COPY ["src/Hosts/Api/Football.Api.csproj", "src/Hosts/Api/"]
-COPY ["src/Application/Football.Application.csproj", "src/Application/"]
-COPY ["src/Domain/Football.Domain.csproj", "src/Domain/"]
-COPY ["src/Infrastructure/Football.Infrastructure.csproj", "src/Infrastructure/"]
-RUN dotnet restore "src/Hosts/Api/Football.Api.csproj"
-COPY . .
-WORKDIR "/src/src/Hosts/Api"
-RUN dotnet build "Football.Api.csproj" -c Release -o /app/build
+COPY ["Domain/Football.Domain.csproj", "Domain/"]
+COPY ["Application/Football.Application.csproj", "Application/"]
+COPY ["Infrastructure/Football.Infrastructure.csproj", "Infrastructure/"]
+COPY ["Hosts/Api/Football.Api.csproj", "Hosts/Api/"]
+RUN dotnet restore "/src/Hosts/Api/Football.Api.csproj"
+
+COPY Domain/ "Domain/"
+COPY Application/ "Application/"
+COPY Infrastructure/ "Infrastructure/"
+COPY Hosts/Api "Hosts/Api"
+WORKDIR "/src/Hosts/Api"
+RUN dotnet build "Football.Api.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Football.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG configuration=Release
+RUN dotnet publish "Football.Api.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
