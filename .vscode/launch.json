@@ -1,0 +1,39 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Web: Football Scoreboard API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-api",
+            "program": "${workspaceFolder}/src/Hosts/Api/bin/Debug/net6.0/Football.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Hosts/Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "Launch Docker: Football Scoreboard API",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run-api: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}
