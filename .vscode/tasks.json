@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj",
+                "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
             ],
             "problemMatcher": "$msCompile"
         },
@@ -80,7 +80,15 @@
             "dependsOn": [
                 "docker-build-api: debug"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "containerName": "footballscoreboard_api",
+                "ports": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 5001
+                    }
+                ]
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj",
                 "enableDebugging": true
@@ -92,7 +100,15 @@
             "dependsOn": [
                 "docker-build-api: release"
             ],
-            "dockerRun": {},
+            "dockerRun": {
+                "containerName": "footballscoreboard_api",
+                "ports": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 5001
+                    }
+                ]
+            },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
             }
