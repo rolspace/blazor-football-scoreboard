@@ -18,7 +18,7 @@ try
 
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-    if (builder.Environment.IsDevelopment() || builder.Environment.IsLocalhost())
+    if (builder.Environment.IsLocalhost())
     {
         builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
     }
