@@ -87,7 +87,11 @@
                         "containerPort": 80,
                         "hostPort": 5001
                     }
-                ]
+                ],
+                "envFiles": [
+                    "${workspaceFolder}/src/Hosts/Api/development.env"
+                ],
+                "network": "blazor-football-scoreboard_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj",
