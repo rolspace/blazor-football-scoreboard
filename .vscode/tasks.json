@@ -88,8 +88,11 @@
                         "hostPort": 5001
                     }
                 ],
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development"
+                },
                 "envFiles": [
-                    "${workspaceFolder}/src/Hosts/Api/development.env"
+                    "${workspaceFolder}/src/development.env"
                 ],
                 "network": "blazor-football-scoreboard_dbnet"
             },
