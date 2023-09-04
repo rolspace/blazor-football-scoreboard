@@ -162,6 +162,70 @@
                 "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-worker: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "rolspace/footballscoreboard_worker:latest",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/src/Hosts/Worker/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-worker: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "rolspace/footballscoreboard_worker:latest",
+                "dockerfile": "${workspaceFolder}/src/Hosts/Worker/Dockerfile",
+                "context": "${workspaceFolder}",
+                "platform": {
+                    "os": "linux",
+                    "architecture": "amd64"
+                },
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-worker: debug",
+            "dependsOn": [
+                "docker-build-worker: debug"
+            ],
+            "dockerRun": {
+                "containerName": "footballscoreboard_worker"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-worker: release",
+            "dependsOn": [
+                "docker-build-worker: release"
+            ],
+            "dockerRun": {
+                "containerName": "footballscoreboard_worker"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
+            }
         }
     ]
 }

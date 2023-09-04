@@ -43,6 +43,15 @@
             }
         },
         {
+            "name": "Launch Docker: Football Scoreboard Worker",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run-worker: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
+            }
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
