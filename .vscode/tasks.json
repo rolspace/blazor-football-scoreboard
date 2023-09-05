@@ -207,7 +207,20 @@
                 "docker-build-worker: debug"
             ],
             "dockerRun": {
-                "containerName": "footballscoreboard_worker"
+                "containerName": "footballscoreboard_worker",
+                "ports": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 5003
+                    }
+                ],
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development"
+                },
+                "envFiles": [
+                    "${workspaceFolder}/src/development.env"
+                ],
+                "network": "blazor-football-scoreboard_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
@@ -221,7 +234,20 @@
                 "docker-build-worker: release"
             ],
             "dockerRun": {
-                "containerName": "footballscoreboard_worker"
+                "containerName": "footballscoreboard_worker",
+                "ports": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 5003
+                    }
+                ],
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Production"
+                },
+                "envFiles": [
+                    "${workspaceFolder}/src/production.env"
+                ],
+                "network": "blazor-football-scoreboard_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
