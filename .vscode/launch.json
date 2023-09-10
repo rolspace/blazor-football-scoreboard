@@ -52,6 +52,12 @@
             }
         },
         {
+            "name": "Launch Web: Football Scoreboard Blazor WebAssembly",
+            "type": "blazorwasm",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/src/Hosts/Blazor"
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
