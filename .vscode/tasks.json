@@ -167,7 +167,7 @@
             "type": "docker-build",
             "label": "docker-build-worker: debug",
             "dependsOn": [
-                "build"
+                "build-worker"
             ],
             "dockerBuild": {
                 "tag": "rolspace/footballscoreboard_worker:latest",
@@ -184,7 +184,7 @@
             "type": "docker-build",
             "label": "docker-build-worker: release",
             "dependsOn": [
-                "build"
+                "build-worker"
             ],
             "dockerBuild": {
                 "tag": "rolspace/footballscoreboard_worker:latest",
