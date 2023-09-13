@@ -170,7 +170,7 @@
                 "build-worker"
             ],
             "dockerBuild": {
-                "tag": "rolspace/footballscoreboard_worker:latest",
+                "tag": "rolspace/footballscoreboard_worker:dev",
                 "target": "base",
                 "dockerfile": "${workspaceFolder}/src/Hosts/Worker/Dockerfile",
                 "context": "${workspaceFolder}",
