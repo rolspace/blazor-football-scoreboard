@@ -289,6 +289,48 @@
                 "${workspaceFolder}/src/Hosts/Blazor/Football.Blazor.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build-blazor: debug",
+            "dependsOn": [
+                "build-blazor"
+            ],
+            "dockerBuild": {
+                "tag": "rolspace/footballscoreboard_blazor:dev",
+                "dockerfile": "${workspaceFolder}/src/Hosts/Blazor/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true,
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Blazor/Football.Blazor.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run-blazor: debug",
+            "dependsOn": [
+                "docker-build-blazor: debug"
+            ],
+            "dockerRun": {
+                "containerName": "footballscoreboard_blazor",
+                "ports": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 5002
+                    }
+                ],
+                "network": "blazor-football-scoreboard_dbnet"
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/Hosts/Blazor/Football.Blazor.csproj",
+                "enableDebugging": false
+            }
+        },
+        {
+            "type":"shell",
+            "label": "docker-stop-blazor: debug",
+            "command": "docker container stop footballscoreboard_blazor && docker container rm footballscoreboard_blazor"
         }
     ]
 }

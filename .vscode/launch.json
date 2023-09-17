@@ -58,6 +58,13 @@
             "cwd": "${workspaceFolder}/src/Hosts/Blazor"
         },
         {
+            "name": "Launch Docker: Football Scoreboard Blazor WebAssembly",
+            "type": "chrome",
+            "preLaunchTask": "docker-run-blazor: debug",
+            "request": "launch",
+            "postDebugTask": "docker-stop-blazor: debug"
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
