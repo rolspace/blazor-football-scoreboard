@@ -13,8 +13,8 @@ COPY src/Application/ "Application/"
 COPY src/Infrastructure/ "Infrastructure/"
 COPY src/Hosts/Blazor/ "Hosts/Blazor/"
 WORKDIR "/src/Hosts/Blazor"
-RUN dotnet build "Football.Blazor.csproj" -c $configuration -o /app/build
-RUN dotnet publish "Football.Blazor.csproj" -c $configuration -o /app/publish
+RUN dotnet build "Football.Blazor.csproj" -c $configuration -o /app/build \
+    && dotnet publish "Football.Blazor.csproj" -c $configuration -o /app/publish
 
 FROM nginx:alpine AS final
 WORKDIR /var/www/web
