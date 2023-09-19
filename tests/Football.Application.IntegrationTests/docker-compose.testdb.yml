@@ -1,5 +1,7 @@
 version: "3.8"
 
+name: footballscoreboard_dbtests_project
+
 services:
   testdb:
     container_name: footballscoreboard_testdb
