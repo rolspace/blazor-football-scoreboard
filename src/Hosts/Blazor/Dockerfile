@@ -16,11 +16,7 @@ WORKDIR "/src/Hosts/Blazor"
 RUN dotnet build "Football.Blazor.csproj" -c $configuration -o /app/build \
     && dotnet publish "Football.Blazor.csproj" -c $configuration -o /app/publish
 
-FROM nginx:alpine AS final
+FROM nginxinc/nginx-unprivileged AS final
 WORKDIR /var/www/web
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /var/www/web
-USER appuser
-
 COPY --from=build /app/publish/wwwroot .
 COPY src/Hosts/Blazor/nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
