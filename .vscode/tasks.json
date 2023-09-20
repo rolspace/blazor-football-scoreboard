@@ -316,11 +316,10 @@
                 "containerName": "footballscoreboard_blazor",
                 "ports": [
                     {
-                        "containerPort": 80,
+                        "containerPort": 8080,
                         "hostPort": 5002
                     }
-                ],
-                "network": "blazor-football-scoreboard_dbnet"
+                ]
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Blazor/Football.Blazor.csproj",
