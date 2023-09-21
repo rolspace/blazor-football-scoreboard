@@ -89,7 +89,10 @@
                     }
                 ],
                 "env": {
-                    "ASPNETCORE_ENVIRONMENT": "Development"
+                    "ASPNETCORE_ENVIRONMENT": "Development",
+                    "Cors__PolicyName": "WebClientCorsPolicy",
+                    "Cors__AllowedOrigins": "http://localhost:5002",
+                    "Cors__AllowedMethods": "GET"
                 },
                 "envFiles": [
                     "${workspaceFolder}/src/development.env"
@@ -116,7 +119,10 @@
                     }
                 ],
                 "env": {
-                    "ASPNETCORE_ENVIRONMENT": "Production"
+                    "ASPNETCORE_ENVIRONMENT": "Production",
+                    "Cors__PolicyName": "WebClientCorsPolicy",
+                    "Cors__AllowedOrigins": "http://localhost:5002",
+                    "Cors__AllowedMethods": "GET"
                 },
                 "envFiles": [
                     "${workspaceFolder}/src/production.env"
