@@ -94,7 +94,7 @@
                 "envFiles": [
                     "${workspaceFolder}/src/development.env"
                 ],
-                "network": "blazor-football-scoreboard_dbnet"
+                "network": "footballscoreboard_db_project_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj",
@@ -121,7 +121,7 @@
                 "envFiles": [
                     "${workspaceFolder}/src/production.env"
                 ],
-                "network": "blazor-football-scoreboard_dbnet"
+                "network": "footballscoreboard_db_project_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
@@ -221,7 +221,7 @@
                 "envFiles": [
                     "${workspaceFolder}/src/development.env"
                 ],
-                "network": "blazor-football-scoreboard_dbnet"
+                "network": "footballscoreboard_db_project_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
@@ -248,7 +248,7 @@
                 "envFiles": [
                     "${workspaceFolder}/src/production.env"
                 ],
-                "network": "blazor-football-scoreboard_dbnet"
+                "network": "footballscoreboard_db_project_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
