@@ -84,16 +84,26 @@
                 "containerName": "footballscoreboard_api",
                 "ports": [
                     {
-                        "containerPort": 80,
+                        "containerPort": 443,
                         "hostPort": 5001
                     }
                 ],
                 "env": {
                     "ASPNETCORE_ENVIRONMENT": "Development",
+                    "ASPNETCORE_URLS": "https://+",
+                    "ASPNETCORE_HTTPS_PORT": "5001",
+                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Football.Api.pfx",
                     "Cors__PolicyName": "WebClientCorsPolicy",
                     "Cors__AllowedOrigins": "http://localhost:5002",
                     "Cors__AllowedMethods": "GET"
                 },
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aspnet/https",
+                        "containerPath": "/https/",
+                        "permissions": "ro"
+                    }
+                ],
                 "envFiles": [
                     "${workspaceFolder}/src/development.env"
                 ],
