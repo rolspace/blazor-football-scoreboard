@@ -105,7 +105,7 @@
                     }
                 ],
                 "envFiles": [
-                    "${workspaceFolder}/src/development.env"
+                    "${workspaceFolder}/development.env"
                 ],
                 "network": "footballscoreboard_db_project_dbnet"
             },
@@ -235,7 +235,7 @@
                     "Hub__HubUrl": "http://footballscoreboard_api/hub/v1/plays"
                 },
                 "envFiles": [
-                    "${workspaceFolder}/src/development.env"
+                    "${workspaceFolder}/development.env"
                 ],
                 "network": "footballscoreboard_db_project_dbnet"
             },
