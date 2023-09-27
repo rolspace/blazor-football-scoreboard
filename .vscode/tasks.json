@@ -232,8 +232,18 @@
                 ],
                 "env": {
                     "ASPNETCORE_ENVIRONMENT": "Development",
-                    "Hub__HubUrl": "http://footballscoreboard_api/hub/v1/plays"
+                    "ASPNETCORE_URLS": "https://+",
+                    "ASPNETCORE_HTTPS_PORT": "5003",
+                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Football.Worker.pfx",
+                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
                 },
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aspnet/https",
+                        "containerPath": "/https/",
+                        "permissions": "ro"
+                    }
+                ],
                 "envFiles": [
                     "${workspaceFolder}/development.env"
                 ],
