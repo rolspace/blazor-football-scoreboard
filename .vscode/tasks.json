@@ -92,15 +92,21 @@
                     "ASPNETCORE_ENVIRONMENT": "Development",
                     "ASPNETCORE_URLS": "https://+",
                     "ASPNETCORE_HTTPS_PORT": "5001",
-                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Football.Api.pfx",
+                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
+                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
                     "Cors__PolicyName": "WebClientCorsPolicy",
                     "Cors__AllowedOrigins": "http://localhost:5002",
                     "Cors__AllowedMethods": "GET"
                 },
                 "volumes": [
                     {
-                        "localPath": "${userHome}/.aspnet/https",
-                        "containerPath": "/https/",
+                        "localPath": "${workspaceFolder}/src/Hosts/Api/cert.pem",
+                        "containerPath": "/https/cert.pem",
+                        "permissions": "ro"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}/src/Hosts/Api/key.pem",
+                        "containerPath": "/https/key.pem",
                         "permissions": "ro"
                     }
                 ],
@@ -234,13 +240,19 @@
                     "ASPNETCORE_ENVIRONMENT": "Development",
                     "ASPNETCORE_URLS": "https://+",
                     "ASPNETCORE_HTTPS_PORT": "5003",
-                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Football.Worker.pfx",
+                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
+                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
                 },
                 "volumes": [
                     {
-                        "localPath": "${userHome}/.aspnet/https",
-                        "containerPath": "/https/",
+                        "localPath": "${workspaceFolder}/src/Hosts/Worker/cert.pem",
+                        "containerPath": "/https/cert.pem",
+                        "permissions": "ro"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}/src/Hosts/Worker/key.pem",
+                        "containerPath": "/https/key.pem",
                         "permissions": "ro"
                     }
                 ],
