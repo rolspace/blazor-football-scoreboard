@@ -282,7 +282,7 @@
                 ],
                 "env": {
                     "ASPNETCORE_ENVIRONMENT": "Production",
-                    "Hub__HubUrl": "http://footballscoreboard_api/hub/v1/plays"
+                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
                 },
                 "envFiles": [
                     "${workspaceFolder}/src/production.env"
