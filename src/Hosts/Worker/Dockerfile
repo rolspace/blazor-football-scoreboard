@@ -1,5 +1,9 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
+COPY src/Hosts/Api/cert.pem /etc/ssl/certs/api-cert.pem
+
+RUN update-ca-certificates --verbose --fresh
+
 EXPOSE 443
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
