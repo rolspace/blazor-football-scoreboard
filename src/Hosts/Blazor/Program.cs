@@ -8,7 +8,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 var scoreboardSettings = builder.Configuration
-    .GetSection(ScoreboardSettings.ScoreboardSection)
+    .GetSection(ScoreboardSettings.Key)
     .Get<ScoreboardSettings>();
 
 builder.Services.AddSingleton(scoreboardSettings);

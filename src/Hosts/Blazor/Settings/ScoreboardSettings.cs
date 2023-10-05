@@ -2,7 +2,7 @@ namespace Football.Blazor.Settings;
 
 public class ScoreboardSettings
 {
-    public const string ScoreboardSection = "Scoreboard";
+    public const string Key = "Scoreboard";
 
     public int Week { get; set; } = 1;
 

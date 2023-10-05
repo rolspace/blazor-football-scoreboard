@@ -1,15 +1,19 @@
 using Football.Application.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Options;
 
 namespace Football.Infrastructure.Hub;
 
 public class HubManager : IHubManager
 {
+    private HubSettings _hubSettings;
+
     private readonly HubConnection _hubConnection;
 
-    public HubManager(Uri hubUri)
+    public HubManager(IOptions<HubSettings> hubSettings)
     {
-        _hubConnection = new HubConnectionBuilder().WithUrl(hubUri).Build();
+        _hubSettings = hubSettings.Value;
+        _hubConnection = new HubConnectionBuilder().WithUrl(_hubSettings.HubUrl).Build();
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)

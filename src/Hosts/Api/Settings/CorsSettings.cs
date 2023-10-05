@@ -2,7 +2,7 @@ namespace Football.Api.Settings;
 
 public class CorsSettings
 {
-    public const string CorsSection = "Cors";
+    public const string Key = "Cors";
 
     public string PolicyName { get; set; } = string.Empty;
 

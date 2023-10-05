@@ -17,15 +17,8 @@ public static class ConfigureServices
 
         services.AddScoped<IFootballDbContext>(provider => provider.GetRequiredService<FootballDbContext>());
 
-        HubSettings? hubSettings = configuration.GetSection(HubSettings.HubSection).Get<HubSettings>();
-        if (hubSettings is not null)
-        {
-            services.AddTransient<IHubManager>((serviceProvider) =>
-            {
-                var hubUri = new Uri(hubSettings.HubUrl);
-                return new HubManager(hubUri);
-            });
-        }
+        services.Configure<HubSettings>(configuration.GetSection(HubSettings.Key));
+        services.AddTransient<IHubManager, HubManager>();
 
         return services;
     }

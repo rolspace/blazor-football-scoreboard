@@ -45,7 +45,7 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    CorsSettings? corsSettings = builder.Configuration.GetSection(CorsSettings.CorsSection).Get<CorsSettings>();
+    CorsSettings? corsSettings = builder.Configuration.GetSection(CorsSettings.Key).Get<CorsSettings>();
     if (corsSettings is not null)
     {
         builder.Services.AddCors(corsOptions =>
