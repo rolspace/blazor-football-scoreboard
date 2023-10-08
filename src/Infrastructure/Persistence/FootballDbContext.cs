@@ -1,7 +1,7 @@
+using System.Reflection;
 using Football.Application.Interfaces;
 using Football.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace Football.Infrastructure.Persistence;
 

@@ -1,8 +1,8 @@
+using System.Reflection;
 using Football.Infrastructure.Extensions;
 using Football.Worker;
 using Serilog;
 using Serilog.Events;
-using System.Reflection;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
