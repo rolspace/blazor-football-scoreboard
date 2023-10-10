@@ -16,7 +16,8 @@ WORKDIR "/src/Hosts/Blazor"
 RUN dotnet build "Football.Blazor.csproj" -c $configuration -o /app/build \
     && dotnet publish "Football.Blazor.csproj" -c $configuration -o /app/publish
 
-FROM nginxinc/nginx-unprivileged AS final
-WORKDIR /var/www/web
-COPY --from=build /app/publish/wwwroot .
+FROM nginx AS final
+COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
 COPY src/Hosts/Blazor/nginx.conf /etc/nginx/nginx.conf
+ADD src/Hosts/Blazor/cert.pem /etc/nginx/certs/cert.pem
+ADD src/Hosts/Blazor/key.pem /etc/nginx/certs/key.pem
