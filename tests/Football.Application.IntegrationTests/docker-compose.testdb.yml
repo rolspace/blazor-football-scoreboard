@@ -1,6 +1,6 @@
 version: "3.8"
 
-name: footballscoreboard_dbtests_project
+name: footballscoreboard_dbtests_compose
 
 services:
   testdb:
