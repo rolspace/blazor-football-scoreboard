@@ -6,14 +6,12 @@ on:
         paths-ignore:
             - .vscode/**
             - data/**
-            - README.md
             - '**/*.md'
+            - README.md
             - .dockerignore
             - .editorconfig
-            - .git*
             - Dockerfile
             - docker-compose
-            - global.json
 
 concurrency: ${{ github.workflow }}
 
