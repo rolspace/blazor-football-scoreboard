@@ -22,11 +22,12 @@ services:
   api:
     container_name: footballscoreboard_api
     build:
-      context: src
+      context: .
       dockerfile: src/Hosts/Api/Dockerfile
     ports:
-      - 5001:80
+      - 5001:443
     environment:
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: https://+
       ASPNETCORE_HTTPS_PORT: 5001
       ASPNETCORE_Kestrel__Certificates__Default__Path: /https/cert.pem
@@ -34,15 +35,23 @@ services:
       Cors__PolicyName: WebClientCorsPolicy
       Cors__AllowedOrigins: https://localhost
       Cors__AllowedMethods: GET
+    env_file:
+      - development.env
+    networks:
+      - appnet
 
   #worker:
   #  build: ../src/Worker/Worker.Game
   #  entrypoint: [ "sh", "-c", "sleep 1m; dotnet Worker.Game.dll" ]
   #  image: worker:latest
   #  networks:
+  #    - app
+  #  environment:
   #    - DOTNET_ENVIRONMENT=Production
   #  depends_on:
+  #    - db
+  #    - web
 
 networks:
-  app:
+  appnet:
     driver: bridge
