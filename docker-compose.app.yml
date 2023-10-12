@@ -1,42 +1,47 @@
 version: '3.8'
 
-services:
+name: footballscoreboard_app_compose
 
+services:
   db:
-    image: mysql:8.0.20
-    command: --default-authentication-plugin=mysql_native_password
+    container_name: footballscoreboard_db
+    image: mysql:8.0.28
     ports:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: football_dbuser
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: football_db
     volumes:
       - path/to/mysql:/var/lib/mysql
+      - ./data:/docker-entrypoint-initdb.d
     networks:
-      - app
+      - appnet
 
-  web:
-    build: ../src/Scoreboard/Scoreboard.Server
-    image: scoreboard:latest
+  api:
+    container_name: footballscoreboard_api
+    build:
+      context: src
+      dockerfile: src/Hosts/Api/Dockerfile
     ports:
       - 5001:80
-    networks:
-      - app
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-    depends_on:
-      - db
+      ASPNETCORE_URLS: https://+
+      ASPNETCORE_HTTPS_PORT: 5001
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/cert.pem
+      ASPNETCORE_Kestrel__Certificates__Default__KeyPath: /https/key.pem
+      Cors__PolicyName: WebClientCorsPolicy
+      Cors__AllowedOrigins: https://localhost
+      Cors__AllowedMethods: GET
 
-  worker:
-    build: ../src/Worker/Worker.Game
-    entrypoint: [ "sh", "-c", "sleep 1m; dotnet Worker.Game.dll" ]
-    image: worker:latest
-    networks:
-      - app
-    environment:
-      - DOTNET_ENVIRONMENT=Production
-    depends_on:
-      - db
-      - web
+  #worker:
+  #  build: ../src/Worker/Worker.Game
+  #  entrypoint: [ "sh", "-c", "sleep 1m; dotnet Worker.Game.dll" ]
+  #  image: worker:latest
+  #  networks:
+  #    - DOTNET_ENVIRONMENT=Production
+  #  depends_on:
 
 networks:
   app:
