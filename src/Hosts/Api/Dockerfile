@@ -30,4 +30,6 @@ RUN dotnet publish "Football.Api.csproj" -c $configuration -o /app/publish /p:Us
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY src/Hosts/Api/cert.pem /https/cert.pem
+COPY src/Hosts/Api/key.pem /https/key.pem
 ENTRYPOINT ["dotnet", "Football.Api.dll"]

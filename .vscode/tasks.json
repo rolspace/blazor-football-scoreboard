@@ -98,18 +98,6 @@
                     "Cors__AllowedOrigins": "https://localhost",
                     "Cors__AllowedMethods": "GET"
                 },
-                "volumes": [
-                    {
-                        "localPath": "${workspaceFolder}/src/Hosts/Api/cert.pem",
-                        "containerPath": "/https/cert.pem",
-                        "permissions": "ro"
-                    },
-                    {
-                        "localPath": "${workspaceFolder}/src/Hosts/Api/key.pem",
-                        "containerPath": "/https/key.pem",
-                        "permissions": "ro"
-                    }
-                ],
                 "envFiles": [
                     "${workspaceFolder}/development.env"
                 ],
