@@ -24,6 +24,8 @@ services:
     build:
       context: .
       dockerfile: src/Hosts/Api/Dockerfile
+      tags:
+        - rolspace/footballscoreboard_api:dev
     ports:
       - 5001:443
     environment:
@@ -37,6 +39,8 @@ services:
       Cors__AllowedMethods: GET
     env_file:
       - development.env
+    depends_on:
+      - db
     networks:
       - appnet
 
