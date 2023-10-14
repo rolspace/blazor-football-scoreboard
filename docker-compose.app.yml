@@ -40,6 +40,21 @@ services:
     networks:
       - appnet
 
+  blazor:
+    container_name: footballscoreboard_blazor
+    image: nginx
+    build:
+      context: .
+      dockerfile: src/Hosts/Blazor/Dockerfile
+      tags:
+        - rolspace/footballscoreboard_blazor:dev
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - db
+      - api
+
   #worker:
   #  build: ../src/Worker/Worker.Game
   #  entrypoint: [ "sh", "-c", "sleep 1m; dotnet Worker.Game.dll" ]
