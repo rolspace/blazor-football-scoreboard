@@ -34,4 +34,6 @@ RUN dotnet publish "Football.Worker.csproj" -c $configuration -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY src/Hosts/Worker/cert.pem /https/cert.pem
+COPY src/Hosts/Worker/key.pem /https/key.pem
 ENTRYPOINT ["dotnet", "Football.Worker.dll"]

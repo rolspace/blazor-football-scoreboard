@@ -232,18 +232,6 @@
                     "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
                 },
-                "volumes": [
-                    {
-                        "localPath": "${workspaceFolder}/src/Hosts/Worker/cert.pem",
-                        "containerPath": "/https/cert.pem",
-                        "permissions": "ro"
-                    },
-                    {
-                        "localPath": "${workspaceFolder}/src/Hosts/Worker/key.pem",
-                        "containerPath": "/https/key.pem",
-                        "permissions": "ro"
-                    }
-                ],
                 "envFiles": [
                     "${workspaceFolder}/development.env"
                 ],
