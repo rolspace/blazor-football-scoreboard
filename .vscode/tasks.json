@@ -101,7 +101,7 @@
                 "envFiles": [
                     "${workspaceFolder}/development.env"
                 ],
-                "network": "footballscoreboard_db_project_dbnet"
+                "network": "footballscoreboard_db_compose_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj",
@@ -131,7 +131,7 @@
                 "envFiles": [
                     "${workspaceFolder}/src/production.env"
                 ],
-                "network": "footballscoreboard_db_project_dbnet"
+                "network": "footballscoreboard_db_compose_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
@@ -247,7 +247,7 @@
                 "envFiles": [
                     "${workspaceFolder}/development.env"
                 ],
-                "network": "footballscoreboard_db_project_dbnet"
+                "network": "footballscoreboard_db_compose_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
@@ -275,7 +275,7 @@
                 "envFiles": [
                     "${workspaceFolder}/src/production.env"
                 ],
-                "network": "footballscoreboard_db_project_dbnet"
+                "network": "footballscoreboard_db_compose_dbnet"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
