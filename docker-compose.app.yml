@@ -59,17 +59,31 @@ services:
       - db
       - api
 
-  #worker:
-  #  build: ../src/Worker/Worker.Game
-  #  entrypoint: [ "sh", "-c", "sleep 1m; dotnet Worker.Game.dll" ]
-  #  image: worker:latest
-  #  networks:
-  #    - app
-  #  environment:
-  #    - DOTNET_ENVIRONMENT=Production
-  #  depends_on:
-  #    - db
-  #    - web
+  worker:
+    container_name: footballscoreboard_worker
+    build:
+      context: .
+      dockerfile: src/Hosts/Worker/Dockerfile
+      tags:
+        - rolspace/footballscoreboard_worker:dev
+    ports:
+      - 5003:443
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+
+      ASPNETCORE_HTTPS_PORT: 5003
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/cert.pem
+      ASPNETCORE_Kestrel__Certificates__Default__KeyPath: /https/key.pem
+      Hub__HubUrl: https://footballscoreboard_api/hub/v1/plays
+    env_file:
+      - development.env
+    depends_on:
+      - db
+      - api
+      - blazor
+    networks:
+      - appnet
+    entrypoint: [ "sh", "-c", "sleep 1m; dotnet Football.Worker.dll" ]
 
 networks:
   appnet:
