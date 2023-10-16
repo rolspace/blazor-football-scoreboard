@@ -13,7 +13,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("Application start.");
+    Log.Information("Worker host application start.");
 
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -43,18 +43,19 @@ try
 
     app.MapGet("/", () => new Response
     {
-        Message = "Web application for the PlayLogHostedService"
+        Message = "Web application for the PlayLogHostedService."
     });
 
     app.Run();
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Application terminated unexpectedly.");
+    Log.Fatal(ex, "Worker host application could not be started.");
+    throw;
 }
 finally
 {
-    Log.Information("Application shut down.");
+    Log.Information("Worker host application shut down.");
     Log.CloseAndFlush();
 }
 

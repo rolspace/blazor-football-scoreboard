@@ -14,7 +14,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("Application start.");
+    Log.Information("API host application start.");
 
     WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -88,10 +88,11 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Application terminated unexpectedly.");
+    Log.Fatal(ex, "API host application could not be started.");
+    throw;
 }
 finally
 {
-    Log.Information("Application shut down.");
+    Log.Information("API host application shut down.");
     Log.CloseAndFlush();
 }
