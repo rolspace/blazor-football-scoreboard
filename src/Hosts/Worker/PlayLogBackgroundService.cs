@@ -69,7 +69,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     IEnumerable<PlayDto> playDtos = await mediator.Send(query);
 
                     int gameOverCount = playDtos.Count(p => p.GameOver);
-                    if (gameOverCount > 0) _gameTimeManager.IncrementGamesOver(gameOverCount);
+                    if (gameOverCount > 0) _gameTimeManager.IncrementFinishedGames(gameOverCount);
 
                     foreach (PlayDto playDto in playDtos)
                     {

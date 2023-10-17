@@ -7,5 +7,5 @@ public interface IGameTimeManager
 
     void SetTime();
 
-    void IncrementGamesOver(int count);
+    void IncrementFinishedGames(int count);
 }
