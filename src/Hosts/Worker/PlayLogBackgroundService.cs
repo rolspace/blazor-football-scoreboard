@@ -1,4 +1,5 @@
 using AutoMapper;
+using Football.Application.Features.Games;
 using Football.Application.Features.Plays;
 using Football.Application.Features.Plays.Models;
 using Football.Application.Features.Stats;
@@ -35,6 +36,19 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
     {
         try
         {
+            using (IServiceScope scope = _scopeFactory.CreateScope())
+            {
+                var gamesQuery = new GetGamesQuery()
+                {
+                    Week = 1
+                };
+
+                var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
+                var gameDtos = await mediator.Send(gamesQuery);
+
+                _gameTimeManager.GamesScheduled = gameDtos.Count();
+            }
+
             await _hubManager.StartAsync(cancellationToken);
         }
         catch (Exception ex)
@@ -50,6 +64,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        // TODO: finish loop if all the games are finished
         while (!stoppingToken.IsCancellationRequested)
         {
             try
@@ -69,7 +84,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     IEnumerable<PlayDto> playDtos = await mediator.Send(query);
 
                     int gameOverCount = playDtos.Count(p => p.GameOver);
-                    if (gameOverCount > 0) _gameTimeManager.IncrementFinishedGames(gameOverCount);
+                    if (gameOverCount > 0) _gameTimeManager.IncrementGamesFinished(gameOverCount);
 
                     foreach (PlayDto playDto in playDtos)
                     {

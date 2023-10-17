@@ -6,11 +6,15 @@ public class GameTimeManager : IGameTimeManager
 {
     private readonly object _locker = new object();
 
-    private int _finishedGames;
+    private int _gamesFinished;
 
     private int _quarterSecondsRemaining;
 
     private int _quarter;
+
+    public int GamesScheduled { get; set; } = 0;
+
+    public bool GameTimeOver => _gamesFinished == GamesScheduled;
 
     public GameTimeManager()
         : this(Constants.FIRST_QUARTER, Constants.SECONDS_IN_QUARTER) { }
@@ -29,7 +33,7 @@ public class GameTimeManager : IGameTimeManager
     {
         lock (_locker)
         {
-            if (_finishedGames == Constants.GAMES_PER_WEEK)
+            if (_gamesFinished == Constants.GAMES_PER_WEEK)
             {
                 Interlocked.Exchange(ref _quarter, -1);
                 Interlocked.Exchange(ref _quarterSecondsRemaining, -1);
@@ -58,11 +62,11 @@ public class GameTimeManager : IGameTimeManager
         }
     }
 
-    public void IncrementFinishedGames(int count)
+    public void IncrementGamesFinished(int count)
     {
         lock (_locker)
         {
-            Interlocked.Add(ref _finishedGames, count);
+            Interlocked.Add(ref _gamesFinished, count);
         }
     }
 }
