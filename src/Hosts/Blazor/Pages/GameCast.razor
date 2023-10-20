@@ -5,12 +5,11 @@
 @using Football.Application.Features.Plays.Models
 @using Football.Application.Features.Stats.Models
 @using Microsoft.AspNetCore.SignalR.Client
-@using Microsoft.Extensions.Logging
+@using Serilog
+@using Serilog.Extensions.Logging
 
 @inject Settings.ScoreboardSettings ScoreboardSettings
 @inject HttpClient Http
-@inject ILoggerProvider LoggerProvider
-@inject ILogger<GameCast> Logger
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
@@ -92,7 +91,7 @@
 
             hubConnection = new HubConnectionBuilder()
                 .WithUrl(hubUri)
-                .ConfigureLogging(loggingBuilder => loggingBuilder.AddProvider(LoggerProvider)).Build();
+                .ConfigureLogging(loggingBuilder => loggingBuilder.AddSerilog()).Build();
 
             hubConnection.On<PlayDto>("ReceivePlay", async (nextPlay) =>
             {
@@ -123,7 +122,7 @@
         catch (Exception ex)
         {
             errorOcurred = true;
-            Logger.LogError(ex.ToString());
+            Log.Error(ex, "There was an error loading the game data.");
         }
     }
 }
