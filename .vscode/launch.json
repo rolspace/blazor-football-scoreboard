@@ -11,7 +11,7 @@
             "cwd": "${workspaceFolder}/src/Hosts/Api",
             "stopAtEntry": false,
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Localhost"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
@@ -36,7 +36,7 @@
             "cwd": "${workspaceFolder}/src/Hosts/Worker",
             "stopAtEntry": false,
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Localhost"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
