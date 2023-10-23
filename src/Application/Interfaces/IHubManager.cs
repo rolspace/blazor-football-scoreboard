@@ -1,5 +1,3 @@
-using Football.Application.Features.Plays.Models;
-
 namespace Football.Application.Interfaces;
 
 public interface IHubManager
@@ -10,7 +8,7 @@ public interface IHubManager
 
     Task SendAsync<T>(string methodName, T? arg1, CancellationToken cancellationToken);
 
-    IDisposable On(string methodName, Action<PlayDto> handler);
+    IDisposable On<T>(string methodName, Action<T> handler);
 
     Task DisposeAsync();
 }

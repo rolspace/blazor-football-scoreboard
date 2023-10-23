@@ -40,7 +40,7 @@ public class HubManager : IHubManager
         }
     }
 
-    public IDisposable On(string methodName, Action<PlayDto> handler)
+    public IDisposable On<PlayDto>(string methodName, Action<PlayDto> handler)
     {
         return _hubConnection.On(methodName, handler);
     }

@@ -88,7 +88,7 @@
             homeTeamStats = gameStats?.Stats.Find(s => s.Home);
             awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
-            HubManager.On("ReceivePlay", async (nextPlay) =>
+            HubManager.On<PlayDto>("ReceivePlay", async (nextPlay) =>
             {
                 if (GameId == nextPlay.GameId)
                 {

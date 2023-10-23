@@ -71,7 +71,7 @@
                     };
                 }).ToList();
 
-                HubManager.On("ReceivePlay", (nextPlay) =>
+                HubManager.On<PlayDto>("ReceivePlay", (nextPlay) =>
                 {
                     PlayDto newPlay = currentPlays.Single(play => play.GameId == nextPlay.GameId);
                     newPlay.HomeScore = nextPlay.HomeScore;
