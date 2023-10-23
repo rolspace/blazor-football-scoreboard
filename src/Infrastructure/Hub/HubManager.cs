@@ -1,3 +1,4 @@
+using Football.Application.Features.Plays.Models;
 using Football.Application.Interfaces;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Options;
@@ -6,14 +7,13 @@ namespace Football.Infrastructure.Hub;
 
 public class HubManager : IHubManager
 {
-    private HubSettings _hubSettings;
-
     private readonly HubConnection _hubConnection;
 
     public HubManager(IOptions<HubSettings> hubSettings)
     {
-        _hubSettings = hubSettings.Value;
-        _hubConnection = new HubConnectionBuilder().WithUrl(_hubSettings.HubUrl).Build();
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(hubSettings.Value.HubUrl)
+            .Build();
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -38,6 +38,11 @@ public class HubManager : IHubManager
         {
             await _hubConnection.SendAsync(methodName, arg1, cancellationToken);
         }
+    }
+
+    public IDisposable On(string methodName, Action<PlayDto> handler)
+    {
+        return _hubConnection.On(methodName, handler);
     }
 
     public async Task DisposeAsync()
