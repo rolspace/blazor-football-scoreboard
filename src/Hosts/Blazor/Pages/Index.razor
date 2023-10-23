@@ -3,13 +3,16 @@
 @using System.Net.Http
 @using Football.Application.Features.Games.Models
 @using Football.Application.Features.Plays.Models
+@using Football.Application.Interfaces
 @using Microsoft.AspNetCore.SignalR.Client
 @using Serilog
 @using Serilog.Extensions.Logging
+@using Settings
 
-@inject Settings.ScoreboardSettings ScoreboardSettings
 @inject HttpClient Http
+@inject IHubManager HubManager
 @inject NavigationManager NavigationManager
+@inject ScoreboardSettings ScoreboardSettings
 
 <div class="mdc-layout-grid__inner">
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Week
@@ -42,8 +45,6 @@
 @code {
     private bool errorOcurred = false;
 
-    private HubConnection? hubConnection;
-
     private IReadOnlyList<PlayDto> currentPlays = new List<PlayDto>();
 
     protected override async Task OnInitializedAsync()
@@ -70,13 +71,7 @@
                     };
                 }).ToList();
 
-                var hubUri = new Uri(ScoreboardSettings.HubUrl ?? throw new Exception("HubUrl setting is not defined."));
-
-                hubConnection = new HubConnectionBuilder()
-                    .WithUrl(hubUri)
-                    .ConfigureLogging(loggingBuilder => loggingBuilder.AddSerilog()).Build();
-
-                hubConnection.On<PlayDto>("ReceivePlay", (nextPlay) =>
+                HubManager.On("ReceivePlay", (nextPlay) =>
                 {
                     PlayDto newPlay = currentPlays.Single(play => play.GameId == nextPlay.GameId);
                     newPlay.HomeScore = nextPlay.HomeScore;
@@ -88,7 +83,7 @@
                     StateHasChanged();
                 });
 
-                await hubConnection.StartAsync();
+                await HubManager.StartAsync(new CancellationToken());
             }
         }
         catch (Exception ex)
