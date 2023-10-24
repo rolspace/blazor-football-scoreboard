@@ -1,4 +1,6 @@
 {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-dotnettools.csharp"
+    "[aspnetcorerazor]": {
+        "editor.formatOnSave": false
+    },
+    "dotnet.backgroundAnalysis.analyzerDiagnosticsScope": "fullSolution"
 }

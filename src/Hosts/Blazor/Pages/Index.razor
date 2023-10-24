@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 
 @using System.Net.Http
 @using Football.Application.Features.Games.Models
@@ -15,8 +15,7 @@
 @inject ScoreboardSettings ScoreboardSettings
 
 <div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Week
-        @ScoreboardSettings.Week Games</div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Week @ScoreboardSettings.Week Games</div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner">
