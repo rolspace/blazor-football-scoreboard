@@ -11,7 +11,7 @@ public class TestDatabaseFixture
 
     public TestDatabaseFixture()
     {
-        var configuration = new ConfigurationBuilder()
+        IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
             .AddEnvironmentVariables().Build();
 

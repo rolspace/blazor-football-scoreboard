@@ -1,13 +1,12 @@
 using Football.Application.Features.Plays.Models;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Football.Api.Hubs
+namespace Football.Api.Hubs;
+
+public class PlayHub : Hub
 {
-    public class PlayHub : Hub
+    public async Task SendPlay(PlayDto playDto)
     {
-        public async Task SendPlay(PlayDto playDto)
-        {
-            await Clients.All.SendAsync("ReceivePlay", playDto);
-        }
+        await Clients.All.SendAsync("ReceivePlay", playDto);
     }
 }

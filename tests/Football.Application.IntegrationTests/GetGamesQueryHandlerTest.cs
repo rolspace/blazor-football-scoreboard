@@ -36,7 +36,7 @@ public class GetGamesQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 
         var expected = new List<GameDto>()
         {
-            new GameDto()
+            new()
             {
                 Id = 2019090500,
                 Week = 1,

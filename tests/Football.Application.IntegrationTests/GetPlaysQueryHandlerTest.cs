@@ -36,7 +36,7 @@ public class GetPlaysQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 
         var expected = new List<PlayDto>()
         {
-            new PlayDto()
+            new()
             {
                 Id = 35,
                 GameId = 2019090500,
@@ -58,7 +58,7 @@ public class GetPlaysQueryHandlerTest : IClassFixture<TestDatabaseFixture>
                 HomeTeamOnOffense = false,
                 AwayTeamOnOffense = true,
             },
-            new PlayDto()
+            new()
             {
                 Id = 50,
                 GameId = 2019090500,

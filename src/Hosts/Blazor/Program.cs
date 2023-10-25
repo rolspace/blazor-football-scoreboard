@@ -4,8 +4,6 @@ using Football.Blazor.Settings;
 using Football.Infrastructure.Hub;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -21,7 +19,7 @@ try
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
-    var scoreboardSettings = builder.Configuration
+    ScoreboardSettings? scoreboardSettings = builder.Configuration
         .GetSection(ScoreboardSettings.Key)
         .Get<ScoreboardSettings>();
 

@@ -1,5 +1,6 @@
 using Football.Application.Interfaces;
 using Football.Domain.Entities;
+using Football.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,11 +48,11 @@ public class SaveGameStatsCommandHandler : IRequestHandler<SaveGameStatsCommand,
         Game? game = await _footballDbContext.Games
             .AsQueryable()
             .Where(g => g.Id == saveGameStatsCommand.GameId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
 
         if (game is null) return 0;
 
-        foreach (var saveGameStatCommandItem in saveGameStatsCommand.SaveGameStatCommandItems)
+        foreach (SaveGameStatsCommandItem saveGameStatCommandItem in saveGameStatsCommand.SaveGameStatCommandItems)
         {
             Stat? stat = await _footballDbContext.Stats
                 .Where(s => s.GameId == saveGameStatsCommand.GameId && s.Team == saveGameStatCommandItem.Team)

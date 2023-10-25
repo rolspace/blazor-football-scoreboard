@@ -39,7 +39,7 @@ public class GetGameStatsQueryHandlerTest : IClassFixture<TestDatabaseFixture>
             GameId = 2019090500,
             Stats = new List<StatDto>()
             {
-                new StatDto()
+                new()
                 {
                     Team = "CHI",
                     Home = true,
@@ -49,7 +49,7 @@ public class GetGameStatsQueryHandlerTest : IClassFixture<TestDatabaseFixture>
                     Punts = 2,
                     ReturnYards = 50
                 },
-                new StatDto()
+                new()
                 {
                     Team = "GB",
                     Home = false,

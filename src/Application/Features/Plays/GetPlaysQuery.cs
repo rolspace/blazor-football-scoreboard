@@ -36,6 +36,6 @@ public class GetPlaysQueryHandler : IRequestHandler<GetPlaysQuery, IEnumerable<P
                 && p.QuarterSecondsRemaining.HasValue
                 && p.QuarterSecondsRemaining == request.QuarterSecondsRemaining)
             .ProjectTo<PlayDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: cancellationToken);
     }
 }

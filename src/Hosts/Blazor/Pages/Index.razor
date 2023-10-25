@@ -51,7 +51,7 @@
         try
         {
             Uri apiUri = new Uri(ScoreboardSettings.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
-            var games = await Http.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games?week={ScoreboardSettings.Week}"));
+            GameDto[]? games = await Http.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games?week={ScoreboardSettings.Week}"));
 
             if (games is not null && games.Count() > 0)
             {

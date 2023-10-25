@@ -39,7 +39,7 @@ try
 
     builder.Services.AddHostedService<PlayLogBackgroundService>();
 
-    var app = builder.Build();
+    WebApplication app = builder.Build();
 
     app.MapGet("/", () => new Response
     {
@@ -57,9 +57,4 @@ finally
 {
     Log.Information("Worker host application shut down.");
     Log.CloseAndFlush();
-}
-
-public class Response
-{
-    public string Message { get; set; } = string.Empty;
 }

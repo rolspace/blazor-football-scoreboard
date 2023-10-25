@@ -60,7 +60,7 @@ try
         });
     }
 
-    var app = builder.Build();
+    WebApplication app = builder.Build();
 
     if (app.Environment.IsDevelopment() || app.Environment.IsLocalhost())
     {

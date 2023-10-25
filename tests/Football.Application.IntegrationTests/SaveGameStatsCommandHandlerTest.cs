@@ -44,7 +44,7 @@ public class SaveGameStatsCommandHandlerTest : IClassFixture<TestDatabaseFixture
             GameOver = false,
             SaveGameStatCommandItems = new List<SaveGameStatsCommandItem>()
             {
-                new SaveGameStatsCommandItem()
+                new()
                 {
                     Team = "CHI",
                     Score = 14,
@@ -53,7 +53,7 @@ public class SaveGameStatsCommandHandlerTest : IClassFixture<TestDatabaseFixture
                     Punts = 0,
                     ReturnYards = 0,
                 },
-                new SaveGameStatsCommandItem()
+                new()
                 {
                     Team = "GB",
                     Score = 7,

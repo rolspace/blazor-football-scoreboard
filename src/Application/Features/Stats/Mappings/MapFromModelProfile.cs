@@ -11,7 +11,7 @@ public class MapFromModelProfile : Profile
             .ForMember(d => d.SaveGameStatCommandItems, o => o.MapFrom(s =>
                 new List<SaveGameStatsCommandItem>()
                 {
-                    new SaveGameStatsCommandItem() {
+                    new() {
                         Team = s.HomeTeam,
                         Score = s.HomeScore,
                         PassingYards = s.HomeTeamOnOffense && s.PlayType == "pass" ? s.YardsGained : 0,
@@ -19,7 +19,7 @@ public class MapFromModelProfile : Profile
                         Punts = s.Punt && s.HomeTeamPossession && Convert.ToBoolean(s.PuntAttempt) ? 1 : 0,
                         ReturnYards = s.Kickoff && s.HomeTeamPossession && s.ReturnYards != null ? (int)s.ReturnYards : 0
                     },
-                    new SaveGameStatsCommandItem() {
+                    new() {
                         Team = s.AwayTeam,
                         Score = s.AwayScore,
                         PassingYards = s.AwayTeamOnOffense && s.PlayType == "pass" ? s.YardsGained : 0,

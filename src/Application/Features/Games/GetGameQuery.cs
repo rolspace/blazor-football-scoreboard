@@ -30,6 +30,6 @@ public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto?>
                 .Where(game => game.Id == request.Id)
                 .Include(game => game.Stats)
                 .ProjectTo<GameDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(cancellationToken: cancellationToken);
     }
 }

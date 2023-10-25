@@ -28,9 +28,9 @@ public class GamesControllerTest
             .ReturnsAsync(gameDto);
 
         var gamesController = new GamesController(mockSender.Object);
-        var actionResult = await gamesController.GetGameById(getGameQuery);
+        ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
-        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(gameDto, okResult.Value);
     }
 
@@ -44,9 +44,9 @@ public class GamesControllerTest
             .ReturnsAsync((GameDto?)null);
 
         var gamesController = new GamesController(mockSender.Object);
-        var actionResult = await gamesController.GetGameById(getGameQuery);
+        ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
-        var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+        NotFoundResult notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
     }
 
     [Fact]
@@ -58,9 +58,9 @@ public class GamesControllerTest
         mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()));
 
         var gamesController = new GamesController(mockSender.Object);
-        var actionResult = await gamesController.GetGameById(getGameQuery);
+        ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
-        var notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
+        BadRequestResult notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
     }
 
     [Fact]
@@ -68,15 +68,13 @@ public class GamesControllerTest
     {
         var getGamesQuery = new GetGamesQuery { Week = 1 };
         var gameDtos = new List<GameDto> {
-            new GameDto
-            {
+            new() {
                 Id = 1,
                 Week = 1,
                 HomeTeam = "HT1",
                 AwayTeam = "AT1"
             },
-            new GameDto
-            {
+            new() {
                 Id = 2,
                 Week = 1,
                 HomeTeam = "HT2",
@@ -89,9 +87,9 @@ public class GamesControllerTest
             .ReturnsAsync(gameDtos);
 
         var gamesController = new GamesController(mockSender.Object);
-        var actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
+        ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
-        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(gameDtos, okResult.Value);
     }
 
@@ -105,9 +103,9 @@ public class GamesControllerTest
             .ReturnsAsync(new List<GameDto>());
 
         var gamesController = new GamesController(mockSender.Object);
-        var actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
+        ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
-        var notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+        NotFoundResult notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
     }
 
     [Fact]
@@ -119,9 +117,9 @@ public class GamesControllerTest
         mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()));
 
         var gamesController = new GamesController(mockSender.Object);
-        var actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
+        ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
-        var notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
+        BadRequestResult notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
     }
 
     [Fact]
@@ -132,8 +130,7 @@ public class GamesControllerTest
         {
             GameId = 1,
             Stats = new List<StatDto> {
-                new StatDto
-                {
+                new() {
                     Team = "HTM",
                     Home = true,
                     Score = 7,
@@ -142,8 +139,7 @@ public class GamesControllerTest
                     Punts = 2,
                     ReturnYards = 20
                 },
-                new StatDto
-                {
+                new() {
                     Team = "ATM",
                     Home = false,
                     Score = 0,
@@ -160,9 +156,9 @@ public class GamesControllerTest
             .ReturnsAsync(gameStatDto);
 
         var gamesController = new GamesController(mockSender.Object);
-        var actionResult = await gamesController.GetStatsById(getGameStatsQuery);
+        ActionResult<GameStatDto> actionResult = await gamesController.GetStatsById(getGameStatsQuery);
 
-        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         Assert.Equal(gameStatDto, okResult.Value);
     }
 }

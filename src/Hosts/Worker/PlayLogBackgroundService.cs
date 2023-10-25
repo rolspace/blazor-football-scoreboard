@@ -1,5 +1,6 @@
 using AutoMapper;
 using Football.Application.Features.Games;
+using Football.Application.Features.Games.Models;
 using Football.Application.Features.Plays;
 using Football.Application.Features.Plays.Models;
 using Football.Application.Features.Stats;
@@ -43,8 +44,8 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     Week = 1
                 };
 
-                var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
-                var gameDtos = await mediator.Send(gamesQuery);
+                ISender mediator = scope.ServiceProvider.GetRequiredService<ISender>();
+                IEnumerable<GameDto> gameDtos = await mediator.Send(gamesQuery, cancellationToken);
 
                 _gameTimeManager.GamesScheduled = gameDtos.Count();
             }
@@ -80,19 +81,20 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                         QuarterSecondsRemaining = quarterSecondsRemaining
                     };
 
-                    var mediator = scope.ServiceProvider.GetRequiredService<ISender>();
-                    IEnumerable<PlayDto> playDtos = await mediator.Send(query);
+                    ISender mediator = scope.ServiceProvider.GetRequiredService<ISender>();
+                    IEnumerable<PlayDto> playDtos = await mediator.Send(query, stoppingToken);
 
                     int gameOverCount = playDtos.Count(p => p.GameOver);
                     if (gameOverCount > 0) _gameTimeManager.IncrementGamesFinished(gameOverCount);
 
                     foreach (PlayDto playDto in playDtos)
                     {
-                        var saveGameStatsCommand = _mapper.Map<SaveGameStatsCommand>(playDto);
-                        await mediator.Send(saveGameStatsCommand);
+                        SaveGameStatsCommand saveGameStatsCommand = _mapper.Map<SaveGameStatsCommand>(playDto);
+                        await mediator.Send(saveGameStatsCommand, stoppingToken);
 
                         await _hubManager.SendAsync<PlayDto>("SendPlay", playDto, stoppingToken);
-                        _logger.LogInformation($"{quarter}/{quarterSecondsRemaining} - {playDto.ToString()}");
+
+                        _logger.LogInformation("{quarter}/{quarterSecondsRemaining} - {playDto}", quarter, quarterSecondsRemaining, playDto);
                     }
 
                     _gameTimeManager.SetTime();
@@ -103,7 +105,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                 _logger.LogError(ex, "An error ocurred trying to retrieve play log data.");
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
 
         await _hubManager.DisposeAsync();

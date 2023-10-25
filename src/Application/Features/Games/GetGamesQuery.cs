@@ -30,6 +30,6 @@ public class GetGamesQueryHandler : IRequestHandler<GetGamesQuery, IEnumerable<G
                 .Where(game => game.Week == request.Week)
                 .Include(game => game.Stats)
                 .ProjectTo<GameDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
     }
 }

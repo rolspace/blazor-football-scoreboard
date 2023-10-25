@@ -4,7 +4,7 @@ namespace Football.Application.Services;
 
 public class GameTimeManager : IGameTimeManager
 {
-    private readonly object _locker = new object();
+    private readonly object _locker = new();
 
     private int _gamesFinished;
 
