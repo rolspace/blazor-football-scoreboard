@@ -14,7 +14,7 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: football_db
     volumes:
-      - path/to/mysql:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
     networks:
       - appnet

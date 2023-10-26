@@ -10,9 +10,11 @@ services:
       - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: football_dbuser
+      MYSQL_PASSWORD: password
       MYSQL_DATABASE: football_testdb
     volumes:
-      - path/to/mysql-test:/var/lib/mysql
+      - ./mysql-test:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
     networks:
       - testdbnet
