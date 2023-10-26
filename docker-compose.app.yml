@@ -9,10 +9,9 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: football_dbuser
-      MYSQL_PASSWORD: password
       MYSQL_DATABASE: football_db
+    env_file:
+      - db.env
     volumes:
       - ./mysql:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
