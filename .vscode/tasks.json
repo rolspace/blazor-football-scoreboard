@@ -99,7 +99,7 @@
                     "Cors__AllowedMethods": "GET"
                 },
                 "envFiles": [
-                    "${workspaceFolder}/development.env"
+                    "${workspaceFolder}/app.env"
                 ],
                 "network": "footballscoreboard_db_compose_dbnet"
             },
@@ -233,7 +233,7 @@
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
                 },
                 "envFiles": [
-                    "${workspaceFolder}/development.env"
+                    "${workspaceFolder}/app.env"
                 ],
                 "network": "footballscoreboard_db_compose_dbnet"
             },
@@ -346,7 +346,7 @@
             }
         },
         {
-            "type":"shell",
+            "type": "shell",
             "label": "docker-stop-blazor: debug",
             "command": "docker container stop footballscoreboard_blazor && docker container rm footballscoreboard_blazor"
         }

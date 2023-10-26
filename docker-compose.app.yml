@@ -37,7 +37,7 @@ services:
       Cors__AllowedOrigins: https://localhost
       Cors__AllowedMethods: GET
     env_file:
-      - development.env
+      - app.env
     depends_on:
       - db
     networks:
@@ -75,7 +75,7 @@ services:
       ASPNETCORE_Kestrel__Certificates__Default__KeyPath: /https/key.pem
       Hub__HubUrl: https://footballscoreboard_api/hub/v1/plays
     env_file:
-      - development.env
+      - app.env
     depends_on:
       - db
       - api
