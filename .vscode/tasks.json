@@ -129,7 +129,7 @@
                     "Cors__AllowedMethods": "GET"
                 },
                 "envFiles": [
-                    "${workspaceFolder}/src/production.env"
+                    "${workspaceFolder}/production.env"
                 ],
                 "network": "footballscoreboard_db_compose_dbnet"
             },
@@ -342,7 +342,7 @@
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
                 },
                 "envFiles": [
-                    "${workspaceFolder}/src/production.env"
+                    "${workspaceFolder}/production.env"
                 ],
                 "network": "footballscoreboard_db_compose_dbnet"
             },
