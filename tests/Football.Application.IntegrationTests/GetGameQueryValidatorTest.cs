@@ -13,6 +13,7 @@ public class GetGameQueryValidatorTest
         _getGameQueryValidator = new GetGameQueryValidator();
     }
 
+    [Fact]
     public void Validate_GameIdIsZero_Throw()
     {
         GetGameQuery getGameQuery = new() { Id = 0 };
