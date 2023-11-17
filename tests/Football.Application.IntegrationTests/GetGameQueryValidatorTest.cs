@@ -22,4 +22,14 @@ public class GetGameQueryValidatorTest
 
         validatorResult.ShouldHaveValidationErrorFor(query => query.Id);
     }
+
+    [Fact]
+    public void Validate_GameIdIsPositive_ValidationSuccess()
+    {
+        GetGameQuery getGameQuery = new() { Id = 1 };
+
+        var validatorResult = _getGameQueryValidator.TestValidate(getGameQuery);
+
+        Assert.True(validatorResult.IsValid);
+    }
 }
