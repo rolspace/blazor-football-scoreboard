@@ -22,4 +22,24 @@ public class GetGamesQueryValidatorTest
 
         validatorResult.ShouldHaveValidationErrorFor(query => query.Week);
     }
+
+    [Fact]
+    public void Validate_WeekIsTwenty_Throw()
+    {
+        GetGamesQuery getGamesQuery = new() { Week = 20 };
+
+        var validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
+
+        validatorResult.ShouldHaveValidationErrorFor(query => query.Week);
+    }
+
+    [Fact]
+    public void Validate_WeekIsTen_ValidationSuccess()
+    {
+        GetGamesQuery getGamesQuery = new() { Week = 10 };
+
+        var validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
+
+        Assert.True(validatorResult.IsValid);
+    }
 }
