@@ -18,7 +18,7 @@ public class GetGameQueryValidatorTest
     {
         GetGameQuery getGameQuery = new() { Id = 0 };
 
-        var validatorResult = _getGameQueryValidator.TestValidate(getGameQuery);
+        TestValidationResult<GetGameQuery> validatorResult = _getGameQueryValidator.TestValidate(getGameQuery);
 
         validatorResult.ShouldHaveValidationErrorFor(query => query.Id);
     }
@@ -28,7 +28,7 @@ public class GetGameQueryValidatorTest
     {
         GetGameQuery getGameQuery = new() { Id = 1 };
 
-        var validatorResult = _getGameQueryValidator.TestValidate(getGameQuery);
+        TestValidationResult<GetGameQuery> validatorResult = _getGameQueryValidator.TestValidate(getGameQuery);
 
         Assert.True(validatorResult.IsValid);
     }

@@ -18,7 +18,7 @@ public class GetGamesQueryValidatorTest
     {
         GetGamesQuery getGamesQuery = new() { Week = 0 };
 
-        var validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
+        TestValidationResult<GetGamesQuery> validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
 
         validatorResult.ShouldHaveValidationErrorFor(query => query.Week);
     }
@@ -28,7 +28,7 @@ public class GetGamesQueryValidatorTest
     {
         GetGamesQuery getGamesQuery = new() { Week = 20 };
 
-        var validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
+        TestValidationResult<GetGamesQuery> validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
 
         validatorResult.ShouldHaveValidationErrorFor(query => query.Week);
     }
@@ -38,7 +38,7 @@ public class GetGamesQueryValidatorTest
     {
         GetGamesQuery getGamesQuery = new() { Week = 10 };
 
-        var validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
+        TestValidationResult<GetGamesQuery> validatorResult = _getGamesQueryValidator.TestValidate(getGamesQuery);
 
         Assert.True(validatorResult.IsValid);
     }
