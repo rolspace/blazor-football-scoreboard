@@ -18,21 +18,6 @@ public class GamesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("{id}")]
-    [ProducesResponseType(typeof(GameDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<GameDto>> GetGameById([FromRoute] GetGameQuery query)
-    {
-        if (query == null) return BadRequest();
-
-        GameDto game = await _mediator.Send(query);
-
-        if (game == null) return NotFound();
-
-        return Ok(game);
-    }
-
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -46,6 +31,21 @@ public class GamesController : ControllerBase
         if (games.Count() == 0) return NotFound();
 
         return Ok(games);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(GameDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<GameDto>> GetGameById([FromRoute] GetGameQuery query)
+    {
+        if (query == null) return BadRequest();
+
+        GameDto game = await _mediator.Send(query);
+
+        if (game == null) return NotFound();
+
+        return Ok(game);
     }
 
     [HttpGet("{id}/stats")]
