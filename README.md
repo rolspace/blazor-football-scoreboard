@@ -31,9 +31,11 @@ The solution contains both unit tests and integration tests.
 
 In order to run the integration tests successfully, a connection to a MySQL database is required.
 
-A test database is provided with the Docker Compose file found in the integration tests project directory, `./tests/Football.Application.IntegrationTests/docker-compose.testdb.yml`. The containers in the Compose file can be run in Visual Studio Code by right-clicking the file and selecting `Compose Up`, assuming the Docker extension is installed. Otherwise, the command, `docker-compose -f docker-compose.testdb.yml up -d` can be executed from a terminal set to the root of the integration tests project.
+A test database is provided with the Docker Compose file found in the integration tests project directory, `./tests/Football.Application.IntegrationTests/docker-compose.testdb.yml`.
 
-The Compose file references an SQL file, `football_testdb.sql`, which is used to seed data into the test database. The SQL file can be found in the `data` folder in the integration tests project directory. The very first time the Compose file runs, the startup will take a bit longer due to the seeing process.
+The containers in the Compose file can be run in Visual Studio Code by right-clicking the file and selecting `Compose Up`, assuming the Docker VSCode extension is installed. Otherwise, the command, `docker-compose -f docker-compose.testdb.yml up -d` can be executed from a terminal set to the root of the integration tests project.
+
+The Compose file references an SQL file, `football_testdb.sql`, which is used to seed data to the test database. The SQL file can be found in the `data` folder in the integration tests project directory. The very first time the Compose file runs, the startup will take a bit longer due to the seeing process.
 
 The Compose file expects a `db.env` file to exist with the secrets required to run the test database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
 - MYSQL_ROOT_PASSWORD
@@ -42,7 +44,7 @@ The Compose file expects a `db.env` file to exist with the secrets required to r
 
 It is important to know that the test database runs on a different port (3307) than the application database (3306).
 
-[Adminer](https://www.adminer.org/) is included in the test database Docker Compose file.
+[Adminer](https://www.adminer.org/) is included in the Docker Compose file and it can be opened in the browser at http://localhost:8081.
 
 ### Running the tests
 
