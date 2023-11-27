@@ -96,7 +96,8 @@
                     "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
                     "Cors__PolicyName": "WebClientCorsPolicy",
                     "Cors__AllowedOrigins": "https://localhost",
-                    "Cors__AllowedMethods": "GET"
+                    "Cors__AllowedMethods": "GET",
+                    "Week": "1"
                 },
                 "envFiles": [
                     "${workspaceFolder}/app.env"
@@ -126,7 +127,8 @@
                     "ASPNETCORE_ENVIRONMENT": "Production",
                     "Cors__PolicyName": "WebClientCorsPolicy",
                     "Cors__AllowedOrigins": "https://localhost",
-                    "Cors__AllowedMethods": "GET"
+                    "Cors__AllowedMethods": "GET",
+                    "Week": "1"
                 },
                 "envFiles": [
                     "${workspaceFolder}/production.env"

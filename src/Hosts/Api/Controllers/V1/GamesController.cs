@@ -11,10 +11,21 @@ namespace Football.Api.Controllers.V1;
 [Route("api/v1/games")]
 public class GamesController : ControllerBase
 {
-    private ISender _mediator;
+    private const int DEFAULT_WEEK = 1;
 
-    public GamesController(ISender mediator)
+    private const string WeekKey = "Week";
+
+    private readonly int _week = DEFAULT_WEEK;
+
+    private readonly ISender _mediator;
+
+    public GamesController(IConfiguration configuration, ISender mediator)
     {
+        if (configuration is not null)
+        {
+            _week = configuration.GetValue(WeekKey, DEFAULT_WEEK);
+        }
+
         _mediator = mediator;
     }
 
@@ -28,7 +39,25 @@ public class GamesController : ControllerBase
 
         IEnumerable<GameDto> games = await _mediator.Send(query);
 
-        if (games.Count() == 0) return NotFound();
+        if (!games.Any()) return NotFound();
+
+        return Ok(games);
+    }
+
+    [HttpGet("today")]
+    [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<GameDto>>> GetCurrentGames()
+    {
+        GetGamesQuery query = new()
+        {
+            Week = _week
+        };
+
+        IEnumerable<GameDto> games = await _mediator.Send(query);
+
+        if (!games.Any()) return NotFound();
 
         return Ok(games);
     }
