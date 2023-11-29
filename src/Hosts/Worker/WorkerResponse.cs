@@ -1,6 +1,6 @@
 namespace Football.Worker;
 
-public class Response
+public class WorkerResponse
 {
     public string Message { get; set; } = string.Empty;
 }

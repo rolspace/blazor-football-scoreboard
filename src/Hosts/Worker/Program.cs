@@ -41,7 +41,7 @@ try
 
     WebApplication app = builder.Build();
 
-    app.MapGet("/", () => new Response
+    app.MapGet("/", () => new WorkerResponse
     {
         Message = "Web application for the PlayLogHostedService."
     });
