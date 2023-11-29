@@ -15,7 +15,7 @@ public class GamesController : ControllerBase
 
     private const string WeekKey = "Week";
 
-    private readonly int _week = DEFAULT_WEEK;
+    private readonly int _week;
 
     private readonly ISender _mediator;
 
