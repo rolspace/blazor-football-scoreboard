@@ -21,10 +21,6 @@ The preferred option to run the entire system is to launch all the applications 
 
 The Compose file references an SQL file, `football_db.sql`, which seeds data into the database. The SQL file can be found in the `data` folder at the root of the repository. The very first time the Compose file starts, the container startup will take a bit longer due to the seeding process.
 
-### Certificates
-
-Test
-
 ### DB configuration
 
 The Compose file expects a `db.env` file at the root of the repository, with the secrets required to run the database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
@@ -56,6 +52,34 @@ MYSQLCONNSTR_FootballDbConnection={MYSQL CONNECTION STRING VALUE}
 ```
 
 > There are additional settings needed for each application, these settings are not sensitive, so they are defined in the `docker-compose.app.yml` file. For more info on these settings, check the README file for each application.
+
+### Certificates
+
+All applications running via the Compose file are configured to use HTTPS. The certificates required for each application can be created by using the `openssl` utility.
+
+For the Blazor UI application, we will create a certificate with no password by running the following command at the root of the project folder:
+
+```
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 3650 -subj "/CN=localhost"
+```
+
+For the Football.Api application, we will create a certificate, with a password, with the following command at the root of the project folder:
+
+```
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=localhost
+```
+
+> The command will prompt you to enter a password...this is the same password that should be used for the ASPNETCORE_Kestrel__Certificates__Default__Password secret. Since the secrets file is shared by all applications, use the same password for the certificates needed by the Football.Worker and Football.Api applications (that's ok in this case, this is just a project for playing around).
+
+There is a special case with the certificate for the Football.Api container. Inside the container network, the Football.Worker hosted service will call the HTTP API provided by the Football.Api container. This call requires HTTPS, so it is necessary to create the certificate for the Football.Api application with the name of the domain inside the container network by running the command at the root of the project:
+
+```
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=footballscoreboard_api"
+```
+
+Each of these commands will create a cert.pem file and a key.pem file at the root of the respective project. The Docker Compose setup will take care of placing all the files in the correct locations, once it starts.
+
+### Start the containers
 
 Starting the Docker Compose file will run the applications in the following order:
 
