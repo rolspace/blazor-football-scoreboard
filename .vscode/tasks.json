@@ -48,6 +48,7 @@
                 "target": "base",
                 "dockerfile": "${workspaceFolder}/src/Hosts/Api/Dockerfile",
                 "context": "${workspaceFolder}",
+                "customOptions": "--no-cache",
                 "pull": true
             },
             "netCore": {
@@ -313,7 +314,8 @@
                     "ASPNETCORE_HTTPS_PORT": "5003",
                     "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
                     "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
-                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
+                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays",
+                    "Week": "1"
                 },
                 "envFiles": [
                     "${workspaceFolder}/app.env"
@@ -341,7 +343,8 @@
                 ],
                 "env": {
                     "ASPNETCORE_ENVIRONMENT": "Production",
-                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays"
+                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays",
+                    "Week": "1"
                 },
                 "envFiles": [
                     "${workspaceFolder}/production.env"

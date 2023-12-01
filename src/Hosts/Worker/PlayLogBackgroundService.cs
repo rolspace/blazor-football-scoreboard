@@ -12,6 +12,12 @@ namespace Football.Worker;
 
 public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 {
+    private const int DEFAULT_WEEK = 1;
+
+    private const string WeekKey = "Week";
+
+    private readonly int _week;
+
     private readonly IGameTimeManager _gameTimeManager;
 
     private readonly IHubManager _hubManager;
@@ -23,7 +29,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
     private readonly ILogger<PlayLogBackgroundService> _logger;
 
     public PlayLogBackgroundService(IHubManager hubManager, IMapper mapper,
-        IServiceScopeFactory scopeFactory, ILogger<PlayLogBackgroundService> logger)
+        IServiceScopeFactory scopeFactory, ILogger<PlayLogBackgroundService> logger, IConfiguration configuration)
     {
         _hubManager = hubManager;
         _mapper = mapper;
@@ -31,6 +37,11 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
         _logger = logger;
 
         _gameTimeManager = new GameTimeManager();
+
+        if (configuration is not null)
+        {
+            _week = configuration.GetValue(WeekKey, DEFAULT_WEEK);
+        }
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)
@@ -41,7 +52,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
             {
                 var gamesQuery = new GetGamesQuery()
                 {
-                    Week = 1
+                    Week = _week
                 };
 
                 ISender mediator = scope.ServiceProvider.GetRequiredService<ISender>();
@@ -76,7 +87,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     int quarterSecondsRemaining = _gameTimeManager.GetQuarterSecondsRemaining();
                     var query = new GetPlaysQuery()
                     {
-                        Week = 1,
+                        Week = _week,
                         Quarter = quarter,
                         QuarterSecondsRemaining = quarterSecondsRemaining
                     };
