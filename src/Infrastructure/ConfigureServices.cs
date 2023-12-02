@@ -1,5 +1,6 @@
 using Football.Application.Interfaces;
 using Football.Infrastructure.Hub;
+using Football.Infrastructure.Options;
 using Football.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,8 +18,8 @@ public static class ConfigureServices
 
         services.AddScoped<IFootballDbContext>(provider => provider.GetRequiredService<FootballDbContext>());
 
-        services.Configure<HubSettings>(configuration.GetSection(HubSettings.Key));
-        services.AddTransient<IHubManager, HubManager>();
+        services.Configure<HubOptions>(configuration.GetSection(HubOptions.Key));
+        services.AddTransient<IHubProvider, HubProvider>();
 
         return services;
     }

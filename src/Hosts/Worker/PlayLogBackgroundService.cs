@@ -20,7 +20,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     private readonly IGameTimeManager _gameTimeManager;
 
-    private readonly IHubManager _hubManager;
+    private readonly IHubProvider _hubProvider;
 
     private readonly IMapper _mapper;
 
@@ -28,10 +28,10 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     private readonly ILogger<PlayLogBackgroundService> _logger;
 
-    public PlayLogBackgroundService(IHubManager hubManager, IMapper mapper,
+    public PlayLogBackgroundService(IHubProvider hubProvider, IMapper mapper,
         IServiceScopeFactory scopeFactory, ILogger<PlayLogBackgroundService> logger, IConfiguration configuration)
     {
-        _hubManager = hubManager;
+        _hubProvider = hubProvider;
         _mapper = mapper;
         _scopeFactory = scopeFactory;
         _logger = logger;
@@ -61,7 +61,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                 _gameTimeManager.GamesScheduled = gameDtos.Count();
             }
 
-            await _hubManager.StartAsync(cancellationToken);
+            await _hubProvider.StartAsync(cancellationToken);
         }
         catch (Exception ex)
         {
@@ -103,7 +103,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                         SaveGameStatsCommand saveGameStatsCommand = _mapper.Map<SaveGameStatsCommand>(playDto);
                         await mediator.Send(saveGameStatsCommand, stoppingToken);
 
-                        await _hubManager.SendAsync<PlayDto>("SendPlay", playDto, stoppingToken);
+                        await _hubProvider.SendAsync<PlayDto>("SendPlay", playDto, stoppingToken);
 
                         _logger.LogInformation("{quarter}/{quarterSecondsRemaining} - {playDto}", quarter, quarterSecondsRemaining, playDto);
                     }
@@ -119,12 +119,12 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
             await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
 
-        await _hubManager.DisposeAsync();
+        await _hubProvider.DisposeAsync();
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        await _hubManager.StopAsync(cancellationToken);
+        await _hubProvider.StopAsync(cancellationToken);
         await base.StopAsync(cancellationToken);
 
         _logger.LogInformation("Background service stopped");
@@ -132,7 +132,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await _hubManager.DisposeAsync();
+        await _hubProvider.DisposeAsync();
         base.Dispose();
 
         _logger.LogInformation("Background service disposed");

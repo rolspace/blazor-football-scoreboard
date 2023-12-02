@@ -10,7 +10,7 @@
 @using Settings
 
 @inject HttpClient Http
-@inject IHubManager HubManager
+@inject IHubProvider HubProvider
 @inject NavigationManager NavigationManager
 @inject ScoreboardSettings ScoreboardSettings
 
@@ -70,7 +70,7 @@
                     };
                 }).ToList();
 
-                HubManager.On<PlayDto>("ReceivePlay", (nextPlay) =>
+                HubProvider.On<PlayDto>("ReceivePlay", (nextPlay) =>
                 {
                     PlayDto newPlay = currentPlays.Single(play => play.GameId == nextPlay.GameId);
                     newPlay.HomeScore = nextPlay.HomeScore;
@@ -82,7 +82,7 @@
                     StateHasChanged();
                 });
 
-                await HubManager.StartAsync(new CancellationToken());
+                await HubProvider.StartAsync(new CancellationToken());
             }
         }
         catch (Exception ex)

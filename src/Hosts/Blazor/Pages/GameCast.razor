@@ -11,7 +11,7 @@
 @using Settings
 
 @inject HttpClient Http
-@inject IHubManager HubManager
+@inject IHubProvider HubProvider
 @inject NavigationManager NavigationManager
 @inject ScoreboardSettings ScoreboardSettings
 
@@ -87,7 +87,7 @@
             homeTeamStats = gameStats?.Stats.Find(s => s.Home);
             awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
-            HubManager.On<PlayDto>("ReceivePlay", async (nextPlay) =>
+            HubProvider.On<PlayDto>("ReceivePlay", async (nextPlay) =>
             {
                 if (GameId == nextPlay.GameId)
                 {
@@ -111,7 +111,7 @@
                 StateHasChanged();
             });
 
-            await HubManager.StartAsync(new CancellationToken());
+            await HubProvider.StartAsync(new CancellationToken());
         }
         catch (Exception ex)
         {

@@ -1,6 +1,6 @@
-namespace Football.Infrastructure.Hub;
+namespace Football.Infrastructure.Options;
 
-public class HubSettings
+public class HubOptions
 {
     public const string Key = "Hub";
 

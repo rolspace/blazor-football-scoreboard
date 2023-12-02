@@ -2,6 +2,7 @@ using Football.Application.Interfaces;
 using Football.Blazor;
 using Football.Blazor.Settings;
 using Football.Infrastructure.Hub;
+using Football.Infrastructure.Options;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Serilog;
@@ -23,11 +24,11 @@ try
         .GetSection(ScoreboardSettings.Key)
         .Get<ScoreboardSettings>();
 
-    builder.Services.Configure<HubSettings>(builder.Configuration.GetSection(HubSettings.Key));
+    builder.Services.Configure<HubOptions>(builder.Configuration.GetSection(HubOptions.Key));
 
     builder.Services.AddSingleton(scoreboardSettings ?? new ScoreboardSettings());
     builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-    builder.Services.AddSingleton<IHubManager, HubManager>();
+    builder.Services.AddSingleton<IHubProvider, HubProvider>();
 
     await builder.Build().RunAsync();
 }

@@ -1,6 +1,6 @@
 namespace Football.Application.Interfaces;
 
-public interface IHubManager
+public interface IHubProvider
 {
     Task StartAsync(CancellationToken cancellationToken);
 
