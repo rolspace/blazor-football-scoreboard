@@ -18,6 +18,7 @@ public static class ConfigureServices
 
         services.AddScoped<IFootballDbContext>(provider => provider.GetRequiredService<FootballDbContext>());
 
+        services.Configure<ScoreboardOptions>(configuration.GetSection(ScoreboardOptions.Key));
         services.Configure<HubOptions>(configuration.GetSection(HubOptions.Key));
         services.AddTransient<IHubProvider, HubProvider>();
 
