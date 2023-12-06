@@ -2,8 +2,10 @@ using Football.Application.Features.Games;
 using Football.Application.Features.Games.Models;
 using Football.Application.Features.Stats;
 using Football.Application.Features.Stats.Models;
+using Football.Infrastructure.Options;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Football.Api.Controllers.V1;
 
@@ -11,22 +13,15 @@ namespace Football.Api.Controllers.V1;
 [Route("api/v1/games")]
 public class GamesController : ControllerBase
 {
-    private const int DEFAULT_WEEK = 1;
-
-    private const string WeekKey = "Week";
-
-    private readonly int _week;
+    private readonly ScoreboardOptions _scoreboardOptions;
 
     private readonly ISender _mediator;
 
-    public GamesController(IConfiguration configuration, ISender mediator)
+    public GamesController(ISender mediator, IOptions<ScoreboardOptions> scoreboardOptions)
     {
-        if (configuration is not null)
-        {
-            _week = configuration.GetValue(WeekKey, DEFAULT_WEEK);
-        }
-
         _mediator = mediator;
+
+        _scoreboardOptions = scoreboardOptions.Value;
     }
 
     [HttpGet]
@@ -52,7 +47,7 @@ public class GamesController : ControllerBase
     {
         GetGamesQuery query = new()
         {
-            Week = _week
+            Week = _scoreboardOptions.Week
         };
 
         IEnumerable<GameDto> games = await _mediator.Send(query);

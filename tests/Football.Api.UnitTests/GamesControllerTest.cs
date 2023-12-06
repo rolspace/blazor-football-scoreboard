@@ -3,14 +3,30 @@ using Football.Application.Features.Games;
 using Football.Application.Features.Games.Models;
 using Football.Application.Features.Stats;
 using Football.Application.Features.Stats.Models;
+using Football.Infrastructure.Options;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Football.Api.UnitTests;
 
 public class GamesControllerTest
 {
+    private Mock<ISender> _mockSender;
+
+    private Mock<IOptions<ScoreboardOptions>> _mockScoreboardOptions;
+
+    public GamesControllerTest()
+    {
+        _mockSender = new Mock<ISender>();
+        _mockScoreboardOptions = new Mock<IOptions<ScoreboardOptions>>();
+
+        _mockScoreboardOptions.Setup(options => options.Value)
+            .Returns(new ScoreboardOptions { Week = 1});
+    }
+
     [Fact]
     public async Task GetGamesById_GameIdFound_ReturnsHttpOkAndGameDto()
     {
@@ -23,11 +39,10 @@ public class GamesControllerTest
             AwayTeam = "ATM"
         };
 
-        var mockSender = new Mock<ISender>();
-        mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()))
+        _mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()))
             .ReturnsAsync(gameDto);
 
-        var gamesController = new GamesController(mockSender.Object);
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
         OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
@@ -39,11 +54,10 @@ public class GamesControllerTest
     {
         var getGameQuery = new GetGameQuery { GameId = 0 };
 
-        var mockSender = new Mock<ISender>();
-        mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()))
+        _mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()))
             .ReturnsAsync((GameDto?)null);
 
-        var gamesController = new GamesController(mockSender.Object);
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
         NotFoundResult notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
@@ -54,10 +68,9 @@ public class GamesControllerTest
     {
         GetGameQuery getGameQuery = null!;
 
-        var mockSender = new Mock<ISender>();
-        mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()));
+        _mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()));
 
-        var gamesController = new GamesController(mockSender.Object);
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
         BadRequestResult notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
@@ -82,11 +95,10 @@ public class GamesControllerTest
             }
         };
 
-        var mockSender = new Mock<ISender>();
-        mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
+        _mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
             .ReturnsAsync(gameDtos);
 
-        var gamesController = new GamesController(mockSender.Object);
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
         OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
@@ -98,11 +110,10 @@ public class GamesControllerTest
     {
         var getGamesQuery = new GetGamesQuery { Week = 0 };
 
-        var mockSender = new Mock<ISender>();
-        mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
+        _mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
             .ReturnsAsync(new List<GameDto>());
 
-        var gamesController = new GamesController(mockSender.Object);
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
         NotFoundResult notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
@@ -113,10 +124,9 @@ public class GamesControllerTest
     {
         GetGamesQuery getGamesQuery = null!;
 
-        var mockSender = new Mock<ISender>();
-        mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()));
+        _mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()));
 
-        var gamesController = new GamesController(mockSender.Object);
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
         BadRequestResult notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
@@ -151,11 +161,10 @@ public class GamesControllerTest
             }
         };
 
-        var mockSender = new Mock<ISender>();
-        mockSender.Setup(sender => sender.Send(getGameStatsQuery, new CancellationToken()))
+        _mockSender.Setup(sender => sender.Send(getGameStatsQuery, new CancellationToken()))
             .ReturnsAsync(gameStatDto);
 
-        var gamesController = new GamesController(mockSender.Object);
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
         ActionResult<GameStatDto> actionResult = await gamesController.GetStatsById(getGameStatsQuery);
 
         OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);

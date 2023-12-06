@@ -6,19 +6,15 @@ using Football.Application.Features.Plays.Models;
 using Football.Application.Features.Stats;
 using Football.Application.Interfaces;
 using Football.Application.Services;
+using Football.Infrastructure.Options;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Football.Worker;
 
 public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 {
-    private const int DEFAULT_WEEK = 1;
-
-    private const string WeekKey = "Week";
-
-    private readonly int _week;
-
-    private readonly IGameTimeManager _gameTimeManager;
+    private readonly ScoreboardOptions _scoreboardOptions;
 
     private readonly IHubProvider _hubProvider;
 
@@ -28,20 +24,19 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     private readonly ILogger<PlayLogBackgroundService> _logger;
 
+    private readonly IGameTimeManager _gameTimeManager;
+
     public PlayLogBackgroundService(IHubProvider hubProvider, IMapper mapper,
-        IServiceScopeFactory scopeFactory, ILogger<PlayLogBackgroundService> logger, IConfiguration configuration)
+        IServiceScopeFactory scopeFactory, ILogger<PlayLogBackgroundService> logger,
+        IOptions<ScoreboardOptions> scoreboardOptions)
     {
         _hubProvider = hubProvider;
         _mapper = mapper;
         _scopeFactory = scopeFactory;
         _logger = logger;
+        _scoreboardOptions = scoreboardOptions.Value;
 
         _gameTimeManager = new GameTimeManager();
-
-        if (configuration is not null)
-        {
-            _week = configuration.GetValue(WeekKey, DEFAULT_WEEK);
-        }
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)
@@ -52,7 +47,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
             {
                 var gamesQuery = new GetGamesQuery()
                 {
-                    Week = _week
+                    Week = _scoreboardOptions.Week
                 };
 
                 ISender mediator = scope.ServiceProvider.GetRequiredService<ISender>();
@@ -87,7 +82,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     int quarterSecondsRemaining = _gameTimeManager.GetQuarterSecondsRemaining();
                     var query = new GetPlaysQuery()
                     {
-                        Week = _week,
+                        Week = _scoreboardOptions.Week,
                         Quarter = quarter,
                         QuarterSecondsRemaining = quarterSecondsRemaining
                     };
