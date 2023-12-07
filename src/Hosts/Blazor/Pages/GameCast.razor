@@ -6,14 +6,15 @@
 @using Football.Application.Features.Stats.Models
 @using Football.Application.Interfaces
 @using Microsoft.AspNetCore.SignalR.Client
+@using Options
 @using Serilog
 @using Serilog.Extensions.Logging
-@using Settings
+
 
 @inject HttpClient Http
 @inject IHubProvider HubProvider
 @inject NavigationManager NavigationManager
-@inject ScoreboardSettings ScoreboardSettings
+@inject ApiOptions ApiOptions
 
 <div class="mdc-layout-grid__inner">
     @if (currentPlay is null && !errorOcurred)
@@ -66,7 +67,7 @@
     {
         try
         {
-            Uri apiUri = new Uri(ScoreboardSettings.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
+            Uri apiUri = new Uri(ApiOptions.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
             GameDto? game = await Http.GetFromJsonAsync<GameDto>(new Uri(apiUri, $"games/{GameId}"));
 
             if (game is null) throw new Exception("Game not found.");

@@ -5,17 +5,17 @@
 @using Football.Application.Features.Plays.Models
 @using Football.Application.Interfaces
 @using Microsoft.AspNetCore.SignalR.Client
+@using Options
 @using Serilog
 @using Serilog.Extensions.Logging
-@using Settings
 
+@inject ApiOptions ApiOptions
 @inject HttpClient Http
 @inject IHubProvider HubProvider
 @inject NavigationManager NavigationManager
-@inject ScoreboardSettings ScoreboardSettings
 
 <div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Week @ScoreboardSettings.Week Games</div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Games</div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner">
@@ -50,8 +50,8 @@
     {
         try
         {
-            Uri apiUri = new Uri(ScoreboardSettings.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
-            GameDto[]? games = await Http.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games?week={ScoreboardSettings.Week}"));
+            Uri apiUri = new Uri(ApiOptions.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
+            GameDto[]? games = await Http.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games/today"));
 
             if (games is not null && games.Count() > 0)
             {

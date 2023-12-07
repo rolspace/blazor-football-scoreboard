@@ -1,6 +1,6 @@
 using Football.Application.Interfaces;
 using Football.Blazor;
-using Football.Blazor.Settings;
+using Football.Blazor.Options;
 using Football.Infrastructure.Hub;
 using Football.Infrastructure.Options;
 using Microsoft.AspNetCore.Components.Web;
@@ -20,13 +20,13 @@ try
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
-    ScoreboardSettings? scoreboardSettings = builder.Configuration
-        .GetSection(ScoreboardSettings.Key)
-        .Get<ScoreboardSettings>();
+    ApiOptions? apiOptions = builder.Configuration
+        .GetSection(ApiOptions.Key)
+        .Get<ApiOptions>();
 
     builder.Services.Configure<HubOptions>(builder.Configuration.GetSection(HubOptions.Key));
 
-    builder.Services.AddSingleton(scoreboardSettings ?? new ScoreboardSettings());
+    builder.Services.AddSingleton(apiOptions ?? new ApiOptions());
     builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
     builder.Services.AddSingleton<IHubProvider, HubProvider>();
 
