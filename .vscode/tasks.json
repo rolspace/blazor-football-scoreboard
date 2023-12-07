@@ -314,7 +314,7 @@
                     "ASPNETCORE_HTTPS_PORT": "5003",
                     "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
                     "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
-                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays",
+                    "Hub__HubUrl": "https://footballscoreboard_api/hub/plays",
                     "Scoreboard__Week": "1"
                 },
                 "envFiles": [
@@ -343,7 +343,7 @@
                 ],
                 "env": {
                     "ASPNETCORE_ENVIRONMENT": "Production",
-                    "Hub__HubUrl": "https://footballscoreboard_api/hub/v1/plays",
+                    "Hub__HubUrl": "https://footballscoreboard_api/hub/plays",
                     "Scoreboard__Week": "1"
                 },
                 "envFiles": [
