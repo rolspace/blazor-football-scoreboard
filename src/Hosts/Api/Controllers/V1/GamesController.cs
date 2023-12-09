@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Football.Application.Features.Games;
 using Football.Application.Features.Games.Models;
 using Football.Application.Features.Stats;
@@ -10,7 +11,8 @@ using Microsoft.Extensions.Options;
 namespace Football.Api.Controllers.V1;
 
 [ApiController]
-[Route("api/v1/games")]
+[ApiVersion(1.0)]
+[Route("api/v{version:apiVersion}/games")]
 public class GamesController : ControllerBase
 {
     private readonly ScoreboardOptions _scoreboardOptions;

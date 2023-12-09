@@ -1,4 +1,6 @@
 using System.Reflection;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using Football.Api.Hubs;
 using Football.Api.Settings;
 using Football.Infrastructure.Extensions;
@@ -41,8 +43,23 @@ try
 
     builder.Services.AddSignalR();
     builder.Services.AddControllers();
+
     builder.Services.AddHealthChecks();
     builder.Services.AddEndpointsApiExplorer();
+
+    builder.Services
+        .AddApiVersioning(options =>
+        {
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.DefaultApiVersion = new ApiVersion(1.0);
+        })
+        .AddMvc()
+        .AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
+        });
+
     builder.Services.AddSwaggerGen();
 
     CorsSettings? corsSettings = builder.Configuration.GetSection(CorsSettings.Key).Get<CorsSettings>();
@@ -65,7 +82,15 @@ try
     if (app.Environment.IsDevelopment() || app.Environment.IsLocalhost())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(options =>
+        {
+            foreach (ApiVersionDescription description in app.DescribeApiVersions())
+            {
+                string url = $"/swagger/{description.GroupName}/swagger.json";
+                string name = description.GroupName.ToUpperInvariant();
+                options.SwaggerEndpoint( url, name );
+            }
+        } );
     }
 
     app.UseSerilogRequestLogging();
