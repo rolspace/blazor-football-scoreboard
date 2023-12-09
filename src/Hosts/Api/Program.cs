@@ -94,7 +94,6 @@ try
     }
 
     app.UseSerilogRequestLogging();
-    app.UseHttpsRedirection();
     app.UseRouting();
 
     if (corsSettings is not null)
