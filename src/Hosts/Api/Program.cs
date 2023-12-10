@@ -2,7 +2,7 @@ using System.Reflection;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Football.Api.Hubs;
-using Football.Api.Settings;
+using Football.Api.Options;
 using Football.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Events;
@@ -62,16 +62,16 @@ try
 
     builder.Services.AddSwaggerGen();
 
-    CorsSettings? corsSettings = builder.Configuration.GetSection(CorsSettings.Key).Get<CorsSettings>();
-    if (corsSettings is not null)
+    CorsOptions? corsOptions = builder.Configuration.GetSection(CorsOptions.Key).Get<CorsOptions>();
+    if (corsOptions is not null)
     {
-        builder.Services.AddCors(corsOptions =>
+        builder.Services.AddCors(options =>
         {
-            corsOptions.AddPolicy(name: corsSettings.PolicyName, poliyBuilder =>
+            options.AddPolicy(name: corsOptions.PolicyName, poliyBuilder =>
             {
                 poliyBuilder
-                    .WithOrigins(corsSettings.AllowedOrigins)
-                    .WithMethods(corsSettings.AllowedMethods)
+                    .WithOrigins(corsOptions.AllowedOrigins)
+                    .WithMethods(corsOptions.AllowedMethods)
                     .AllowAnyHeader();
             });
         });
@@ -96,9 +96,9 @@ try
     app.UseSerilogRequestLogging();
     app.UseRouting();
 
-    if (corsSettings is not null)
+    if (corsOptions is not null)
     {
-        app.UseCors(corsSettings.PolicyName);
+        app.UseCors(corsOptions.PolicyName);
     }
 
     app.UseEndpoints(endpoints =>

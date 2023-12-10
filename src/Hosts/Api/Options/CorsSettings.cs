@@ -1,6 +1,6 @@
-namespace Football.Api.Settings;
+namespace Football.Api.Options;
 
-public class CorsSettings
+public class CorsOptions
 {
     public const string Key = "Cors";
 
