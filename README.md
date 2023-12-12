@@ -15,11 +15,12 @@ The system is split into three main elements:
 
 ## How to run locally
 
-For details on how to run each application separately, go to the README file for each of the host C# projects: the API, the Blazor UI, and the Worker. Each application can be started individually using the `dotnet cli` or with the VSCode launch config.
+For details on how to run each application separately, go to the README file for each of the host C# projects: the API, the Blazor UI, and the Worker. Each application can be started individually using the `dotnet cli`, with the VSCode launch config, or with a Docker container.
 
-The preferred option to run the entire system is to launch all the applications together with a single click (or command) using Docker Compose. The Docker Compose file can be found at the root of the repository, `docker-compose.app.yml`
+The preferred option to run the entire system together is to launch all the applications with a single click, or command, using Docker Compose. The Docker Compose file can be found at the root of the repository, `docker-compose.app.yml`
 
-The Compose file references an SQL file, `football_db.sql`, which seeds data into the database. The SQL file can be found in the `data` folder at the root of the repository. The very first time the Compose file starts, the container startup will take a bit longer due to the seeding process.
+The Compose file will start containers for all three applications, including the MySQL database where the game data is stored. In order to seed the database, the MySQL container references an SQL file, `football_db.sql`, found in the `data` folder at the root of the repository.
+It is important to be aware that the very first time the Compose file starts, the container startup will take a bit longer due to the seeding process.
 
 ### DB configuration
 
@@ -51,7 +52,7 @@ ASPNETCORE_Kestrel__Certificates__Default__Password={CERTIFICATE PASSWORD VALUE}
 MYSQLCONNSTR_FootballDbConnection={MYSQL CONNECTION STRING VALUE}
 ```
 
-> There are additional settings needed for each application, these settings are not sensitive, so they are defined in the `docker-compose.app.yml` file. For more info on these settings, check the README file for each application.
+> There are additional settings needed for each application, these settings are not sensitive, so they can be listed in the `docker-compose.app.yml` file. For more info on these settings, check the README file for each application.
 
 ### Certificates
 
@@ -63,7 +64,7 @@ For the Blazor UI application, we will create a certificate with no password by 
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 3650 -subj "/CN=localhost"
 ```
 
-For the Football.Api application, we will create a certificate, with a password, with the following command at the root of the project folder:
+For the Football.Worker application, we will create a certificate, with a password, with the following command at the root of the project folder:
 
 ```
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=localhost
@@ -91,6 +92,9 @@ Starting the Docker Compose file will run the applications in the following orde
 If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the `docker-compose.app.yml` file and selecting `Compose Up`.
 
 If the extension is not installed, the command, `docker-compose -f docker-compose.app.yml up -d`, can be executed from a terminal set at the root of the repository.
+
+After startup, the Football.Api application will be available at https://localhost:5001.
+The Football.Blazor application will be available at https://localhost.
 
 ## Tests
 
