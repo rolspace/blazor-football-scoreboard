@@ -22,7 +22,7 @@ The preferred option to run the entire system together is to launch all the appl
 The Compose file will start containers for all three applications, including the MySQL database where the game data is stored. In order to seed the database, the MySQL container references an SQL file, `football_db.sql`, found in the `data` folder at the root of the repository.
 It is important to be aware that the very first time the Compose file starts, the container startup will take a bit longer due to the seeding process.
 
-### DB configuration
+### Database configuration
 
 The Compose file expects a `db.env` file at the root of the repository, with the secrets required to run the database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
 
@@ -80,7 +80,7 @@ openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3
 
 Each of these commands will create a cert.pem file and a key.pem file at the root of the respective project. The Docker Compose setup will take care of placing all the files in the correct locations, once it starts.
 
-### Start the containers
+### Compose Up
 
 Starting the Docker Compose file will run the applications in the following order:
 
@@ -96,7 +96,7 @@ If the extension is not installed, the command, `docker-compose -f docker-compos
 After startup, the Football.Api application will be available at https://localhost:5001.
 The Football.Blazor application will be available at https://localhost.
 
-## Tests
+## How to run the tests
 
 ### Preparing the tests
 
