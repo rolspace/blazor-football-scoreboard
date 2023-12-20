@@ -60,7 +60,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred starting the Hub manager");
+            _logger.LogError(ex, "An error occurred starting the background service");
         }
         finally
         {
