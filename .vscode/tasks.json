@@ -272,6 +272,7 @@
                 "target": "base",
                 "dockerfile": "${workspaceFolder}/src/Hosts/Worker/Dockerfile",
                 "context": "${workspaceFolder}",
+                "customOptions": "--no-cache",
                 "pull": true
             },
             "netCore": {
