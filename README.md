@@ -17,14 +17,14 @@ The system is split into three main elements:
 
 For details on how to run each application separately, go to the README file for each of the host C# projects: the API, the Blazor UI, and the Worker. Each application can be started individually using the `dotnet cli`, with the VSCode launch config, or with a Docker container.
 
-The preferred option to run the entire system together is to launch all the applications with a single click, or command, using Docker Compose. The Docker Compose file can be found at the root of the repository, `docker-compose.app.yml`
+The preferred option to run the entire system together is to launch all the applications with a single click, or command, using Docker Compose. The Docker Compose file can be found at the root of the repository, [docker-compose.app.yml](/docker-compose.app.yml)
 
-The Compose file will start containers for all three applications, including the MySQL database where the game data is stored. In order to seed the database, the MySQL container references an SQL file, `football_db.sql`, found in the `data` folder at the root of the repository.
+The Compose file will start containers for all three applications, including the MySQL database where the game data is stored. In order to seed the database, the MySQL container references an SQL file, [football_db.sql](/data/football_db.sql).
 It is important to be aware that the very first time the Compose file starts, the container startup will take a bit longer due to the seeding process.
 
 ### Database configuration
 
-The Compose file expects a `db.env` file at the root of the repository, with the secrets required to run the database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
+The Compose file expects a *db.env* file at the root of the repository, with the secrets required to run the database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
 
 - MYSQL_ROOT_PASSWORD
 - MYSQL_USER
@@ -40,7 +40,7 @@ MYSQL_PASSWORD={MYSQL USER PASSWORD}
 
 ### Application configuration
 
-The Compose file expects an `app.env` file at the root of the repository, with the secrets required to run the Football.Api and Football.Worker applications:
+The Compose file expects an *app.env* file at the root of the repository, with the secrets required to run the Football.Api and Football.Worker applications:
 
 - ASPNETCORE_Kestrel__Certificates__Default__Password: password for the certificates
 - MYSQLCONNSTR_FootballDbConnection: MySQL database connection string
@@ -52,7 +52,8 @@ ASPNETCORE_Kestrel__Certificates__Default__Password={CERTIFICATE PASSWORD VALUE}
 MYSQLCONNSTR_FootballDbConnection={MYSQL CONNECTION STRING VALUE}
 ```
 
-> There are additional settings needed for each application, these settings are not sensitive, so they can be listed in the `docker-compose.app.yml` file. For more info on these settings, check the README file for each application.
+> [!IMPORTANT]
+> There are additional settings needed for each application, these settings are not sensitive, so they can be listed in the [docker-compose.app.yml](/docker-compose.app.yml) file. For more info on these settings, check the README file for each application.
 
 ### Certificates
 
@@ -70,7 +71,8 @@ For the Football.Worker application, we will create a certificate, with a passwo
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=localhost
 ```
 
-> The command will prompt you to enter a password...this is the same password that should be used for the ASPNETCORE_Kestrel__Certificates__Default__Password secret. Since the secrets file is shared by all applications, use the same password for the certificates needed by the Football.Worker and Football.Api applications (that's ok in this case, this is just a project for playing around).
+> [!IMPORTANT]
+> The command will prompt you to enter a password...this is the same password that should be used for the ASPNETCORE_Kestrel__Certificates__Default__Password secret. As a convenience, use the same password for the local certificates (that's ok in this case, this is a project for playing around).
 
 There is a special case with the certificate for the Football.Api container. Inside the container network, the Football.Worker hosted service will call the HTTP API provided by the Football.Api container. This call requires HTTPS, so it is necessary to create the certificate for the Football.Api application with the name of the domain inside the container network by running the command at the root of the project:
 
@@ -89,7 +91,7 @@ Starting the Docker Compose file will run the applications in the following orde
 3. Football.Blazor
 4. Football.Worker
 
-If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the `docker-compose.app.yml` file and selecting `Compose Up`.
+If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the [docker-compose.app.yml](/docker-compose.app.yml) file and selecting `Compose Up`.
 
 If the extension is not installed, the command, `docker-compose -f docker-compose.app.yml up -d`, can be executed from a terminal set at the root of the repository.
 
@@ -104,17 +106,17 @@ The solution contains both unit tests and integration tests.
 
 In order to run the integration tests successfully, a connection to a MySQL database is required.
 
-A test database is provided with the Docker Compose file found in the integration tests project directory, `tests/Football.Application.IntegrationTests/docker-compose.testdb.yml`.
+The test database can be run via the Docker Compose file found in the integration tests project directory, [docker-compose.testdb.yml](/tests/Football.Application.IntegrationTests/docker-compose.testdb.yml).
 
-The Compose file references an SQL file, `football_testdb.sql`, which is used to seed data to the test database. The SQL file can be found in the `data` folder in the integration tests project directory. The very first time the Compose file runs, the startup will take a bit longer due to the seeing process.
+The Compose file references an SQL file, [football_testdb.sql](/tests/Football.Application.IntegrationTests/data/football_testdb.sql), which is used to seed data to the test database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
 
-The Compose file expects a `db.env` file with the secrets required to run the test database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
+The Compose file requires an env file with the name *db.env*. This file should be at the [root of the integration tests project](/tests/Football.Application.IntegrationTests/). The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
 
 - MYSQL_ROOT_PASSWORD
 - MYSQL_USER
 - MYSQL_PASSWORD
 
-The contents of the file should be similar to the example below:
+The contents of the env file should be similar to the example below:
 
 ```
 MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
@@ -122,7 +124,7 @@ MYSQL_USER={MYSQL USER IDENTIFIER}
 MYSQL_PASSWORD={MYSQL USER PASSWORD}
 ```
 
-If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the `docker-compose.testdb.yml` file and selecting `Compose Up`.
+If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the [docker-compose.testdb.yml](/tests/Football.Application.IntegrationTests/docker-compose.testdb.yml) file and selecting `Compose Up`.
 
 If the extension is not installed, the command, `docker-compose -f docker-compose.testdb.yml up -d` can be executed from a terminal set to the root of the integration tests project.
 
@@ -132,7 +134,7 @@ It is important to note that the test database runs on a different port (3307) t
 
 ### Running the tests
 
-1. Set the current working directory in your terminal of choice to the root of the repository, where the `Scoreboard.sln` solution file is located.
+1. Set the current working directory in your terminal of choice to the root of the repository, where the [Scoreboard.sln](/Scoreboard.sln) solution file is located.
 
 2. Run the tests with the `dotnet test` command.
 
@@ -142,7 +144,7 @@ It is important to note that the test database runs on a different port (3307) t
 
 2. Install the dotnet report generator tool globally with the command, `dotnet tool install dotnet-reportgenerator-globaltool`.
 
-3. Set the current working directory in your terminal of choice to the root of the repository, where the `Scoreboard.sln` solution file is located.
+3. Set the current working directory in your terminal of choice to the root of the repository, where the [Scoreboard.sln](/Scoreboard.sln) solution file is located.
 
 4. Run the tests with the command, `dotnet-coverage collect 'dotnet test --no-restore' -f cobertura  -o 'coverage.xml'`. It is possible to change the report output by [changing the `-f` and `-o` parameters from the collect command](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage#dotnet-coverage-collect).
 
