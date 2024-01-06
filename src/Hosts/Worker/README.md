@@ -30,7 +30,7 @@ The Compose file requires a secrets file with the name *db.env*. This file shoul
 
 ### Application launch
 
-Once the database is up and running, the Football.Worker web application can be run from:
+Once the database is up and running, the Football.Worker web application can be launched from:
 
 1. A terminal set to the root of the project and executing the command, `dotnet run`.
 

@@ -27,7 +27,7 @@ The Compose file requires an env file with the name *db.env*. This file should b
 
 ### Application launch
 
-Once the database is up and running, the Football.Api web application can be run from:
+Once the database is up and running, the Football.Api web application can be launched from:
 
 1. A terminal set to the root of the project and executing the command, `dotnet run`.
 
