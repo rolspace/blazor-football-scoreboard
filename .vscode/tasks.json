@@ -135,9 +135,6 @@
                     "Cors__AllowedMethods": "GET",
                     "Scoreboard__Week": "1"
                 },
-                "envFiles": [
-                    "${workspaceFolder}/production.env"
-                ],
                 "network": "footballscoreboard_db_compose_dbnet"
             },
             "netCore": {
@@ -355,9 +352,6 @@
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/plays",
                     "Scoreboard__Week": "1"
                 },
-                "envFiles": [
-                    "${workspaceFolder}/production.env"
-                ],
                 "network": "footballscoreboard_db_compose_dbnet"
             },
             "netCore": {
