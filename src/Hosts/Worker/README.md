@@ -48,7 +48,7 @@ Once the database is up and running, the Football.Worker web application can be 
 
 3. Select the *Launch Docker: Football Scoreboard Worker* launch config from the VSCode *Run and Debug* menu.
 
-    The Docker container needs a certificate and its key in order to run with HTTPS. Before starting the container make sure that these files are created by running the command at the root of the project folder:
+    In order to setup the SSL certificate for the application, before launching the container, make sure that certificate and key files are created by running this command at the root of the project folder:
 
     ```
     openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=localhost"
@@ -57,7 +57,7 @@ Once the database is up and running, the Football.Worker web application can be 
     The command will prompt you to create a password for the certificate. It is important to remember this password as it will be used later. It is also possible to use an empty password. Once this is done, there should be a *cert.pem* and a *key.pem* file at the root of the project.
 
     > [!IMPORTANT]
-    > Keep in mind that that when running the whole system together, the Football.Worker application needs to call the Football.Api application. In order for this to work properly, make sure that the [Football.Api certificate](https://github.com/rolspace/blazor-football-scoreboard/tree/main/src/Hosts/Api#application-launch) is also created before the container is built.
+    > Keep in mind that that when running the whole system together, the Football.Worker application needs to call the Football.Api application. In order for this to work properly, make sure that the [certificate for the Football.Api application](https://github.com/rolspace/blazor-football-scoreboard/tree/main/src/Hosts/Api#application-launch) is also created before the container is launched.
 
     Once the launch config starts, the application will run using *Development* as the **ASPNETCORE_ENVIRONMENT**.
     The container image will be built using the [Dockerfile](/src/Hosts/Worker/Dockerfile) at the root of the project. The variables required for the application to run are defined in the  *docker-run-worker: debug* task, in the [tasks.json](/tasks.json) file:

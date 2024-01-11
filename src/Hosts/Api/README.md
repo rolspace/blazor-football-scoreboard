@@ -47,13 +47,13 @@ Once the database is up and running, the Football.Api web application can be lau
 
 3. Select the *Launch Docker: Football Scoreboard API* launch config from the VSCode *Run and Debug* menu.
 
-    The Docker container needs a certificate and its key in order to run with HTTPS. Before starting the container make sure that these files are created by running the command at the root of the project folder:
+    In order to setup the SSL certificate for the application, before launching the container, make sure that certificate and key files are created by running this command at the root of the project folder:
 
     ```
     openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=footballscoreboard_api"
     ```
 
-    The *CN (Common Name)* value is set to `footballscoreboard_api`. This is needed to allow container to container calls within the container network when running all the applications together. This is also the reason why the `dev-certs` pfx certificate is not used, as it does not support setting the CN value.
+    The *CN (Common Name)* value is set to `footballscoreboard_api`. This is needed to allow container to container calls within the container network when running all the applications together. This is also the reason why the `dev-certs` PFX certificate is not used, as it does not support setting the CN value.
 
     The command will prompt you to create a password for the certificate. It is important to remember this password as it will be used later. It is also possible to use an empty password. Once this is done, there should be a *cert.pem* and a *key.pem* file at the root of the project.
 
