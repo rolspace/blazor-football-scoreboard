@@ -73,31 +73,17 @@ Once the database is up and running, the Football.Api web application can be lau
 
 Regardless of the method used to run the application locally, it will be available at *https&#65279;://localhost:5001*.
 
-## How to run the tests
+## How to run the unit tests
 
-### Running the tests
+Refer to the [Football.Api.UnitTests README](/tests/Football.Api.UnitTests/README.md) for details.
 
-1. Set the current working directory in your terminal of choice to the root of the repository, where the [Scoreboard.sln](/Scoreboard.sln) solution file is located.
+## Additional Details
 
-2. Run the tests with the `dotnet test` command.
-
-### Running the tests with coverage
-
-1. Install the dotnet coverage tool globally with the command, `dotnet tool install --global dotnet-coverage`.
-
-2. Install the dotnet report generator tool globally with the command, `dotnet tool install dotnet-reportgenerator-globaltool`.
-
-3. Set the current working directory in your terminal of choice to the root of the repository, where the [Scoreboard.sln](/Scoreboard.sln) solution file is located.
-
-4. Run the tests with the command, `dotnet-coverage collect 'dotnet test --no-restore' -f cobertura  -o 'coverage.xml'`. It is possible to change the report output by [changing the `-f` and `-o` parameters from the collect command](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage#dotnet-coverage-collect).
-
-5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:./coveragereport" "-assemblyfilters:+Football.*;-Football.*Tests";`. The HTML coverage report will be found in the `coveragereport` folder at the root of the repository, open the `index.html` file on your browser of choice.
-
-## HTTP API
+### HTTP API
 
 The API exposes the following endpoints:
 
-### GET /api/v1/games?week={week}
+#### GET /api/v1/games?week={week}
 
 Retrieves all the games for a given week parameter, where the value of week is a number between 1 and 17.
 
@@ -105,11 +91,11 @@ Returns a 400 if no week parameter is provided.
 
 Returns a 404 if no games are found for the given week.
 
-### GET /api/v1/games/today
+#### GET /api/v1/games/today
 
 Retrieves all the games scheduled for today.
 
-### GET /api/v1/games/{id}
+#### GET /api/v1/games/{id}
 
 Retrieves the game data for the specified id.
 
@@ -117,7 +103,7 @@ Returns a 400 if no id parameter is provided.
 
 Returns a 404 if the id cannot be found.
 
-### GET /api/v1/games/{id}/stats
+#### GET /api/v1/games/{id}/stats
 
 Retrieves the game statistics for the specified id.
 
@@ -125,8 +111,8 @@ Returns a 400 if no id parameter is provided.
 
 Returns a 404 if the id cannot be found.
 
-## SignalR Hub
+### SignalR Hub
 
-### /hub/plays
+#### /hub/plays
 
 The hub endpoint exposes the method used by the [Worker](./src/Hosts/Football.Worker) game simulation that sends play data to the [Blazor](./src/Hosts/Football.Blazor) web clients.

@@ -134,7 +134,7 @@ It is important to note that the test database runs on a different port (3307) t
 
 ### Running the tests
 
-1. Set the current working directory in your terminal of choice to the root of the repository, where the [Scoreboard.sln](/Scoreboard.sln) solution file is located.
+1. Set the current working directory in your terminal of choice to the [root of the repository](/).
 
 2. Run the tests with the `dotnet test` command.
 
@@ -144,8 +144,8 @@ It is important to note that the test database runs on a different port (3307) t
 
 2. Install the dotnet report generator tool globally with the command, `dotnet tool install dotnet-reportgenerator-globaltool`.
 
-3. Set the current working directory in your terminal of choice to the root of the repository, where the [Scoreboard.sln](/Scoreboard.sln) solution file is located.
+3. Set the current working directory in your terminal of choice to the [root of the repository](/).
 
 4. Run the tests with the command, `dotnet-coverage collect 'dotnet test --no-restore' -f cobertura  -o 'coverage.xml'`. It is possible to change the report output by [changing the `-f` and `-o` parameters from the collect command](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage#dotnet-coverage-collect).
 
-5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:./coveragereport" "-assemblyfilters:+Football.*;-Football.*Tests";`. The HTML coverage report will be found in the `coveragereport` folder at the root of the repository, open the `index.html` file on your browser of choice.
+5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:./coveragereport" "-assemblyfilters:+Football.*;-Football.*Tests";`. The HTML coverage report will be found in the `coveragereport` folder at the [root of the repository](/), open the `index.html` file on your browser of choice to view the results.
