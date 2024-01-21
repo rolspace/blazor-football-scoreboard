@@ -32,7 +32,7 @@ The Compose file requires a secrets file with the name *db.env*. This file shoul
 
 Once the database is up and running, the Football.Worker web application can be launched from:
 
-1. A terminal set to the root of the project and executing the command, `dotnet run`.
+1. A terminal set to the root of the project. On this terminal, run the command, `dotnet run`.
 
     The application will run using *Localhost* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Worker/appsettings.Localhost.json) configuration file. The application settings require the following values:
     - **Hub:HubUrl**: URL for the SignalR Hub that will receive play data.
@@ -42,11 +42,11 @@ Once the database is up and running, the Football.Worker web application can be 
 
     For HTTPS, set up the developer certificate with the `dotnet dev-certs` command.
 
-2. Select the *Launch Web: Football Scoreboard Worker* launch config from the VSCode Run & Debug menu.
+2. The VSCode *Run & Debug* menu. Run the *Launch Web: Football Scoreboard Worker* launch config.
 
     The application will run using the same approach as option #1, this is just a convenient way to launch directly from VSCode.
 
-3. Select the *Launch Docker: Football Scoreboard Worker* launch config from the VSCode *Run and Debug* menu.
+3. The VSCode *Run and Debug* menu. Run the *Launch Docker: Football Scoreboard Worker* launch config.
 
     In order to setup the SSL certificate for the application, before launching the container, make sure that certificate and key files are created by running this command at the root of the project folder:
 

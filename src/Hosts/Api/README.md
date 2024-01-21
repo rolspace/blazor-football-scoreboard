@@ -29,7 +29,7 @@ The Compose file requires an env file with the name *db.env*. This file should b
 
 Once the database is up and running, the Football.Api web application can be launched from:
 
-1. A terminal set to the root of the project and executing the command, `dotnet run`.
+1. A terminal set to the root of the project. On this terminal, run the command, `dotnet run`.
 
     The application will run using *Localhost* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Api/appsettings.Localhost.json) configuration file. The application settings require the following values:
     - **Cors:PolicyName**: CORS policy name defined for the web application.
@@ -41,11 +41,11 @@ Once the database is up and running, the Football.Api web application can be lau
 
     For HTTPS, set up the developer certificate with the `dotnet dev-certs` command.
 
-2. Select the *Launch Web: Football Scoreboard API* launch config from the VSCode *Run & Debug* menu.
+2. The VSCode *Run & Debug* menu. Run the *Launch Web: Football Scoreboard API* launch config.
 
     The application will run using the same approach as option #1, this is just a convenient way to launch directly from VSCode.
 
-3. Select the *Launch Docker: Football Scoreboard API* launch config from the VSCode *Run and Debug* menu.
+3. The VSCode *Run and Debug* menu. Run the *Launch Docker: Football Scoreboard API* launch config.
 
     In order to setup the SSL certificate for the application, before launching the container, make sure that certificate and key files are created by running this command at the root of the project folder:
 

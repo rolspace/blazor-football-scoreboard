@@ -17,7 +17,7 @@ Before starting the Blazor web application, it is important to know that it reli
 
 The Football.Blazor application can be launched from:
 
-1. A terminal set to the root of the project and executing the command, `dotnet run`.
+1. A terminal set to the root of the project. On this terminal, run the command, `dotnet run`.
 
     The application will run using *Localhost* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Blazor/appsettings.Localhost.json) configuration file. The application settings require the following values:
         - **Api_ApiBaseUrl**: Base URL for the HTTP API that will be called by the Blazor application.
@@ -25,11 +25,11 @@ The Football.Blazor application can be launched from:
 
     For HTTPS, set up the developer certificate with the `dotnet dev-certs` command. Once the application is running, it will be available at *https&#65279;://localhost:5002*
 
-2. Select the *Launch Web: Football Scoreboard Blazor WebAssembly* launch config from the VSCode Run & Debug menu.
+2. The VSCode *Run & Debug* menu. Run the *Launch Web: Football Scoreboard Blazor WebAssembly* launch config.
 
     The application will run using the same approach as option #1, this is just a convenient way to launch directly from VSCode.
 
-3. Select the *Launch Docker: Football Scoreboard Blazor WebAssembly* launch config from the VSCode *Run and Debug* menu.
+3. The VSCode *Run and Debug* menu. Run the *Launch Docker: Football Scoreboard Blazor WebAssembly* launch config.
 
     The Docker container for the Blazor application runs a little differently than the previous options.
     The application runs via Nginx using the setup provided in the [tasks.json](/.vscode/tasks.json) file.

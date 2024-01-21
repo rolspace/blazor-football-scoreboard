@@ -104,7 +104,7 @@ The Football.Blazor application will be available at https://localhost.
 
 The solution contains both unit tests and integration tests.
 
-In order to run the integration tests successfully, a connection to a MySQL database is required.
+The integration tests require a database connection in order to run successfully. The Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database via Docker.
 
 The test database can be run via the Docker Compose file found in the integration tests project directory, [docker-compose.testdb.yml](/tests/Football.Application.IntegrationTests/docker-compose.testdb.yml).
 
