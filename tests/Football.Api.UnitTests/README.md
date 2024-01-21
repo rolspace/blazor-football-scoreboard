@@ -1,6 +1,6 @@
 # Blazor Football Scoreboard Football.Api Unit Tests
 
-This test project executes the unit tests for the Football.Api web application project.
+This test project executes the unit tests for the [Football.Api](/src/Hosts/Api/) web application project.
 
 ## Requirements
 
