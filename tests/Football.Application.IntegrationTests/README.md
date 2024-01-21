@@ -1,25 +1,46 @@
-# Football.Application Integration Tests
+# Blazor Football Scoreboard Football.Application Integration Tests
 
-## Test Preparation
+This test project executes the integration tests for the [Football.Application](/src/Application/) assembly project.
 
-The integration tests require a connection to a MySQL database in order to run successfully.
+## Requirements
 
-The database can be started with the Compose file found in the project directory, `docker-compose.testdb.yml`, with the command, `docker-compose -f docker-compose.testdb.yml up -d`
+- .NET 6+ SDK
+- Docker 4.30+
 
-The Compose file references an SQL file, `football_testdb.sql`, to seed data into the test database. The sql file can be found in the `data` folder in the project directory.
+## How to run the tests
 
-## Run the tests
+### Preparing the test database
 
-1. Set the current working directory in your terminal of choice to the root of the project, where the `Football.Application.IntegrationTests.csproj` file is located.
+The integration tests require a database connection in order to run successfully. The Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database via Docker.
 
-2. Run the tests with the `dotnet test` command.
+The Compose file references an SQL file, [football_testdb.sql](/data/testdb/football_testdb.sql), which is used to seed data to the test database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
 
-## Run the tests with coverage
+The Compose file requires an env file with the name *testdb.env*. This file must be located at the [root of the repository](/). The env file must contain some of the environment values required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
 
-1. Install the dotCover global tool, `dotnet tool install JetBrains.dotCover.GlobalTool -g`
+- MYSQL_ROOT_PASSWORD
+- MYSQL_USER
+- MYSQL_PASSWORD
 
-2. Set the current working directory in your terminal of choice to the root of the project, where the `Football.Application.IntegrationTests.csproj` file is located.
+The test database for the integration tests that can be launched from:
 
-3. Run the tests with the `dotnet dotcover test --dcReportType=HTML --dcFilters="-:MySqlConnector"` command.
+- A terminal set to the [root of the repository](/). On this terminal, run the command, `docker-compose -f docker-compose.testdb.yml up -d`
 
-4. The coverage report can be viewed by opening the `dotCover.Output.html` file in a browser window.
+- The VSCode Explorer, assuming the Docker extension is installed. Simply right click on the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and select `Compose Up`.
+
+### Running the tests
+
+Once the test database is ready, run the tests by:
+
+1. Opening a terminal and setting the working directory to [the root of the integration test project](/tests/Football.Application.IntegrationTests/).
+
+2. In the terminal, run the tests with the `dotnet test` command.
+
+### Running the tests with coverage
+
+1. Install the dotCover tool globally with the command, `dotnet tool install JetBrains.dotCover.GlobalTool -g`
+
+2. In a terminal, set the working directory to [the root of the integration test project](/tests/Football.Application.IntegrationTests/).
+
+3. Run the command, `dotnet dotcover test --dcReportType=HTML --dcFilters="-:MySqlConnector"`.
+
+The coverage report can be viewed by opening the `dotCover.Output.html` file in a browser window.
