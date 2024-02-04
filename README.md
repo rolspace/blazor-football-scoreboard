@@ -24,7 +24,7 @@ It is important to be aware that the very first time the Compose file starts, th
 
 ### Database configuration
 
-The Compose file expects a *db.env* file at the root of the repository, with the secrets required to run the database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
+The Compose file expects a file with the name *.env.db* at the root of the repository, with the secrets required to run the database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
 
 - MYSQL_ROOT_PASSWORD
 - MYSQL_USER
@@ -40,7 +40,7 @@ MYSQL_PASSWORD={MYSQL USER PASSWORD}
 
 ### Application configuration
 
-The Compose file expects an *app.env* file at the root of the repository, with the secrets required to run the Football.Api and Football.Worker applications:
+The Compose file expects a file with the name *.env.app* at the root of the repository, with the secrets required to run the Football.Api and Football.Worker applications:
 
 - ASPNETCORE_Kestrel__Certificates__Default__Password: password for the certificates
 - MYSQLCONNSTR_FootballDbConnection: MySQL database connection string
@@ -106,11 +106,9 @@ The solution contains both unit tests and integration tests.
 
 The integration tests require a database connection in order to run successfully. The Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database via Docker.
 
-The test database can be run via the Docker Compose file found in the integration tests project directory, [docker-compose.testdb.yml](/tests/Football.Application.IntegrationTests/docker-compose.testdb.yml).
+The Compose file references an SQL file, [football_testdb.sql](/scripts/testdb/football_testdb.sql), which is used to seed data to the test database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
 
-The Compose file references an SQL file, [football_testdb.sql](/tests/Football.Application.IntegrationTests/data/football_testdb.sql), which is used to seed data to the test database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
-
-The Compose file requires an env file with the name *db.env*. This file should be at the [root of the integration tests project](/tests/Football.Application.IntegrationTests/). The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
+The Compose file requires an env file with the name *.env.testdb* at the root of the repository. The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
 
 - MYSQL_ROOT_PASSWORD
 - MYSQL_USER
@@ -124,7 +122,7 @@ MYSQL_USER={MYSQL USER IDENTIFIER}
 MYSQL_PASSWORD={MYSQL USER PASSWORD}
 ```
 
-If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the [docker-compose.testdb.yml](/tests/Football.Application.IntegrationTests/docker-compose.testdb.yml) file and selecting `Compose Up`.
+If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and selecting `Compose Up`.
 
 If the extension is not installed, the command, `docker-compose -f docker-compose.testdb.yml up -d` can be executed from a terminal set to the root of the integration tests project.
 

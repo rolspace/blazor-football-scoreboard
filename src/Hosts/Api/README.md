@@ -18,9 +18,10 @@ A database is provided with the Docker Compose file found at the root of the rep
 
 The containers in the Compose file can be run in VSCode by right-clicking the file and selecting *Compose Up*, assuming the Docker extension is installed in VSCode. Otherwise, the command, `docker-compose -f docker-compose.db.yml up -d`, can be executed from a terminal at the root of the repository.
 
-The Compose file references an SQL file, [football_db.sql](/data/football_db.sql), which seeds data to the database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
+The Compose file references an SQL file, [football_db.sql](/scripts/appdb/football_db.sql), which seeds data to the database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
 
-The Compose file requires an env file with the name *db.env*. This file should be at the root of the repository. The file must define the following environment variables, as they are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
+The Compose file expects a file with the name *.env.db* at the root of the repository. The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
+
 - MYSQL_ROOT_PASSWORD
 - MYSQL_USER
 - MYSQL_PASSWORD
