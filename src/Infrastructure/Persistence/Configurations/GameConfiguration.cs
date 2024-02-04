@@ -15,16 +15,20 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
         entityTypeBuilder.Property(e => e.Id).HasColumnName("id");
 
         entityTypeBuilder.Property(e => e.AwayTeam)
-            .HasColumnName("away_team")
+            .IsRequired()
+            .IsUnicode(false)
             .HasMaxLength(3)
-            .IsUnicode(false);
+            .HasColumnName("away_team");
 
         entityTypeBuilder.Property(e => e.HomeTeam)
-            .HasColumnName("home_team")
+            .IsRequired()
+            .IsUnicode(false)
             .HasMaxLength(3)
-            .IsUnicode(false);
+            .HasColumnName("home_team");
 
-        entityTypeBuilder.Property(e => e.Week).HasColumnName("week");
+        entityTypeBuilder.Property(e => e.Week)
+            .IsRequired()
+            .HasColumnName("week");
 
         entityTypeBuilder.Property(e => e.State).HasColumnName("state_type").HasConversion<string>();
 

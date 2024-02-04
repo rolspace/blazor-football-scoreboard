@@ -8,9 +8,9 @@ public class Game
 
     public int Week { get; set; }
 
-    public string HomeTeam { get; set; } = string.Empty;
+    public string HomeTeam { get; set; } = null!;
 
-    public string AwayTeam { get; set; } = string.Empty;
+    public string AwayTeam { get; set; } = null!;
 
     public int? Quarter { get; set; }
 
