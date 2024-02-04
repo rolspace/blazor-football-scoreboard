@@ -23,7 +23,8 @@ The containers in the Compose file can be run in VSCode by right-clicking the fi
 
 The Compose file references an SQL file, [football_db.sql](/data/football_db.sql), which seeds data to the database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
 
-The Compose file requires a secrets file with the name *db.env*. This file should be at the rooot of the repository. The file must define the following environment variables, as they are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
+The Compose file expects a file with the name *.env.db* at the root of the repository. The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
+
 - MYSQL_ROOT_PASSWORD
 - MYSQL_USER
 - MYSQL_PASSWORD

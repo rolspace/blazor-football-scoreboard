@@ -15,7 +15,7 @@ The integration tests require a database connection in order to run successfully
 
 The Compose file references an SQL file, [football_testdb.sql](/data/testdb/football_testdb.sql), which is used to seed data to the test database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
 
-The Compose file requires an env file with the name *testdb.env*. This file must be located at the [root of the repository](/). The env file must contain some of the environment values required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
+The Compose file expects a file with the name *.env.testdb* at the root of the repository. The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
 
 - MYSQL_ROOT_PASSWORD
 - MYSQL_USER
