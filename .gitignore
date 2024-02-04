@@ -365,8 +365,8 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # .env files used by VSCode tasks
-*.env
+.env*
 
 # Local mysql database locations
-**/mysql/
-**/mysql-test/
+**/data/appdb/
+**/data/testdb/
