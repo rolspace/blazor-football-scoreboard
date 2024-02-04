@@ -9,14 +9,14 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: football_db
+      MYSQL_DATABASE: footballscoreboard_db
     env_file:
       - db.env
     volumes:
-      - ./mysql:/var/lib/mysql
-      - ./data:/docker-entrypoint-initdb.d
+      - ./data/appdb:/var/lib/mysql
+      - ./scripts/appdb:/docker-entrypoint-initdb.d
     networks:
-      - appnet
+      - app_net
 
   api:
     container_name: footballscoreboard_api
@@ -42,7 +42,7 @@ services:
     depends_on:
       - db
     networks:
-      - appnet
+      - app_net
 
   blazor:
     container_name: footballscoreboard_blazor
@@ -83,9 +83,9 @@ services:
       - api
       - blazor
     networks:
-      - appnet
+      - app_net
     entrypoint: [ "sh", "-c", "sleep 1m; dotnet Football.Worker.dll" ]
 
 networks:
-  appnet:
+  app_net:
     driver: bridge

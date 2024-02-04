@@ -9,14 +9,14 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: football_db
+      MYSQL_DATABASE: footballscoreboard_db
     env_file:
       - db.env
     volumes:
-      - ./mysql:/var/lib/mysql
-      - ./data:/docker-entrypoint-initdb.d
+      - ./data/appdb:/var/lib/mysql
+      - ./scripts/appdb:/docker-entrypoint-initdb.d
     networks:
-      - dbnet
+      - db_net
 
   db_viewer:
     container_name: footballscoreboard_db_viewer
@@ -24,10 +24,10 @@ services:
     ports:
       - 8080:8080
     networks:
-      - dbnet
+      - db_net
     depends_on:
       - db
 
 networks:
-  dbnet:
+  db_net:
     driver: bridge

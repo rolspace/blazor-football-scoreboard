@@ -13,8 +13,8 @@ services:
     env_file:
       - .env.testdb
     volumes:
-      - ./testdb:/var/lib/mysql
-      - ./tests/Football.Application.IntegrationTests/data:/docker-entrypoint-initdb.d
+      - ./data/testdb:/var/lib/mysql
+      - ./scripts/testdb:/docker-entrypoint-initdb.d
     networks:
       - testdb_net
 
