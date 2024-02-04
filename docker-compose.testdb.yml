@@ -11,12 +11,12 @@ services:
     environment:
       MYSQL_DATABASE: football_testdb
     env_file:
-      - db.env
+      - .env.testdb
     volumes:
-      - ./mysql-test:/var/lib/mysql
-      - ./data:/docker-entrypoint-initdb.d
+      - ./testdb:/var/lib/mysql
+      - ./tests/Football.Application.IntegrationTests/data:/docker-entrypoint-initdb.d
     networks:
-      - testdbnet
+      - testdb_net
 
   testdb_viewer:
     container_name: footballscoreboard_testdb_viewer
@@ -24,10 +24,10 @@ services:
     ports:
       - 8081:8080
     networks:
-      - testdbnet
+      - testdb_net
     depends_on:
       - testdb
 
 networks:
-  testdbnet:
+  testdb_net:
     driver: bridge
