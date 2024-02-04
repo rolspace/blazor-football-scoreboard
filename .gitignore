@@ -368,5 +368,4 @@ FodyWeavers.xsd
 .env*
 
 # Local mysql database locations
-**/data/appdb/
-**/data/testdb/
+data
