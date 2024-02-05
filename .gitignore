@@ -369,3 +369,6 @@ FodyWeavers.xsd
 
 # Local mysql database locations
 data
+
+# Path for custom application certificates
+certs
