@@ -11,7 +11,7 @@ services:
     environment:
       MYSQL_DATABASE: footballscoreboard_db
     env_file:
-      - db.env
+      - .env.db
     volumes:
       - ./data/appdb:/var/lib/mysql
       - ./scripts/appdb:/docker-entrypoint-initdb.d
