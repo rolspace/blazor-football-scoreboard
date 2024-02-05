@@ -93,17 +93,24 @@
                     "ASPNETCORE_ENVIRONMENT": "Development",
                     "ASPNETCORE_URLS": "https://+",
                     "ASPNETCORE_HTTPS_PORT": "5001",
-                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
-                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
+                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Api_Cert.pem",
+                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/Api_CertKey.pem",
                     "Cors__PolicyName": "WebClientCorsPolicy",
                     "Cors__AllowedOrigins": "https://localhost",
                     "Cors__AllowedMethods": "GET",
                     "Scoreboard__Week": "1"
                 },
-                "envFiles": [
-                    "${workspaceFolder}/app.env"
+                "volumes": [
+                    {
+                        "localPath": "./certs/api",
+                        "containerPath": "/https",
+                        "permissions": "ro"
+                    }
                 ],
-                "network": "footballscoreboard_db_compose_dbnet"
+                "envFiles": [
+                    "${workspaceFolder}/.env.app"
+                ],
+                "network": "footballscoreboard_db_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj",
@@ -128,14 +135,14 @@
                     "ASPNETCORE_ENVIRONMENT": "Production",
                     "ASPNETCORE_URLS": "https://+",
                     "ASPNETCORE_HTTPS_PORT": "5001",
-                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
-                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
+                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Api_Cert.pem",
+                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/Api_CertKey.pem",
                     "Cors__PolicyName": "WebClientCorsPolicy",
                     "Cors__AllowedOrigins": "https://localhost",
                     "Cors__AllowedMethods": "GET",
                     "Scoreboard__Week": "1"
                 },
-                "network": "footballscoreboard_db_compose_dbnet"
+                "network": "footballscoreboard_db_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
