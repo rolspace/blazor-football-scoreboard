@@ -2,59 +2,61 @@ name: build-test
 run-name: Run build and tests
 
 on:
-    push:
-        paths-ignore:
-            - .vscode/**
-            - data/**
-            - '**/*.md'
-            - README.md
-            - .dockerignore
-            - .editorconfig
-            - Dockerfile
-            - docker-compose
+  push:
+    paths-ignore:
+      - '**/*.md'
+      - '**/Dockerfile'
+      - .vscode/**
+      - .dockerignore
+      - .editorconfig
+      - docker-compose*
+      - README.md
 
 concurrency: ${{ github.workflow }}
 
 jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                dotnet-version: ['6.0.x']
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x']
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-            - name: Create test database
-              run: |
-                docker pull mysql:8.0.28
-                docker run --name footballscoreboard_testdb -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }} -e MYSQL_USER=${{ secrets.DB_USER }} -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} -e MYSQL_DATABASE=${{ vars.DB_NAME }} -p 3306:3306 -v ${{github.workspace}}/tests/Football.Application.IntegrationTests/data:/docker-entrypoint-initdb.d -d mysql:8.0.28
+      - name: Create test database
+        env:
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          docker pull mysql:8.0.28
+          docker run --name footballscoreboard_testdb -e MYSQL_ROOT_PASSWORD="$DB_ROOT_PASSWORD" -e MYSQL_USER="$DB_USER" -e MYSQL_PASSWORD="$DB_PASSWORD" -e MYSQL_DATABASE=${{ vars.DB_NAME }} -p 3306:3306 -v ${{github.workspace}}/scripts/testdb:/docker-entrypoint-initdb.d -d mysql:8.0.28
 
-            - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-              uses: actions/setup-dotnet@v3
-              with:
-                dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
 
-            - name: Restore
-              run: |
-                dotnet restore
+      - name: Restore
+        run: |
+          dotnet restore
 
-            - name: Build
-              run: |
-                dotnet build --configuration Release --no-restore
+      - name: Build
+        run: |
+          dotnet build --configuration Release --no-restore
 
-            - name: Run tests
-              env:
-                MYSQLCONNSTR_FootballDbConnection: Server=localhost;Database=${{ vars.DB_NAME }};Uid=${{ secrets.DB_USER }};Pwd=${{ secrets.DB_PASSWORD }};
-              run: |
-                dotnet tool install --global dotnet-coverage
-                dotnet-coverage collect 'dotnet test --no-restore' -f xml  -o 'coverage.xml'
+      - name: Run tests
+        env:
+          MYSQLCONNSTR_FootballDbConnection: Server=localhost;Database=${{ vars.DB_NAME }};Uid=${{ secrets.DB_USER }};Pwd=${{ secrets.DB_PASSWORD }};
+        run: |
+          dotnet tool install --global dotnet-coverage
+          dotnet-coverage collect 'dotnet test --no-restore' -f xml  -o 'coverage.xml'
 
-            - name: Upload coverage
-              uses: actions/upload-artifact@v3
-              with:
-                path: |
-                  coverage.xml
-
+      - name: Upload coverage
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            coverage.xml
