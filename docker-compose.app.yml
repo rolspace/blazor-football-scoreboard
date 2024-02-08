@@ -38,7 +38,7 @@ services:
       Cors__AllowedMethods: GET
       Week: 1
     env_file:
-      - env.app
+      - env.api
     depends_on:
       - db
     networks:

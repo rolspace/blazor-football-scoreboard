@@ -108,7 +108,7 @@
                     }
                 ],
                 "envFiles": [
-                    "${workspaceFolder}/.env.app"
+                    "${workspaceFolder}/.env.api"
                 ],
                 "network": "footballscoreboard_db_compose_db_net"
             },
