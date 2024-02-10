@@ -2,10 +2,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 443
 
-COPY src/Hosts/Worker/cert.pem /https/cert.pem
-COPY src/Hosts/Worker/key.pem /https/key.pem
-COPY src/Hosts/Api/cert.pem /etc/ssl/certs/FootballApi-cert.pem
-
 RUN update-ca-certificates --verbose --fresh
 
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
