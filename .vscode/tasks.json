@@ -102,7 +102,7 @@
                 },
                 "volumes": [
                     {
-                        "localPath": "./certs/api",
+                        "localPath": "${workspaceFolder}/certs/api",
                         "containerPath": "/https",
                         "permissions": "ro"
                     }
@@ -321,15 +321,26 @@
                     "ASPNETCORE_ENVIRONMENT": "Development",
                     "ASPNETCORE_URLS": "https://+",
                     "ASPNETCORE_HTTPS_PORT": "5003",
-                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
-                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
+                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Football.Worker.pfx",
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/plays",
                     "Scoreboard__Week": "1"
                 },
                 "envFiles": [
-                    "${workspaceFolder}/app.env"
+                    "${workspaceFolder}/.env.worker"
                 ],
-                "network": "footballscoreboard_db_compose_dbnet"
+                "volumes": [
+                    {
+                        "localPath": "${workspaceFolder}/certs/api/Api_Cert.pem",
+                        "containerPath": "/etc/ssl/certs/Api_Cert.pem",
+                        "permissions": "ro"
+                    },
+                    {
+                        "localPath": "${userHome}/.aspnet/https/Football.Worker.pfx",
+                        "containerPath": "/https/Football.Worker.pfx",
+                        "permissions": "ro"
+                    }
+                ],
+                "network": "footballscoreboard_db_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
@@ -354,12 +365,10 @@
                     "ASPNETCORE_ENVIRONMENT": "Production",
                     "ASPNETCORE_URLS": "https://+",
                     "ASPNETCORE_HTTPS_PORT": "5003",
-                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/cert.pem",
-                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/key.pem",
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/plays",
                     "Scoreboard__Week": "1"
                 },
-                "network": "footballscoreboard_db_compose_dbnet"
+                "network": "footballscoreboard_db_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
