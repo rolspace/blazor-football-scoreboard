@@ -217,6 +217,18 @@
                         "containerPort": 80,
                         "hostPort": 80
                     }
+                ],
+                "volumes": [
+                    {
+                        "localPath": "${workspaceFolder}/certs/blazor/Blazor_Cert.pem",
+                        "containerPath": "/etc/nginx/certs/Blazor_Cert.pem",
+                        "permissions": "ro"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}/certs/blazor/Blazor_CertKey.pem",
+                        "containerPath": "/etc/nginx/certs/Blazor_CertKey.pem",
+                        "permissions": "ro"
+                    }
                 ]
             },
             "netCore": {
