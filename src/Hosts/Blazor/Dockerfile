@@ -19,5 +19,3 @@ RUN dotnet build "Football.Blazor.csproj" -c $configuration -o /app/build \
 FROM nginx AS final
 COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
 COPY src/Hosts/Blazor/nginx.conf /etc/nginx/nginx.conf
-COPY src/Hosts/Blazor/cert.pem /etc/nginx/certs/cert.pem
-COPY src/Hosts/Blazor/key.pem /etc/nginx/certs/key.pem
