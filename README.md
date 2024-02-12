@@ -1,11 +1,11 @@
 # Blazor Football Scoreboard
 
-This C# source code repository provides a system to simulate and display real-time game data from the 2019 football season.
+This source code repository contains libraries and applications that are used to run a system that simulates real-time game data from the 2019 football season.
 
 The system is split into three main elements:
-- HTTP API: this application exposes HTTP endpoints to get game data for football games from the 2019 NFL season. The API app also exposes a SignalR Hub to send messages to connected clients about plays in ongoing games.
-- Web Worker: the worker is used to read play data from games. The Worker sends play data to the SignalR Hub which communicates with the Blazor clients.
-- Blazor UI: this application displays the scores and current plays for games in a given week. The user can also view a page for a specific game which provides game statistics for both teams playing.
+- HTTP API: this application exposes HTTP endpoints to get data and statistics for football games from the 2019 NFL season. This application also exposes a SignalR Hub used to send messages to connected clients.
+- Web Worker: the worker is used to read play data from an existing game database. The Worker sends this play data to the SignalR Hub which communicates with the Blazor client.
+- Blazor UI: this application displays the scores and current plays for games in a given week in the schedule. The user can also view a page for a specific game which provides game statistics.
 
 ## Requirements
 
@@ -15,22 +15,44 @@ The system is split into three main elements:
 
 ## How to run locally
 
-For details on how to run each application separately, go to the README file for each of the host C# projects: the API, the Blazor UI, and the Worker. Each application can be started individually using the `dotnet cli`, with the VSCode launch config, or with a Docker container.
+In order to run the system, it is important to keep in mind the following details:
+1. The HTTP API must be started first, as it provides the game data and statistics.
+2. The Blazor UI should be started second, it will load the current game data and receive "real-time" updates and stats via the HTTP API and SignalR Hub.
+3. The Web Worker should be started third, it will begin the process of simulating the games.
 
-The preferred option to run the entire system together is to launch all the applications with a single click, or command, using Docker Compose. The Docker Compose file can be found at the root of the repository, [docker-compose.app.yml](/docker-compose.app.yml)
+> [!IMPORTANT]
+> The HTTP API and Web Worker use a configuration value to set the week in the season schedule.
+> It is necessary that both applications have the same week set in their respective application settings.
+> Current, the value provided in the application settings for both applications is set to Week = 1 (first week of the season schedule).
 
-The Compose file will start containers for all three applications, including the MySQL database where the game data is stored. In order to seed the database, the MySQL container references an SQL file, [football_db.sql](/data/football_db.sql).
-It is important to be aware that the very first time the Compose file starts, the container startup will take a bit longer due to the seeding process.
+To start the applications, refer to the specific README file for each of them: [HTTP API](/src/Hosts/Api/README.md), [Blazor UI](/src/Hosts/Blazor/README.md), and the [Web Worker](/src/Hosts/Worker/README.md).
 
-### Database configuration
+The settings for the `Localhost` **ASPNETCORE_ENVIRONMENT** in each application are defined to allow the system to run as expected without any changes.
 
-The Compose file expects a file with the name *.env.db* at the root of the repository, with the secrets required to run the database. These values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/):
+## How to run locally with Docker Compose
 
-- MYSQL_ROOT_PASSWORD
-- MYSQL_USER
-- MYSQL_PASSWORD
+The Docker Compose file found at the root of the repository, [docker-compose-app.yml](/docker-compose.app.yml), launches the system following the startup order provided in the previous section. The settings for the `Development` **ASPNETCORE_ENVIRONMENT** in each application are defined to allow the system to run as expected without any changes.
 
-The contents of the file should be similar to the example below:
+The Docker Compose file requires the following items to be setup before launch:
+- .env files
+- Certificates
+
+### .env files
+
+The Docker Compose file starts four services:
+- The application database
+- HTTP API
+- Blazor UI
+- Web Worker
+
+---
+
+The application database runs from a MySQL 8.0.28 image. The Docker Compose settings expects a file, named `.env.localdb`, which must include the following environment variables:
+- **MYSQL_ROOT_PASSWORD**
+- **MYSQL_USER**
+- **MYSQL_PASSWORD**
+
+The contents of the `.env.localdb` file should be similar to the example below:
 
 ```
 MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
@@ -38,83 +60,100 @@ MYSQL_USER={MYSQL USER IDENTIFIER}
 MYSQL_PASSWORD={MYSQL USER PASSWORD}
 ```
 
-### Application configuration
+---
 
-The Compose file expects a file with the name *.env.app* at the root of the repository, with the secrets required to run the Football.Api and Football.Worker applications:
+The HTTP API Compose settings expects a file, named `.env.api`, which must include the following environment variables:
+- **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the certificate
+- **MYSQLCONNSTR_FootballDbConnection**: MySQL database connection string
 
-- ASPNETCORE_Kestrel__Certificates__Default__Password: password for the certificates
-- MYSQLCONNSTR_FootballDbConnection: MySQL database connection string
-
-The contents of the file should be similar to the example below:
+The contents of the `.env.api` file should be similar to the example below:
 
 ```
 ASPNETCORE_Kestrel__Certificates__Default__Password={CERTIFICATE PASSWORD VALUE}
 MYSQLCONNSTR_FootballDbConnection={MYSQL CONNECTION STRING VALUE}
 ```
 
-> [!IMPORTANT]
-> There are additional settings needed for each application, these settings are not sensitive, so they can be listed in the [docker-compose.app.yml](/docker-compose.app.yml) file. For more info on these settings, check the README file for each application.
+---
+
+The Web Worker Compose settings expects a file, named `.env.worker`, which must include the following environment variables:
+- **MYSQLCONNSTR_FootballDbConnection**: MySQL database connection string
+
+The contents of the `.env.worker` file should be similar to the example below:
+
+```
+MYSQLCONNSTR_FootballDbConnection={MYSQL CONNECTION STRING VALUE}
+```
 
 ### Certificates
 
-All applications running via the Compose file are configured to use HTTPS. The certificates required for each application can be created by using the `openssl` utility.
+All services in the Docker Compose file run with SSL.
 
-For the Blazor UI application, we will create a certificate with no password by running the following command at the root of the project folder:
+---
 
-```
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -days 3650 -subj "/CN=localhost"
-```
+The Web Worker application uses the same development certificate provided by .NET, so there is no need to create a custom certificate.
 
-For the Football.Worker application, we will create a certificate, with a password, with the following command at the root of the project folder:
+---
 
-```
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=localhost
-```
-
-> [!IMPORTANT]
-> The command will prompt you to enter a password...this is the same password that should be used for the ASPNETCORE_Kestrel__Certificates__Default__Password secret. As a convenience, use the same password for the local certificates (that's ok in this case, this is a project for playing around).
-
-There is a special case with the certificate for the Football.Api container. Inside the container network, the Football.Worker hosted service will call the HTTP API provided by the Football.Api container. This call requires HTTPS, so it is necessary to create the certificate for the Football.Api application with the name of the domain inside the container network by running the command at the root of the project:
+The Blazor UI runs as a static web application served by NGINX. Therefore, it is necessary to create a custom certificate with a key. The files can be created by running the following command from the repository root:
 
 ```
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=footballscoreboard_api"
+openssl req -x509 -newkey rsa:4096 -keyout certs/blazor/Blazor_CertKey.pem -out certs/blazor/Blazor_Cert.pem -nodes -days 3650 -subj "/CN=localhost"
 ```
 
-Each of these commands will create a cert.pem file and a key.pem file at the root of the respective project. The Docker Compose setup will take care of placing all the files in the correct locations, once it starts.
+This certificate will not require a password. The certificate and key will be created in the ./certs/blazor folder. The [NGINX config file](/src/Hosts/Blazor/nginx.conf) expects these files to be at this location.
+
+---
+
+The HTTP API will be called by the Web Worker when sending data via the SignalR Hub, this call will be made inside the container network, which will use the name of the container set in the Compose file. For this reason, a custom certificate is needed.
+
+The certificate can be created by running the following command from the repository root:
+
+```
+openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=footballscoreboard_api"
+```
+
+A password will need to be created, this is the value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** environment variable in the .env.api file used by the Docker Compose configuration.
 
 ### Compose Up
 
-Starting the Docker Compose file will run the applications in the following order:
+Once the .env files and the certificates have been set up, it is time to start the system.
+
+This can be done in two ways:
+
+1. If you have the Docker extension for VSCode, right-click the [docker-compose.app.yml](/docker-compose.app.yml) file and select `Compose Up`.
+2. Run the command, `docker-compose -f docker-compose.app.yml up -d`, from a terminal set at the root of the repository.
+
+Running `docker-compose up` on the Docker Compose file will start the services in the following order:
 
 1. MySQL Database
 2. Football.Api
 3. Football.Blazor
 4. Football.Worker
 
-If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the [docker-compose.app.yml](/docker-compose.app.yml) file and selecting `Compose Up`.
+The Compose file will start containers for the MySQL database and all three applications.
 
-If the extension is not installed, the command, `docker-compose -f docker-compose.app.yml up -d`, can be executed from a terminal set at the root of the repository.
+If the database is started for the first time, there is an automated seeding process that uses the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file to generate the tables and data. Due to the size of the database, the database container startup will take longer.
+The database will be persisted locally in the /data/localdb folder for subsequent runs.
 
-After startup, the Football.Api application will be available at https://localhost:5001.
-The Football.Blazor application will be available at https://localhost.
+After startup, the HTTP API application will be available at the following URL: https://localhost:5001.
+After startup, Blazor UI application will be available at the following URL: https://localhost.
 
 ## How to run the tests
 
-### Preparing the tests
+The repository includes both unit tests and integration tests.
 
-The solution contains both unit tests and integration tests.
+The integration tests require a database in order to run successfully.
 
-The integration tests require a database connection in order to run successfully. The Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database via Docker.
+### Preparing the test database
 
-The Compose file references an SQL file, [football_testdb.sql](/scripts/testdb/football_testdb.sql), which is used to seed data to the test database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
+The Docker Compose file found at the root of the repository, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database and a database viewer via [Adminer](https://www.adminer.org/).
 
-The Compose file requires an env file with the name *.env.testdb* at the root of the repository. The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
+The test database runs from a MySQL 8.0.28 image. The Docker Compose settings expects a file, named `.env.testdb`, which must include the following environment variables:
+- **MYSQL_ROOT_PASSWORD**
+- **MYSQL_USER**
+- **MYSQL_PASSWORD**
 
-- MYSQL_ROOT_PASSWORD
-- MYSQL_USER
-- MYSQL_PASSWORD
-
-The contents of the env file should be similar to the example below:
+The contents of the `.env.testdb` file should be similar to the example below:
 
 ```
 MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
@@ -122,17 +161,30 @@ MYSQL_USER={MYSQL USER IDENTIFIER}
 MYSQL_PASSWORD={MYSQL USER PASSWORD}
 ```
 
-If you have the Docker extension for VSCode, the containers in the Compose file can be started by right-clicking the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and selecting `Compose Up`.
+> [!IMPORTANT]
+> The test database is configured to run on a different port (3307) than the default port used by MySQL databases (3306).
 
-If the extension is not installed, the command, `docker-compose -f docker-compose.testdb.yml up -d` can be executed from a terminal set to the root of the integration tests project.
+### Start the test database
 
-It is important to note that the test database runs on a different port (3307) than the default used by MySQL databases (3306).
+Once the .env file has been set up, it is time to start the test database.
 
-[Adminer](https://www.adminer.org/) is included in the Docker Compose file and it can be opened in the browser at http://localhost:8081.
+This can be done in two ways:
+
+1. If you have the Docker extension for VSCode, right-click the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and select `Compose Up`.
+2. Run the command, `docker-compose -f docker-compose.testdb.yml up -d` from a terminal set at the root of the repository.
+
+The Compose file will start containers for the test MySQL database and Adminer.
+
+If the test database is started for the first time, there is an automated seeding process that uses the [footballscoreboard_testdb.sql](/scripts/localdb/footballscoreboard_testdb.sql) file to generate the tables and data.
+
+Due to the size of the database, the test database container startup will take a bit longer.
+The database will be persisted locally in the /data/testdb folder for subsequent runs.
+
+Adminer will be available at the following URL: http://localhost:8081.
 
 ### Running the tests
 
-1. Set the current working directory in your terminal of choice to the [root of the repository](/).
+1. Set the current working directory in your terminal of choice to the root of the repository.
 
 2. Run the tests with the `dotnet test` command.
 
@@ -142,8 +194,10 @@ It is important to note that the test database runs on a different port (3307) t
 
 2. Install the dotnet report generator tool globally with the command, `dotnet tool install dotnet-reportgenerator-globaltool`.
 
-3. Set the current working directory in your terminal of choice to the [root of the repository](/).
+3. Set the current working directory in your terminal of choice to the root of the repository.
 
 4. Run the tests with the command, `dotnet-coverage collect 'dotnet test --no-restore' -f cobertura  -o 'coverage.xml'`. It is possible to change the report output by [changing the `-f` and `-o` parameters from the collect command](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage#dotnet-coverage-collect).
 
-5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:./coveragereport" "-assemblyfilters:+Football.*;-Football.*Tests";`. The HTML coverage report will be found in the `coveragereport` folder at the [root of the repository](/), open the `index.html` file on your browser of choice to view the results.
+5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:./coveragereport" "-assemblyfilters:+Football.*;-Football.*Tests";`.
+
+The HTML coverage report will be found in the `coveragereport` folder at the root of the repository, open the `index.html` file on your browser of choice to view the results.
