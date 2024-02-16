@@ -342,11 +342,6 @@
                 ],
                 "volumes": [
                     {
-                        "localPath": "${workspaceFolder}/certs/api/Api_Cert.pem",
-                        "containerPath": "/etc/ssl/certs/Api_Cert.pem",
-                        "permissions": "ro"
-                    },
-                    {
                         "localPath": "${userHome}/.aspnet/https/Football.Worker.pfx",
                         "containerPath": "/https/Football.Worker.pfx",
                         "permissions": "ro"
