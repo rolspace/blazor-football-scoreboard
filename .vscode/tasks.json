@@ -110,7 +110,7 @@
                 "envFiles": [
                     "${workspaceFolder}/.env.api"
                 ],
-                "network": "footballscoreboard_db_compose_db_net"
+                "network": "footballscoreboard_localdb_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj",
@@ -142,7 +142,7 @@
                     "Cors__AllowedMethods": "GET",
                     "Scoreboard__Week": "1"
                 },
-                "network": "footballscoreboard_db_compose_db_net"
+                "network": "footballscoreboard_localdb_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
@@ -352,7 +352,7 @@
                         "permissions": "ro"
                     }
                 ],
-                "network": "footballscoreboard_db_compose_db_net"
+                "network": "footballscoreboard_localdb_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
@@ -380,7 +380,7 @@
                     "Hub__HubUrl": "https://footballscoreboard_api/hub/plays",
                     "Scoreboard__Week": "1"
                 },
-                "network": "footballscoreboard_db_compose_db_net"
+                "network": "footballscoreboard_localdb_compose_db_net"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"

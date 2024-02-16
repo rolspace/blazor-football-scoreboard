@@ -4,17 +4,17 @@ name: footballscoreboard_app_compose
 
 services:
   db:
-    container_name: footballscoreboard_db
+    container_name: footballscoreboard_localdb
     image: mysql:8.0.28
     ports:
       - 3306:3306
     environment:
       MYSQL_DATABASE: footballscoreboard_db
     env_file:
-      - env.db
+      - env.localdb
     volumes:
-      - ./data/appdb:/var/lib/mysql
-      - ./scripts/appdb:/docker-entrypoint-initdb.d
+      - ./data/localdb:/var/lib/mysql
+      - ./scripts/localdb:/docker-entrypoint-initdb.d
     networks:
       - app_net
 
