@@ -31,7 +31,7 @@ The settings for the `Localhost` **ASPNETCORE_ENVIRONMENT** in each application 
 
 ## How to run locally with Docker Compose
 
-The Docker Compose file found at the root of the repository, [docker-compose-app.yml](/docker-compose.app.yml), launches the system following the startup order provided in the previous section. The settings for the `Development` **ASPNETCORE_ENVIRONMENT** in each application are defined to allow the system to run as expected without any changes.
+The Docker Compose file found at the root of the repository, [docker-compose.app.yml](/docker-compose.app.yml), launches the system following the startup order provided in the previous section. The settings for the `Development` **ASPNETCORE_ENVIRONMENT** in each application are defined to allow the system to run as expected without any changes.
 
 The Docker Compose file requires the following items to be setup before launch:
 - .env files
@@ -90,7 +90,12 @@ All services in the Docker Compose file run with SSL.
 
 ---
 
-The Web Worker application uses the same development certificate provided by .NET, so there is no need to create a custom certificate.
+The Web Worker application uses a development certificate provided by .NET. The development certificate can be created by running the following command:
+
+```
+dotnet dev-certs https -ep ~/.aspnet/https/Football.Worker.pfx -p {PASSWORD VALUE}
+dotnet dev-certs https --trust
+```
 
 ---
 
@@ -100,7 +105,8 @@ The Blazor UI runs as a static web application served by NGINX. Therefore, it is
 openssl req -x509 -newkey rsa:4096 -keyout certs/blazor/Blazor_CertKey.pem -out certs/blazor/Blazor_Cert.pem -nodes -days 3650 -subj "/CN=localhost"
 ```
 
-This certificate will not require a password. The certificate and key will be created in the ./certs/blazor folder. The [NGINX config file](/src/Hosts/Blazor/nginx.conf) expects these files to be at this location.
+The command will not request entering a password. The certificate and key will be created in the ./certs/blazor folder.
+The [NGINX config file](/src/Hosts/Blazor/nginx.conf) expects these files to be at this location.
 
 ---
 
@@ -109,10 +115,10 @@ The HTTP API will be called by the Web Worker when sending data via the SignalR 
 The certificate can be created by running the following command from the repository root:
 
 ```
-openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=footballscoreboard_api"
+openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
 ```
 
-A password will need to be created, this is the value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** environment variable in the .env.api file used by the Docker Compose configuration.
+The command will request entering a password, the password value is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** environment variable in the .env.api file used by the Docker Compose configuration.
 
 ### Compose Up
 
@@ -171,7 +177,7 @@ Once the .env file has been set up, it is time to start the test database.
 This can be done in two ways:
 
 1. If you have the Docker extension for VSCode, right-click the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and select `Compose Up`.
-2. Run the command, `docker-compose -f docker-compose.testdb.yml up -d` from a terminal set at the root of the repository.
+2. Run the command, `docker-compose -f docker-compose.testdb.yml up -d`, from a terminal set at the root of the repository.
 
 The Compose file will start containers for the test MySQL database and Adminer.
 
