@@ -9,7 +9,7 @@ services:
     ports:
       - 3307:3306
     environment:
-      MYSQL_DATABASE: football_testdb
+      MYSQL_DATABASE: footballscoreboard_db
     env_file:
       - .env.testdb
     volumes:
