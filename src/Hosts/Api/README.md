@@ -1,6 +1,6 @@
 # Blazor Football Scoreboard Football.Api
 
-This web application project runs an HTTP API endpoint and a SignalR Hub that are used to allow communication between the Worker process and the Blazor UI.
+This .NET 6 web application exposes HTTP endpoints and a SignalR Hub that are used to provide game data and statistics from the 2019 football season for connected clients.
 
 ## Requirements
 
@@ -10,69 +10,103 @@ This web application project runs an HTTP API endpoint and a SignalR Hub that ar
 
 ## How to run locally
 
-### Database configuration
+The application needs a database and the environment variables to run locally.
 
-In order to run the web application, a connection to a MySQL database is required.
+### Local - Database configuration
 
-A database is provided with the Docker Compose file found at the root of the repository, [docker-compose.db.yml](/docker-compose.db.yml).
+The Docker Compose file found at the root of the repository, [docker-compose.localdb.yml](/docker-compose.app.yml), launches A MySQL database and [Adminer](https://www.adminer.org/).
 
-The containers in the Compose file can be run in VSCode by right-clicking the file and selecting *Compose Up*, assuming the Docker extension is installed in VSCode. Otherwise, the command, `docker-compose -f docker-compose.db.yml up -d`, can be executed from a terminal at the root of the repository.
+The local database runs from a MySQL 8.0.28 image. The Docker Compose settings expects a file, named `.env.localdb`, which must include the following environment variables:
+- **MYSQL_ROOT_PASSWORD**
+- **MYSQL_USER**
+- **MYSQL_PASSWORD**
+
+The contents of the `.env.localdb` file should be similar to the example below:
+
+```
+MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
+MYSQL_USER={MYSQL USER IDENTIFIER}
+MYSQL_PASSWORD={MYSQL USER PASSWORD}
+```
+
+Once the `.env.localdb` file has been set up, it is time to start the local database.
+
+This can be done in two ways:
+
+1. If you have the Docker extension for VSCode, right-click the [docker-compose.localdb.yml](/docker-compose.localdb.yml) file and select `Compose Up`.
+2. Run the command, `docker-compose -f docker-compose.localdb.yml up -d`, from a terminal set at the root of the repository.
 
 The Compose file references an SQL file, [football_db.sql](/scripts/appdb/football_db.sql), which seeds data to the database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
 
-The Compose file expects a file with the name *.env.db* at the root of the repository. The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
+If the local database is started for the first time, there is an automated seeding process that uses the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file to generate the tables and data.
 
-- MYSQL_ROOT_PASSWORD
-- MYSQL_USER
-- MYSQL_PASSWORD
+Due to the size of the database, the local database container startup will take a bit longer.
+The database will be persisted locally in the /data/localdb folder for subsequent runs.
 
-### Application launch
+Adminer will be available at the following URL: http://localhost:8080.
 
-Once the database is up and running, the Football.Api web application can be launched from:
+### Local - Application settings
 
-1. A terminal set to the root of the project. On this terminal, run the command, `dotnet run`.
+When running locally, the application will set *Localhost* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Api/appsettings.Localhost.json) configuration file.
 
-    The application will run using *Localhost* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Api/appsettings.Localhost.json) configuration file. The application settings require the following values:
-    - **Cors:PolicyName**: CORS policy name defined for the web application.
-    - **Cors:AllowedOrigins**: comma-separated list of CORS allowed origins. This value should be set to *https&#65279;://localhost:5002* to allow calls from the Blazor application.
-    - **Cors:AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to *GET* to allow calls from the Blazor application.
-    - **Scoreboard:Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
+The application settings and the keys required are the following:
+- **Cors:PolicyName**: CORS policy name defined for the web application.
+- **Cors:AllowedOrigins**: comma-separated list of CORS allowed origins. This value should be set to *https&#65279;://localhost:5002* to allow calls from the Blazor UI application (Football.Blazor project).
+- **Cors:AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to *GET* to allow calls from the Blazor application.
+- **Scoreboard:Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
 
-    It is necessary to set the value of the **ConnectionStrings:FootballDbConnection** setting separately. This is a sensitive value and it is not included in the [appsettings.Localhost.json](/src/Hosts/Api/appsettings.Localhost.json) file. This can be done via the user secrets.
+Separately from the application settings, it is required to use the User Secrets to store a sensitive value:
+- **ConnectionStrings:FootballDbConnection**: database connection string.
 
-    For HTTPS, set up the developer certificate with the `dotnet dev-certs` command.
+### Local - Launch the application locally
 
-2. The VSCode *Run & Debug* menu. Run the *Launch Web: Football Scoreboard API* launch config.
+The application can be launched in two ways:
+1. From a terminal set at the root of the project, */src/Hosts/Api*, with the the command: `dotnet run`.
+2. From VSCode via the *Run & Debug* menu. Select the *Launch Web: Football Scoreboard API* launch config.
 
-    The application will run using the same approach as option #1, this is just a convenient way to launch directly from VSCode.
+Once the application is started, it will be available at https&#65270;://localhost:5001.
 
-3. The VSCode *Run and Debug* menu. Run the *Launch Docker: Football Scoreboard API* launch config.
+## How to run locally via Docker
 
-    In order to setup the SSL certificate for the application, before launching the container, make sure that certificate and key files are created by running this command at the root of the project folder:
+The Docker application needs a database and the environment variables to run locally.
 
-    ```
-    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -subj "/CN=footballscoreboard_api"
-    ```
+### Docker - Database configuration
 
-    The *CN (Common Name)* value is set to `footballscoreboard_api`. This is needed to allow container to container calls within the container network when running all the applications together. This is also the reason why the `dev-certs` PFX certificate is not used, as it does not support setting the CN value.
+Follow the same instructions for the [database configuration provided earlier](#local---database-configuration) for the local setup (no Docker).
 
-    The command will prompt you to create a password for the certificate. It is important to remember this password as it will be used later. It is also possible to use an empty password. Once this is done, there should be a *cert.pem* and a *key.pem* file at the root of the project.
+### Docker - Application settings
 
-    Once the launch config starts, the application will run using *Development* as the **ASPNETCORE_ENVIRONMENT**.
-    The container image will be built using the [Dockerfile](/src/Hosts/Api/Dockerfile) at the root of the project. The variables required for the application to run are defined in the  *docker-run-api: debug* task, in the [tasks.json](/.vscode/tasks.json) file:
+When running via Docker, the application will set *Development* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Api/appsettings.Localhost.json) configuration file, if it exists.
 
-    - [**ASPNETCORE_URLS**](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/host/web-host?view=aspnetcore-6.0#server-urls)
-    - [**ASPNETCORE_HTTPS_PORT**](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/host/web-host?view=aspnetcore-6.0#https-port)
-    - [**ASPNETCORE_Kestrel__Certificates__Default__Path**](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-8.0#certificate-sources)
-    - [**ASPNETCORE_Kestrel__Certificates__Default__KeyPath**](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel/endpoints?view=aspnetcore-8.0#certificate-sources)
-    - **Cors__PolicyName**: CORS policy name defined for the Football.Api application.
-    - **Cors__AllowedOrigins**: comma-separated list of CORS allowed origins. This value should be set to *https&#65279;://localhost:5002* to allow calls from the Blazor application.
-    - **Cors__AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to `GET` to allow calls from the Blazor application.
-    - **Scoreboard__Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
+The rest of the configuration values are provided as environment variables in the [tasks.json](/.vscode/tasks.json) file.
 
-    There is also a task definition with the label *docker-run-api: release*, where **ASPNETCORE_ENVIRONMENT** is set to *Production*.
+The application settings and the keys required are the following:
+- **Cors__PolicyName**: CORS policy name defined for the web application.
+- **Cors__AllowedOrigins**: comma-separated list of CORS allowed origins. This value should be set to *https&#65279;://localhost:5002* to allow calls from the Blazor UI application (Football.Blazor project).
+- **Cors__AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to *GET* to allow calls from the Blazor application.
+- **Scoreboard__Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
 
-Regardless of the method used to run the application locally, it will be available at *https&#65279;://localhost:5001*.
+Separately from the application settings, it is required to use a .env file, named `.env.api`, for the sensitive settings required:
+- **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the custom certificate used by the application.
+- **MYSQLCONNSTR_FootballDbConnection**: database connection string.
+
+### Docker - Custom certificate
+
+The Football.Api web application requires a custom certificate for HTTPS when running via Docker.
+
+The certificate and the key can be created with the following command:
+
+```
+openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
+```
+
+This command will prompt for a certificate password. This password is the same value that needs to be added to the `.env.api` file mentioned [earlier](#docker---application-settings).
+
+After the creation of the certificate is done, all the configuration necessary is provided in the [tasks.json](/.vscode/tasks.json) file.
+
+### Docker - Launch the application via Docker
+
+The application can be launched from VSCode via the *Run & Debug* menu. Select the *Launch Docker: Football Scoreboard API* launch config.
 
 ## How to run the unit tests
 
@@ -86,7 +120,7 @@ The API exposes the following endpoints:
 
 #### GET /api/v1/games?week={week}
 
-Retrieves all the games for a given week parameter, where the value of week is a number between 1 and 17.
+Retrieves all the games for a given week in the schedule.
 
 Returns a 400 if no week parameter is provided.
 
@@ -95,25 +129,27 @@ Returns a 404 if no games are found for the given week.
 #### GET /api/v1/games/today
 
 Retrieves all the games scheduled for today.
+`today` is understood to represent the current week in the schedule (defined by the Scoreboard:Week application setting).
 
 #### GET /api/v1/games/{id}
 
-Retrieves the game data for the specified id.
+Retrieves the game data for the specified game id.
 
-Returns a 400 if no id parameter is provided.
+Returns a 400 if no game id parameter is provided.
 
-Returns a 404 if the id cannot be found.
+Returns a 404 if the game id cannot be found.
 
 #### GET /api/v1/games/{id}/stats
 
-Retrieves the game statistics for the specified id.
+Retrieves the game statistics for the specified game id.
 
-Returns a 400 if no id parameter is provided.
+Returns a 400 if no game id parameter is provided.
 
-Returns a 404 if the id cannot be found.
+Returns a 404 if the game id cannot be found.
 
 ### SignalR Hub
 
 #### /hub/plays
 
-The hub endpoint exposes the method used by the [Worker](./src/Hosts/Football.Worker) game simulation that sends play data to the [Blazor](./src/Hosts/Football.Blazor) web clients.
+The hub endpoint exposes the method called by the [Web
+Worker](/src/Hosts/Football.Worker), which sends play data to the [Blazor](./src/Hosts/Football.Blazor) web clients.
