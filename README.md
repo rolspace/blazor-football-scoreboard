@@ -16,9 +16,9 @@ The system is split into three main elements:
 ## How to run locally
 
 In order to run the system, it is important to keep in mind the following details:
-1. The HTTP API must be started first, as it provides the game data and statistics.
-2. The Blazor UI should be started second, it will load the current game data and receive "real-time" updates and stats via the HTTP API and SignalR Hub.
-3. The Web Worker should be started third, it will begin the process of simulating the games.
+1. The HTTP API must be launched first, as it provides the game data and statistics.
+2. The Blazor UI should be launched second, it will load the current game data and receive "real-time" updates and stats via the HTTP API and SignalR Hub.
+3. The Web Worker should be launched third, it will begin the process of simulating the games.
 
 > [!IMPORTANT]
 > The HTTP API and Web Worker use a configuration value to set the week in the season schedule.
@@ -138,11 +138,11 @@ Running `docker-compose up` on the Docker Compose file will start the services i
 
 The Compose file will start containers for the MySQL database and all three applications.
 
-If the database is started for the first time, there is an automated seeding process that uses the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file to generate the tables and data. Due to the size of the database, the database container startup will take longer.
+If the database is launched for the first time, there is an automated seeding process that uses the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file to generate the tables and data. Due to the size of the database, the database container startup will take longer.
 The database will be persisted locally in the /data/localdb folder for subsequent runs.
 
-After startup, the HTTP API application will be available at the following URL: https://localhost:5001.
-After startup, Blazor UI application will be available at the following URL: https://localhost.
+After startup, the HTTP API application will be available at the following URL: https&ZeroWidthSpace;://localhost:5001.
+After startup, Blazor UI application will be available at the following URL: https&ZeroWidthSpace;://localhost.
 
 ## How to run the tests
 
@@ -181,12 +181,12 @@ This can be done in two ways:
 
 The Compose file will start containers for the test MySQL database and Adminer.
 
-If the test database is started for the first time, there is an automated seeding process that uses the [footballscoreboard_testdb.sql](/scripts/localdb/footballscoreboard_testdb.sql) file to generate the tables and data.
+If the test database is launched for the first time, there is an automated seeding process that uses the [footballscoreboard_testdb.sql](/scripts/localdb/footballscoreboard_testdb.sql) file to generate the tables and data.
 
 Due to the size of the database, the test database container startup will take a bit longer.
 The database will be persisted locally in the /data/testdb folder for subsequent runs.
 
-Adminer will be available at the following URL: http://localhost:8081.
+Adminer will be available at the following URL: http&ZeroWidthSpace;://localhost:8081.
 
 ### Running the tests
 
