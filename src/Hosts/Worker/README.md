@@ -54,7 +54,7 @@ The application settings and the keys required are the following:
 - **Hub:HubUrl**: URL for the Signal Hub.
 - **Scoreboard:Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
 
-Separately from the application settings, it is required to use the .NET user secrets to store settings that should not be in the repo:
+Separately from the application settings, it is required to use the .NET user secrets to store settings that should not be committed to the repo:
 - **ConnectionStrings:FootballDbConnection**: database connection string.
 
 ### Local - Launch the application locally
@@ -83,8 +83,22 @@ The application settings and the keys required are the following:
 - **Hub:HubUrl**: URL for the Signal Hub.
 - **Scoreboard:Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
 
-Separately from the application settings, it is required to use a `.env` file, named `.env.worker`, to store settings that should not be in the repo:
+Separately from the application settings, it is required to use a `.env` file, named `.env.worker`, to store settings that should not be committed to the repo:
+- **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the custom certificate used by the application.
 - **MYSQLCONNSTR_FootballDbConnection**: database connection string.
+
+### Docker - Custom certificate
+
+The Football.Worker web application requires a custom certificate for HTTPS when running via Docker.
+
+The certificate and the key can be created with the following commands:
+
+```
+dotnet dev-certs https -ep ~/.aspnet/https/Football.Worker.pfx -p {PASSWORD VALUE}
+dotnet dev-certs https --trust
+```
+
+The {PASSWORD VALUE} is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** enviroment setting in the `.env.worker` file mentioned [earlier](#docker---application-settings).
 
 ### Docker - Launch the application via Docker
 

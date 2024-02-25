@@ -55,7 +55,7 @@ The application settings and the keys required are the following:
 - **Cors:AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to *GET* to allow calls from the Blazor application.
 - **Scoreboard:Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
 
-Separately from the application settings, it is required to use the .NET user secrets to store settings that should not be in the repo:
+Separately from the application settings, it is required to use the .NET user secrets to store settings that should not be committed to the repo:
 - **ConnectionStrings:FootballDbConnection**: database connection string.
 
 ### Local - Launch the application locally
@@ -86,7 +86,7 @@ The application settings and the keys required are the following:
 - **Cors__AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to *GET* to allow calls from the Blazor application.
 - **Scoreboard__Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
 
-Separately from the application settings, it is required to use a `.env` file, named `.env.api`, to store settings that should not be in the repo:
+Separately from the application settings, it is required to use a `.env` file, named `.env.api`, to store settings that should not be committed to the repo:
 - **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the custom certificate used by the application.
 - **MYSQLCONNSTR_FootballDbConnection**: database connection string.
 
@@ -100,7 +100,7 @@ The certificate and the key can be created with the following command:
 openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
 ```
 
-This command will prompt for a certificate password. This password is the same value that needs to be added to the `.env.api` file mentioned [earlier](#docker---application-settings).
+This command will prompt for a certificate password. This password is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** enviroment setting in the `.env.api` file mentioned [earlier](#docker---application-settings).
 
 After the creation of the certificate is done, all the configuration necessary is provided in the [tasks.json](/.vscode/tasks.json) file.
 

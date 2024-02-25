@@ -76,19 +76,47 @@ MYSQLCONNSTR_FootballDbConnection={MYSQL CONNECTION STRING VALUE}
 ---
 
 The Web Worker Compose settings expects a file, named `.env.worker`, which must include the following environment variables:
+- **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the certificate
 - **MYSQLCONNSTR_FootballDbConnection**: MySQL database connection string
 
 The contents of the `.env.worker` file should be similar to the example below:
 
 ```
+ASPNETCORE_Kestrel__Certificates__Default__Password={CERTIFICATE PASSWORD VALUE}
 MYSQLCONNSTR_FootballDbConnection={MYSQL CONNECTION STRING VALUE}
 ```
 
 ### Certificates
 
-All services in the Docker Compose file run with SSL.
+All services in the Docker Compose file run with SSL. These certificates need to be created manually.
 
----
+#### Football.Api Certificate
+
+The HTTP API will be called by the Web Worker application when sending data via the SignalR Hub. This call will be made inside the container network, which will use the name of the container set in the Compose file. For this reason, a custom certificate is needed.
+
+The certificate can be created by running the following command from the repository root:
+
+```
+openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
+```
+
+The command will request a password, the password value is the same value that must to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** environment setting in the `.env.api` file used by the Docker Compose configuration.
+
+The certificate and key will be created in the `./certs/api` folder.
+
+#### Football.Blazor Certificate
+
+The Blazor UI runs as a static web application served by NGINX. Therefore, it is necessary to create a custom certificate abd key. The files can be created by running the following command from the repository root:
+
+```
+openssl req -x509 -newkey rsa:4096 -keyout certs/blazor/Blazor_CertKey.pem -out certs/blazor/Blazor_Cert.pem -nodes -days 3650 -subj "/CN=localhost"
+```
+
+The command will not request a password.
+
+The certificate and key will be created in the `./certs/blazor` folder.
+
+#### Football.Worker Certificate
 
 The Web Worker application uses a development certificate provided by .NET. The development certificate can be created by running the following command:
 
@@ -97,28 +125,7 @@ dotnet dev-certs https -ep ~/.aspnet/https/Football.Worker.pfx -p {PASSWORD VALU
 dotnet dev-certs https --trust
 ```
 
----
-
-The Blazor UI runs as a static web application served by NGINX. Therefore, it is necessary to create a custom certificate with a key. The files can be created by running the following command from the repository root:
-
-```
-openssl req -x509 -newkey rsa:4096 -keyout certs/blazor/Blazor_CertKey.pem -out certs/blazor/Blazor_Cert.pem -nodes -days 3650 -subj "/CN=localhost"
-```
-
-The command will not request entering a password. The certificate and key will be created in the ./certs/blazor folder.
-The [NGINX config file](/src/Hosts/Blazor/nginx.conf) expects these files to be at this location.
-
----
-
-The HTTP API will be called by the Web Worker when sending data via the SignalR Hub, this call will be made inside the container network, which will use the name of the container set in the Compose file. For this reason, a custom certificate is needed.
-
-The certificate can be created by running the following command from the repository root:
-
-```
-openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
-```
-
-The command will request entering a password, the password value is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** environment variable in the .env.api file used by the Docker Compose configuration.
+The {PASSWORD VALUE} is the same value that must to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** environment setting in the `.env.worker` file used by the Docker Compose configuration.
 
 ### Compose Up
 
