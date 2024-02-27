@@ -27,19 +27,6 @@
             }
         },
         {
-            "name": "Launch Web: Football Scoreboard Blazor WebAssembly",
-            "type": "blazorwasm",
-            "request": "launch",
-            "cwd": "${workspaceFolder}/src/Hosts/Blazor"
-        },
-        {
-            "name": "Launch Docker: Football Scoreboard Blazor WebAssembly",
-            "type": "chrome",
-            "preLaunchTask": "docker-run-blazor: debug",
-            "request": "launch",
-            "postDebugTask": "docker-stop-blazor: debug"
-        },
-        {
             "name": "Launch Web: Football Scoreboard Worker",
             "type": "coreclr",
             "request": "launch",
@@ -63,6 +50,13 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
             }
+        },
+        {
+            "name": "Launch Web: Football Scoreboard Blazor WebAssembly",
+            "type": "blazorwasm",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/src/Hosts/Blazor",
+            "url": "https://localhost:5002"
         },
         {
             "name": ".NET Core Attach",

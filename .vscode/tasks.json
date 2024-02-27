@@ -118,37 +118,6 @@
             }
         },
         {
-            "type": "docker-run",
-            "label": "docker-run-api: release",
-            "dependsOn": [
-                "docker-build-api: release"
-            ],
-            "dockerRun": {
-                "containerName": "footballscoreboard_api",
-                "ports": [
-                    {
-                        "containerPort": 80,
-                        "hostPort": 5001
-                    }
-                ],
-                "env": {
-                    "ASPNETCORE_ENVIRONMENT": "Production",
-                    "ASPNETCORE_URLS": "https://+",
-                    "ASPNETCORE_HTTPS_PORT": "5001",
-                    "ASPNETCORE_Kestrel__Certificates__Default__Path": "/https/Api_Cert.pem",
-                    "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "/https/Api_CertKey.pem",
-                    "Cors__PolicyName": "WebClientCorsPolicy",
-                    "Cors__AllowedOrigins": "https://localhost",
-                    "Cors__AllowedMethods": "GET",
-                    "Scoreboard__Week": "1"
-                },
-                "network": "footballscoreboard_localdb_compose_db_net"
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
-            }
-        },
-        {
             "label": "build-blazor",
             "command": "dotnet",
             "type": "process",
@@ -183,63 +152,6 @@
                 "${workspaceFolder}/src/Hosts/Blazor/Football.Blazor.csproj"
             ],
             "problemMatcher": "$msCompile"
-        },
-        {
-            "type": "docker-build",
-            "label": "docker-build-blazor: debug",
-            "dependsOn": [
-                "build-blazor"
-            ],
-            "dockerBuild": {
-                "tag": "rolspace/footballscoreboard_blazor:dev",
-                "dockerfile": "${workspaceFolder}/src/Hosts/Blazor/Dockerfile",
-                "context": "${workspaceFolder}",
-                "pull": true,
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/Hosts/Blazor/Football.Blazor.csproj"
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "docker-run-blazor: debug",
-            "dependsOn": [
-                "docker-build-blazor: debug"
-            ],
-            "dockerRun": {
-                "containerName": "footballscoreboard_blazor",
-                "ports": [
-                    {
-                        "containerPort": 443,
-                        "hostPort": 443
-                    },
-                    {
-                        "containerPort": 80,
-                        "hostPort": 80
-                    }
-                ],
-                "volumes": [
-                    {
-                        "localPath": "${workspaceFolder}/certs/blazor/Blazor_Cert.pem",
-                        "containerPath": "/etc/nginx/certs/Blazor_Cert.pem",
-                        "permissions": "ro"
-                    },
-                    {
-                        "localPath": "${workspaceFolder}/certs/blazor/Blazor_CertKey.pem",
-                        "containerPath": "/etc/nginx/certs/Blazor_CertKey.pem",
-                        "permissions": "ro"
-                    }
-                ]
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/Hosts/Blazor/Football.Blazor.csproj",
-                "enableDebugging": false
-            }
-        },
-        {
-            "type": "shell",
-            "label": "docker-stop-blazor: debug",
-            "command": "docker container stop footballscoreboard_blazor && docker container rm footballscoreboard_blazor"
         },
         {
             "label": "build-worker",
@@ -352,33 +264,6 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
                 "enableDebugging": true
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "docker-run-worker: release",
-            "dependsOn": [
-                "docker-build-worker: release"
-            ],
-            "dockerRun": {
-                "containerName": "footballscoreboard_worker",
-                "ports": [
-                    {
-                        "containerPort": 80,
-                        "hostPort": 5003
-                    }
-                ],
-                "env": {
-                    "ASPNETCORE_ENVIRONMENT": "Production",
-                    "ASPNETCORE_URLS": "https://+",
-                    "ASPNETCORE_HTTPS_PORT": "5003",
-                    "Hub__HubUrl": "https://footballscoreboard_api/hub/plays",
-                    "Scoreboard__Week": "1"
-                },
-                "network": "footballscoreboard_localdb_compose_db_net"
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj"
             }
         }
     ]
