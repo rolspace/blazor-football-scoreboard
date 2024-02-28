@@ -45,17 +45,17 @@ The database will be persisted locally in the `./data/localdb` folder for subseq
 
 Adminer will be available at the following URL: http&ZeroWidthSpace;://localhost:8080.
 
-### Environment variables
+### Application settings
 
 #### dotnet CLI
 
 Running via the dotnet CLI, the application will set *Localhost* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Api/appsettings.Localhost.json) configuration file.
 
-The application settings and the keys required are the following:
+The keys required for the application settings are the following:
 - **Cors:PolicyName**: CORS policy name defined for the web application.
 - **Cors:AllowedOrigins**: comma-separated list of CORS allowed origins. This value should be set to https&ZeroWidthSpace;://localhost:5002 to allow calls from the Blazor UI application.
 - **Cors:AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to *GET* to allow calls from the Blazor application.
-- **Scoreboard:Week**: week number for the scheduled games, should be a value between 1 and 17. When running all the applications together, this value should match in both the Football.Api and Football.Worker applications.
+- **Scoreboard:Week**: number for the week in the season schedule.
 
 > [!IMPORTANT]
 > The **Scoreboard:Week** setting is used to set the week of the schedule for the games that will simulated.
@@ -70,7 +70,7 @@ Separately from the application settings, it is required to use the .NET user se
 
 Running via Docker, the application will set *Development* as the **ASPNETCORE_ENVIRONMENT** and use environment variables defined in the `docker-run-api: debug` task in the [tasks.json](/.vscode/tasks.json) file.
 
-The application settings and the keys required are the following:
+The keys required for the application settings are the following:
 - **Cors__PolicyName**: CORS policy name defined for the web application.
 - **Cors__AllowedOrigins**: comma-separated list of CORS allowed origins. This value should be set to https&ZeroWidthSpace;://localhost:5002 to allow calls from the Blazor UI application.
 - **Cors__AllowedMethods**: comma-separated list of CORS allowed methods.  This value should be set to *GET* to allow calls from the Blazor application.
@@ -89,7 +89,7 @@ Separately from the application settings, it is required to use a `.env` file, n
 #### dotnet CLI
 
 The application can be launched in two ways:
-1. From a terminal set at the root of the project, *./src/Hosts/Api*, with the the command: `dotnet run`.
+1. From a terminal set at the root of the project, `./src/Hosts/Api`, with the the command: `dotnet run`.
 2. From VSCode via the *Run & Debug* menu. Select the *Launch Web: Football Scoreboard API* launch config.
 
 Once the application starts, it will be available at https&ZeroWidthSpace;://localhost:5001.
@@ -106,7 +106,7 @@ The certificate and the key can be created with the following command:
 openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
 ```
 
-This command will prompt for a certificate password. This password is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** enviroment setting in the `.env.api` file mentioned [earlier](#environment-values).
+This command will prompt for a certificate password. This password is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** enviroment setting in the `.env.api` file mentioned earlier in the [application settings](#application-settings) section.
 
 Once the certificate is ready, the application can be launched from VSCode via the *Run and Debug* menu, simply select the *Launch Docker: Football Scoreboard API* launch config.
 
