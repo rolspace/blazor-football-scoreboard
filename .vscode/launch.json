@@ -52,7 +52,7 @@
             }
         },
         {
-            "name": "Launch Web: Football Scoreboard Blazor WebAssembly",
+            "name": "Launch Web: Football Scoreboard Blazor",
             "type": "blazorwasm",
             "request": "launch",
             "cwd": "${workspaceFolder}/src/Hosts/Blazor",
