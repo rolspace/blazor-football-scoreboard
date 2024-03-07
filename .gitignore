@@ -364,11 +364,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-# .env files used by VSCode tasks
+# .env files used by VSCode tasks and Docker Compose files for debugging
 .env*
 
-# Local mysql database locations
-data
-
-# Path for custom application certificates
-certs
+# Path for local Docker data
+.docker/*
+!.docker/.gitkeep
