@@ -10,7 +10,7 @@ This test project executes the unit tests for the [Football.Api](/src/Hosts/Api/
 
 ### Running the tests
 
-1. Set the current working directory in your terminal of choice to the [root of the unit test project](/tests/Football.Api.UnitTests/).
+1. Set the current working directory a terminal to the [root of the unit test project](/tests/Football.Api.UnitTests/).
 
 2. Run the tests with the `dotnet test` command.
 

@@ -11,7 +11,7 @@ The system is split into three main elements:
 
 - .NET 6+ SDK
 - Visual Studio Code 1.83+
-- Docker 4.30+
+- Docker Desktop 4.30+
 
 ## How to run locally
 
@@ -86,4 +86,4 @@ To run the tests, perform the following steps:
 
 5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:./coveragereport" "-assemblyfilters:+Football.*;-Football.*Tests";`.
 
-The HTML coverage report will be found in the `./coveragereport` folder at the root of the repository, open the `index.html` file on your browser of choice to view the results.
+The HTML coverage report will be found in the `coveragereport` folder at the root of the repository, open the `index.html` file on your browser of choice to view the results.

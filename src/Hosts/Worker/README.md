@@ -6,7 +6,7 @@ This .NET 6 web application runs a background service that reads the existing da
 
 - .NET 6+ SDK
 - Visual Studio Code 1.83+
-- Docker 4.30+
+- Docker Desktop 4.30+
 
 ## How to run locally
 
@@ -82,7 +82,7 @@ Separately from the application settings, it is required to use a `.env` file, n
 #### dotnet CLI
 
 The application can be launched in two ways:
-1. From a terminal set at the root of the project, `./src/Hosts/Worker`, with the the command: `dotnet run`.
+1. From a terminal set at the root of the project, `src/Hosts/Worker`, with the the command: `dotnet run`.
 2. From VSCode via the *Run & Debug* menu. Select the *Launch Web: Football Scoreboard Worker* launch config.
 
 Once the application starts, it will be available at https&ZeroWidthSpace;://localhost:5003, however, there are no relevant endpoints exposed. The main output of the application will be output to the console from the background service.

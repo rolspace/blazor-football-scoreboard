@@ -7,7 +7,7 @@ The website has a page for all the games for a given week, where the user can se
 
 - .NET 6+ SDK
 - Visual Studio Code 1.83+
-- Docker 4.30+
+- Docker Desktop 4.30+
 
 ## How to run locally
 
@@ -26,7 +26,7 @@ The keys required for the application settings are the following:
 ### Launch the application
 
 The application can be launched in two ways:
-1. From a terminal set at the root of the project, `./src/Hosts/Blazor`, with the the command: `dotnet run`.
+1. From a terminal set at the root of the project, `src/Hosts/Blazor`, with the the command: `dotnet run`.
 2. From VSCode via the *Run & Debug* menu. Select the *Launch Web: Football Scoreboard Blazor* launch config.
 
 Once the application starts, it will be available at https&ZeroWidthSpace;://localhost:5002.

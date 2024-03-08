@@ -6,7 +6,7 @@ This .NET 6 web application exposes HTTP endpoints and a SignalR Hub that are us
 
 - .NET 6+ SDK
 - Visual Studio Code 1.83+
-- Docker 4.30+
+- Docker Desktop 4.30+
 
 ## How to run locally
 
@@ -15,7 +15,7 @@ In order for the application to run successfully a database and environment vari
 
 ### Database configuration
 
-The Docker Compose file, [docker-compose.localdb.yml](/docker-compose.app.yml), provides a MySQL database and a database management tool, [Adminer](https://www.adminer.org/).
+The Docker Compose file, [docker-compose.localdb.yml](/docker-compose.localdb.yml), provides a MySQL database and a database management tool, [Adminer](https://www.adminer.org/).
 
 The local database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a file to exist at the root of the repository with the name `.env.localdb`, which must include the following variables:
 - **MYSQL_ROOT_PASSWORD**
@@ -89,7 +89,7 @@ Separately from the application settings, it is required to use a `.env` file, n
 #### dotnet CLI
 
 The application can be launched in two ways:
-1. From a terminal set at the root of the project, `./src/Hosts/Api`, with the the command: `dotnet run`.
+1. From a terminal set at the root of the project, `src/Hosts/Api`, with the the command: `dotnet run`.
 2. From VSCode via the *Run & Debug* menu. Select the *Launch Web: Football Scoreboard API* launch config.
 
 Once the application starts, it will be available at https&ZeroWidthSpace;://localhost:5001.
@@ -98,7 +98,7 @@ Once the application starts, it will be available at https&ZeroWidthSpace;://loc
 
 #### Docker
 
-Before starting the application via Docker, a custom certificate is required. This certificate is needed because the SignalR Hub exposes by the Football.Api application will be called inside the Docker network with SSL.
+Before starting the application via Docker, a custom certificate is required to allow calls to the SignalR Hub from inside the Docker network with SSL.
 
 The certificate and the key can be created with the following command:
 
@@ -162,4 +162,4 @@ Returns a 404 if the game id cannot be found.
 #### /hub/plays
 
 The hub endpoint exposes the method called by the [Web
-Worker](/src/Hosts/Football.Worker), which sends play data to the [Blazor](./src/Hosts/Football.Blazor) web clients.
+Worker](/src/Hosts/Football.Worker), which sends play data to the [Blazor](/src/Hosts/Football.Blazor) web clients.
