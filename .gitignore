@@ -146,11 +146,11 @@ dotCover*
 coverage*[.json, .xml, .info]
 
 # Visual Studio code coverage results
-*.coverage
 *.coveragexml
 
 # ReportGenerator directory
-coveragereport
+.coverage/*
+!.coverage/.gitkeep
 
 # NCrunch
 _NCrunch_*
