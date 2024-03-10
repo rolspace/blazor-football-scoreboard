@@ -5,27 +5,47 @@ This test project executes the integration tests for the [Football.Application](
 ## Requirements
 
 - .NET 6+ SDK
-- Docker 4.30+
+- Docker Desktop 4.30+
 
 ## How to run the tests
 
 ### Preparing the test database
 
-The integration tests require a database connection in order to run successfully. The Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database via Docker.
+The integration tests require a database in order to run successfully.
 
-The Compose file references an SQL file, [football_testdb.sql](/data/testdb/football_testdb.sql), which is used to seed data to the test database. The very first time the Compose file runs, the startup will take a bit longer due to the seeding process.
+The Docker Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a MySQL database and a database management tool, [Adminer](https://www.adminer.org/).
 
-The Compose file expects a file with the name *.env.testdb* at the root of the repository. The following values are required by the [MySQL Docker image](https://hub.docker.com/_/mysql/) and should be included in the env file:
+The test database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a file to exist at the root of the repository with the name `.env.testdb`, which must include the following variables:
+- **MYSQL_ROOT_PASSWORD**
+- **MYSQL_USER**
+- **MYSQL_PASSWORD**
 
-- MYSQL_ROOT_PASSWORD
-- MYSQL_USER
-- MYSQL_PASSWORD
+The variables are required to launch the database container.
+The contents of the `.env.testdb` file should be similar to the example below:
 
-The test database for the integration tests that can be launched from:
+```
+MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
+MYSQL_USER={MYSQL USER IDENTIFIER}
+MYSQL_PASSWORD={MYSQL USER PASSWORD}
+```
 
-- A terminal set to the [root of the repository](/). On this terminal, run the command, `docker-compose -f docker-compose.testdb.yml up -d`
+> [!IMPORTANT]
+> The test database is configured to run on a different port (3307) than the default port used by MySQL databases (3306).
 
-- The VSCode Explorer, assuming the Docker extension is installed. Simply right click on the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and select `Compose Up`.
+### Starting the test database
+
+The test database can be launched in two ways:
+1. If you have the Docker extension for VSCode, right-click the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and select `Compose Up`.
+2. Run the command, `docker-compose -f docker-compose.testdb.yml up -d`, from a terminal set at the root of the repository.
+
+The Compose file will start containers for the test MySQL database and Adminer.
+
+If the test database is launched for the first time, there is an automated seeding process that uses the [footballscoreboard_testdb.sql](/scripts/localdb/footballscoreboard_testdb.sql) file to generate the tables and data.
+
+Due to the size of the database, the test database container startup will take a bit longer.
+The database will be persisted locally in the `.docker/volumes/testdb` folder for subsequent runs.
+
+Adminer will be available at the following URL: http&ZeroWidthSpace;://localhost:8081.
 
 ### Running the tests
 
@@ -37,10 +57,14 @@ Once the test database is ready, run the tests by:
 
 ### Running the tests with coverage
 
-1. Install the dotCover tool globally with the command, `dotnet tool install JetBrains.dotCover.GlobalTool -g`
+1. Install the [dotnet coverage](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage) tool globally with the command, `dotnet tool install --global dotnet-coverage`.
 
-2. In a terminal, set the working directory to [the root of the integration test project](/tests/Football.Application.IntegrationTests/).
+2. Install the [dotnet report generator](https://www.nuget.org/packages/dotnet-reportgenerator-globaltool) tool globally with the command, `dotnet tool install dotnet-reportgenerator-globaltool`.
 
-3. Run the command, `dotnet dotcover test --dcReportType=HTML --dcFilters="-:MySqlConnector"`.
+3. Set the current working directory in your terminal of choice to the root of the repository.
 
-The coverage report can be viewed by opening the `dotCover.Output.html` file in a browser window.
+4. Run the tests with the command, `dotnet-coverage collect 'dotnet test --no-restore' -f cobertura  -o 'coverage.xml'`. It is possible to change the report output by [changing the `-f` and `-o` parameters from the collect command](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage#dotnet-coverage-collect).
+
+5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:.coverage" "-assemblyfilters:+Football.*;-Football.*Tests";`.
+
+The HTML coverage report will be found in the `.coverage` folder at the root of the repository, open the `index.html` file on your browser of choice to view the results.
