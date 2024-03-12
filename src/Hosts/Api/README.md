@@ -40,8 +40,8 @@ The Compose file will start containers for the local MySQL database and Adminer.
 
 If the local database is launched for the first time, there is an automated seeding process that uses the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file to generate the tables and data.
 
-Due to the size of the database, the local database container startup will take a bit longer.
-The database will be persisted locally in the `./data/localdb` folder for subsequent runs.
+Due to the size of the local database, the container startup will take a few minutes longer.
+The database will be persisted locally with a Docker Volume in the `.docker/volumes/localdb` folder, for subsequent runs.
 
 Adminer will be available at the following URL: http&ZeroWidthSpace;://localhost:8080.
 
@@ -103,10 +103,12 @@ Before starting the application via Docker, a custom certificate is required to 
 The certificate and the key can be created with the following command:
 
 ```
-openssl req -x509 -newkey rsa:4096 -keyout certs/api/Api_CertKey.pem -out certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
+openssl req -x509 -newkey rsa:4096 -keyout .docker/volumes/certs/api/Api_CertKey.pem -out .docker/volumes/certs/api/Api_Cert.pem -sha256 -days 3650 -subj "/CN=Football Scoreboard API" -addext "subjectAltName = DNS:localhost, DNS:footballscoreboard_api"
 ```
 
 This command will prompt for a certificate password. This password is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** enviroment setting in the `.env.api` file mentioned earlier in the [application settings](#application-settings) section.
+
+The certificate and key created will be stored in a location known to the Docker setup, the `.docker/volumes/certs/api` folder.
 
 Once the certificate is ready, the application can be launched from VSCode via the *Run and Debug* menu, simply select the *Launch Docker: Football Scoreboard API* launch config.
 

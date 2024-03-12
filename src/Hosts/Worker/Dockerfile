@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-COPY certs/api/Api_Cert.pem /usr/local/share/ca-certificates/Api_Cert.crt
+COPY .docker/volumes/certs/api/Api_Cert.pem /usr/local/share/ca-certificates/Api_Cert.crt
 RUN update-ca-certificates --verbose
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers

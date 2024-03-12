@@ -13,7 +13,7 @@ services:
     env_file:
       - .env.localdb
     volumes:
-      - ./data/localdb:/var/lib/mysql
+      - ./.docker/volumes/localdb:/var/lib/mysql
       - ./scripts/localdb:/docker-entrypoint-initdb.d
     networks:
       - db_net

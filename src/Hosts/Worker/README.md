@@ -41,7 +41,7 @@ The Compose file will start containers for the local MySQL database and Adminer.
 If the local database is launched for the first time, there is an automated seeding process that uses the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file to generate the tables and data.
 
 Due to the size of the database, the local database container startup will take a bit longer.
-The database will be persisted locally in the `./data/localdb` folder for subsequent runs.
+The database will be persisted locally in the `.docker/volumes/localdb` folder for subsequent runs.
 
 Adminer will be available at the following URL: http&ZeroWidthSpace;://localhost:8080.
 

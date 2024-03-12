@@ -102,7 +102,7 @@
                 },
                 "volumes": [
                     {
-                        "localPath": "${workspaceFolder}/certs/api",
+                        "localPath": "${workspaceFolder}/.docker/volumes/certs/api",
                         "containerPath": "/https",
                         "permissions": "ro"
                     }
