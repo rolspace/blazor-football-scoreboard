@@ -1,6 +1,6 @@
 # Blazor Football Scoreboard Football.Worker
 
-This .NET 6 web application runs a background service that reads the existing data from football games in the 2019 season.
+This .NET 6 web application runs a background service that replays game logs from games in the 2019 football season.
 
 ## Requirements
 
@@ -11,13 +11,13 @@ This .NET 6 web application runs a background service that reads the existing da
 ## How to run locally
 
 The application can be launched locally with the dotnet CLI or with Docker.
-In order for the application to run successfully a database and environment variables are required.
+In order for the application to run successfully a local database and the application settings are required.
 
 ### Database configuration
 
 The Docker Compose file, [docker-compose.localdb.yml](/docker-compose.app.yml), provides a MySQL database and a database management tool, [Adminer](https://www.adminer.org/).
 
-The local database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a file to exist at the root of the repository with the name `.env.localdb`, which must include the following variables:
+The local database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a `.env.localdb` file at the root of the repository, which must include the following variables:
 - **MYSQL_ROOT_PASSWORD**
 - **MYSQL_USER**
 - **MYSQL_PASSWORD**
@@ -36,56 +36,58 @@ The local database can be launched in two ways:
 1. If you have the Docker extension for VSCode, right-click the [docker-compose.localdb.yml](/docker-compose.localdb.yml) file and select `Compose Up`.
 2. Run the command, `docker-compose -f docker-compose.localdb.yml up -d`, from a terminal set at the root of the repository.
 
-The Compose file will start containers for the local MySQL database and Adminer.
+The Docker Compose file will start containers for the local database and Adminer.
 
-If the local database is launched for the first time, there is an automated seeding process that uses the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file to generate the tables and data.
+For the initial launch of the database container, there is an automated seeding process to generate the tables and data, based on the [footballscoreboard_localdb.sql](/scripts/localdb/footballscoreboard_localdb.sql) file.
 
-Due to the size of the database, the local database container startup will take a bit longer.
-The database will be persisted locally in the `.docker/volumes/localdb` folder for subsequent runs.
+Due to the size of the local database, the container startup will take a few minutes. Once the container is ready, the database will be persisted locally with a Docker Volume in the *.docker/volumes/localdb* folder.
 
-Adminer will be available at the following URL: http&ZeroWidthSpace;://localhost:8080.
+Adminer will be available at the following URL: *http&ZeroWidthSpace;://localhost:8080*.
 
 ### Application settings
 
-#### dotnet CLI
+#### dotnet CLI
 
-Running via the dotnet CLI, the application will set *Localhost* as the **ASPNETCORE_ENVIRONMENT** and use the [appsettings.Localhost.json](/src/Hosts/Worker/appsettings.Localhost.json) configuration file.
+Running via the dotnet CLI, the startup will set the **ASPNETCORE_ENVIRONMENT** to *Localhost* and use the [appsettings.Localhost.json](/src/Hosts/Worker/appsettings.Localhost.json) configuration file.
 
 The keys required for the application settings are the following:
 - **Hub:HubUrl**: URL of the SignalR Hub.
 - **Scoreboard:Week**: number for the week in the season schedule.
 
 > [!IMPORTANT]
-> The **Scoreboard:Week** setting is used to set the week of the schedule for the games that will simulated.
-> It is necessary that both the Football.Api and the Football.Worker applications have the same value for this setting.
+> The **Scoreboard:Week** setting is used to set the week in the season schedule that will be simulated.
+> It is necessary that both the [Football.Api](/src/Hosts/Api/) and the [Football.Worker](/src/Hosts/Worker/) applications have the same value for this setting.
 
-Separately from the application settings, it is required to use the .NET user secrets to store settings that should not be committed to the repo:
+Separately from the application settings file, an additional setting should be stored in the .NET user secrets:
 - **ConnectionStrings:FootballDbConnection**: database connection string.
 
 ---
 
 #### Docker
 
-Running via Docker, the application will set *Development* as the **ASPNETCORE_ENVIRONMENT** and use environment variables defined in the `docker-run-worker: debug` task in the [tasks.json](/.vscode/tasks.json) file.
+Running via Docker, the application will set the **ASPNETCORE_ENVIRONMENT** variable to *Development* and use the environment variables defined in the `docker-run-worker: debug` task in the [tasks.json](/.vscode/tasks.json) file.
 
 The keys required for the application settings are the following:
 - **Hub:HubUrl**: URL for the Signal Hub.
 - **Scoreboard:Week**: number for the week in the season schedule.
 
-Separately from the application settings, it is required to use a `.env` file, named `.env.worker`, to store settings that should not be committed to the repo:
+> [!IMPORTANT]
+> The **Scoreboard:Week** setting is used to set the week in the season schedule that will be simulated.
+> It is necessary that both the [Football.Api](/src/Hosts/Api/) and the [Football.Worker](/src/Hosts/Worker/) applications have the same value for this setting.
+
+Separately from the environment variables, sensitive settings should be stored in a `.env.worker` file, at the root of the repository:
 - **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the custom certificate used by the application.
 - **MYSQLCONNSTR_FootballDbConnection**: database connection string.
-
 
 ### Launch the application
 
 #### dotnet CLI
 
 The application can be launched in two ways:
-1. From a terminal set at the root of the project, `src/Hosts/Worker`, with the the command: `dotnet run`.
+1. From a terminal set at the root of the project, with the the command: `dotnet run`.
 2. From VSCode via the *Run & Debug* menu. Select the *Launch Web: Football Scoreboard Worker* launch config.
 
-Once the application starts, it will be available at https&ZeroWidthSpace;://localhost:5003, however, there are no relevant endpoints exposed. The main output of the application will be output to the console from the background service.
+Once the application starts, it will be available at *https&ZeroWidthSpace;://localhost:5003*, however, there are no relevant endpoints exposed. The main output of the application will be output to the console from the background service.
 
 ---
 
@@ -104,4 +106,4 @@ The {PASSWORD VALUE} is the same value that needs to be set for the **ASPNETCORE
 
 Once the certificate is ready, the application can be launched from VSCode via the *Run and Debug* menu, simply select the *Launch Docker: Football Scoreboard API* launch config.
 
-Once the application starts, it will be available at https&ZeroWidthSpace;://localhost:5003, however, there are no relevant endpoints exposed. The main output of the application will be output to the console from the execution of the background service.
+Once the application starts, it will be available at *https&ZeroWidthSpace;://localhost:5003*, however, there are no other endpoints available. The main output of the application will be sent to the console from the running background service.

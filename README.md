@@ -1,11 +1,11 @@
 # Blazor Football Scoreboard
 
-This repository contains libraries and applications to run a simulation of games from the 2019 football season in "real-time".
+This repository contains libraries and web applications that are used to run a simulation of the 2019 football season.
 
 The system is split into three main elements:
 - **Web API**: exposes HTTP endpoints to get data and statistics for football games from the 2019 season. It includes a SignalR Hub used to send messages to connected clients.
-- **Web Worker**: reads play data from an existing database. The Worker sends this play data to the SignalR Hub which communicates with the Blazor client.
-- **Blazor UI**: displays the scores and plays for games. The user can also view a page for a specific game which provides game statistics.
+- **Blazor UI**: displays the scores and the play-by-play for each game. The user can also browse to a dedicated page for each game, with additional data.
+- **Web Worker**: reads play data from an existing database. This process sends the play data to the SignalR Hub, which communicates with the Blazor client.
 
 ## Requirements
 
@@ -28,11 +28,11 @@ The repository includes both unit tests and integration tests.
 
 The integration tests require a database in order to run successfully.
 
-### Prepare the test database
+### Preparing the test database
 
 The Docker Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database and a database management tool, [Adminer](https://www.adminer.org/).
 
-The test database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a file to exist at the root of the repository with the name `.env.testdb`, which must include the following variables:
+The test database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a `.env.testdb` file at the root of the repository, which must include the following variables:
 - **MYSQL_ROOT_PASSWORD**
 - **MYSQL_USER**
 - **MYSQL_PASSWORD**
@@ -49,32 +49,30 @@ MYSQL_PASSWORD={MYSQL USER PASSWORD}
 > [!IMPORTANT]
 > The test database is configured to run on a different port (3307) than the default port used by MySQL databases (3306).
 
-### Start the test database
+### Starting the test database
 
-Once the .env file has been set up, it is time to start the test database.
+Once the `.env.testdb` file has been set up, the test database is ready for launch.
 
-This can be done in two ways:
-
+The test database can be launched in two ways:
 1. If you have the Docker extension for VSCode, right-click the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and select `Compose Up`.
 2. Run the command, `docker-compose -f docker-compose.testdb.yml up -d`, from a terminal set at the root of the repository.
 
-The Compose file will start containers for the test MySQL database and Adminer.
+The Docker Compose file will start the containers for the test database and Adminer.
 
-If the test database is launched for the first time, there is an automated seeding process that uses the [footballscoreboard_testdb.sql](/scripts/localdb/footballscoreboard_testdb.sql) file to generate the tables and data.
+For the initial launch of the database container, there is an automated seeding process to generate the tables and data, based on the [footballscoreboard_testdb.sql](/scripts/testdb/footballscoreboard_testdb.sql) file.
 
-Due to the size of the database, the test database container startup will take a bit longer.
-The database will be persisted locally in the `./data/testdb` folder for subsequent runs.
+Due to the size of the test database, the container startup will take a few minutes. Once the container is ready, the database will be persisted locally with a Docker Volume in the *.docker/volumes/testdb* folder.
 
-Adminer will be available at the following URL: http&ZeroWidthSpace;://localhost:8081.
+Adminer will be available at the following URL: *http&ZeroWidthSpace;://localhost:8081*.
 
-### Run the tests
+### Running the tests
 
 To run the tests, perform the following steps:
 
-1. Set the current working directory in your terminal of choice to the root of the repository.
+1. In a terminal, set the current working directory to the root of the repository.
 2. Run the tests with the `dotnet test` command.
 
-### Run the tests with coverage
+### Running the tests with coverage
 
 1. Install the [dotnet coverage](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage) tool globally with the command, `dotnet tool install --global dotnet-coverage`.
 
@@ -86,4 +84,4 @@ To run the tests, perform the following steps:
 
 5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:.coverage" "-assemblyfilters:+Football.*;-Football.*Tests";`.
 
-The HTML coverage report will be found in the `.coverage` folder at the root of the repository, open the `index.html` file on your browser of choice to view the results.
+The HTML coverage report will be found in the *.coverage* folder at the root of the repository, open the *index.html* file on your browser of choice to view the results.
