@@ -149,8 +149,8 @@ coverage*[.json, .xml, .info]
 *.coveragexml
 
 # ReportGenerator directory
-.coverage/*
-!.coverage/.gitkeep
+coverage/*
+!coverage/.gitkeep
 
 # NCrunch
 _NCrunch_*

@@ -64,6 +64,6 @@ Once the test database is ready, run the tests by:
 
 4. Run the tests with the command, `dotnet-coverage collect 'dotnet test --no-restore' -f cobertura  -o 'coverage.xml'`. It is possible to change the report output by [changing the -f and -o parameters](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage#dotnet-coverage-collect) from the `collect` command.
 
-5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:.coverage" "-assemblyfilters:+Football.*;-Football.*Tests";`.
+5. Generate the coverage report using the reportgenerator tool with the command, `reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests";`.
 
-The HTML coverage report will be found in the *.coverage* folder at the root of the repository, open the *index.html* file on your browser of choice to view the results.
+The HTML coverage report will be found in the *coverage* folder at the root of the repository, open the *index.html* file on your browser of choice to view the results.
