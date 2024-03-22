@@ -41,7 +41,7 @@ public class GamesController : ControllerBase
         return Ok(games);
     }
 
-    [HttpGet("today")]
+    [HttpGet("now")]
     [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

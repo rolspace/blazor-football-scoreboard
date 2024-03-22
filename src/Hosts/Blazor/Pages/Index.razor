@@ -51,7 +51,7 @@
         try
         {
             Uri apiUri = new Uri(ApiOptions.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
-            GameDto[]? games = await Http.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games/today"));
+            GameDto[]? games = await Http.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games/now"));
 
             if (games is not null && games.Count() > 0)
             {

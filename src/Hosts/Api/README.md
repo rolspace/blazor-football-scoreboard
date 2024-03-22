@@ -139,10 +139,10 @@ Returns a 404 if no games are found for the given week.
 
 ---
 
-#### GET /api/v1/games/today
+#### GET /api/v1/games/now
 
-Retrieves all the games scheduled for today.
-*today* is understood to represent the current week in the season schedule (defined by the *Scoreboard:Week* application setting).
+Retrieves all the games scheduled for this moment.
+*now* represents the current week in the season schedule, which is determined by the *Scoreboard:Week* application setting.
 
 ---
 
