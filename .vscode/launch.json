@@ -9,13 +9,13 @@
             "program": "${workspaceFolder}/src/Hosts/Api/bin/Debug/net6.0/Football.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Hosts/Api",
+            "launchSettingsFilePath": "${workspaceFolder}/src/Hosts/Api/Properties/launchSettings.json",
             "stopAtEntry": false,
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Localhost"
+            "serverReadyAction": {
+                "action":"openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s/swagger"
             },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
         },
         {
             "name": "Launch Docker: Football Scoreboard API",
@@ -24,6 +24,11 @@
             "preLaunchTask": "docker-run-api: debug",
             "netCore": {
                 "appProject": "${workspaceFolder}/src/Hosts/Api/Football.Api.csproj"
+            },
+            "dockerServerReadyAction": {
+                "action":"openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+                "uriFormat": "%s://localhost:%s/swagger"
             }
         },
         {
@@ -37,9 +42,6 @@
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Localhost"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
             }
         },
         {
