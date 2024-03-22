@@ -29,14 +29,11 @@ public class GamesController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesByWeek([FromQuery] GetGamesQuery query)
     {
         if (query == null) return BadRequest();
 
         IEnumerable<GameDto> games = await _mediator.Send(query);
-
-        if (!games.Any()) return NotFound();
 
         return Ok(games);
     }
@@ -44,7 +41,6 @@ public class GamesController : ControllerBase
     [HttpGet("now")]
     [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<GameDto>>> GetCurrentGames()
     {
         GetGamesQuery query = new()
@@ -53,8 +49,6 @@ public class GamesController : ControllerBase
         };
 
         IEnumerable<GameDto> games = await _mediator.Send(query);
-
-        if (!games.Any()) return NotFound();
 
         return Ok(games);
     }
