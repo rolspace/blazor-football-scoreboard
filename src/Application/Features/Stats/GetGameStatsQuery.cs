@@ -2,6 +2,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Football.Application.Features.Stats.Models;
 using Football.Application.Interfaces;
+using Football.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ namespace Football.Application.Features.Stats;
 
 public record GetGameStatsQuery : IRequest<GameStatDto>
 {
-    public int GameId { get; init; }
+    public int Id { get; init; }
 }
 
 public class GetGameStatsQueryHandler : IRequestHandler<GetGameStatsQuery, GameStatDto?>
@@ -17,6 +18,7 @@ public class GetGameStatsQueryHandler : IRequestHandler<GetGameStatsQuery, GameS
     private readonly IFootballDbContext _footballDbContext;
 
     private readonly IMapper _mapper;
+
     public GetGameStatsQueryHandler(IFootballDbContext footballDbContext, IMapper mapper)
     {
         _footballDbContext = footballDbContext;
@@ -31,7 +33,7 @@ public class GetGameStatsQueryHandler : IRequestHandler<GetGameStatsQuery, GameS
 
         return new GameStatDto()
         {
-            GameId = request.GameId,
+            GameId = request.Id,
             Stats = gameStats
         };
     }

@@ -9,7 +9,7 @@ namespace Football.Application.Features.Games;
 
 public record GetGameQuery : IRequest<GameDto>
 {
-    public int GameId { get; init; }
+    public int Id { get; init; }
 }
 
 public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto?>
@@ -27,7 +27,7 @@ public class GetGameQueryHandler : IRequestHandler<GetGameQuery, GameDto?>
     public async Task<GameDto?> Handle(GetGameQuery request, CancellationToken cancellationToken)
     {
         return await _footballDbContext.Games
-                .Where(game => game.Id == request.GameId)
+                .Where(game => game.Id == request.Id)
                 .Include(game => game.Stats)
                 .ProjectTo<GameDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);

@@ -30,7 +30,7 @@ public class GamesControllerTest
     [Fact]
     public async Task GetGamesById_GameIdFound_ReturnsHttpOkAndGameDto()
     {
-        var getGameQuery = new GetGameQuery { GameId = 1 };
+        var getGameQuery = new GetGameQuery { Id = 1 };
         var gameDto = new GameDto
         {
             Id = 1,
@@ -52,7 +52,7 @@ public class GamesControllerTest
     [Fact]
     public async Task GetGamesById_GameIdNotFound_ReturnsNotFound()
     {
-        var getGameQuery = new GetGameQuery { GameId = 0 };
+        var getGameQuery = new GetGameQuery { Id = 0 };
 
         _mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()))
             .ReturnsAsync((GameDto?)null);
@@ -135,7 +135,7 @@ public class GamesControllerTest
     [Fact]
     public async Task GetStatsById_GameIdFound_ReturnsGameStatsDtoModel()
     {
-        var getGameStatsQuery = new GetGameStatsQuery() { GameId = 1 };
+        var getGameStatsQuery = new GetGameStatsQuery() { Id = 1 };
         var gameStatDto = new GameStatDto
         {
             GameId = 1,

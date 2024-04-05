@@ -6,7 +6,7 @@ public class GetGameQueryValidator : AbstractValidator<GetGameQuery>
 {
     public GetGameQueryValidator()
     {
-        RuleFor(g => g.GameId)
+        RuleFor(g => g.Id)
             .Must(gameId => gameId > 0)
             .WithMessage("GameId must never be zero or negative");
     }

@@ -15,17 +15,17 @@ public class GetGameQueryValidatorTest
     [Fact]
     public void Validate_GameIdIsZero_Throw()
     {
-        GetGameQuery getGameQuery = new() { GameId = 0 };
+        GetGameQuery getGameQuery = new() { Id = 0 };
 
         TestValidationResult<GetGameQuery> validatorResult = _getGameQueryValidator.TestValidate(getGameQuery);
 
-        validatorResult.ShouldHaveValidationErrorFor(query => query.GameId);
+        validatorResult.ShouldHaveValidationErrorFor(query => query.Id);
     }
 
     [Fact]
     public void Validate_GameIdIsPositive_ValidationSuccess()
     {
-        GetGameQuery getGameQuery = new() { GameId = 1 };
+        GetGameQuery getGameQuery = new() { Id = 1 };
 
         TestValidationResult<GetGameQuery> validatorResult = _getGameQueryValidator.TestValidate(getGameQuery);
 

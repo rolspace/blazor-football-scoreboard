@@ -66,7 +66,7 @@ public class GetGameStatsQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 
         GameStatDto? result = await handler.Handle(new GetGameStatsQuery
         {
-            GameId = 2019090500
+            Id = 2019090500
         }, new CancellationToken());
 
         result.Should().BeEquivalentTo(expected);
@@ -87,7 +87,7 @@ public class GetGameStatsQueryHandlerTest : IClassFixture<TestDatabaseFixture>
 
         GameStatDto? result = await handler.Handle(new GetGameStatsQuery
         {
-            GameId = 1
+            Id = 1
         }, new CancellationToken());
 
         result.Should().BeEquivalentTo(expected);
