@@ -60,7 +60,10 @@ try
             options.SubstituteApiVersionInUrl = true;
         });
 
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.DescribeAllParametersInCamelCase();
+    });
 
     CorsOptions? corsOptions = builder.Configuration.GetSection(CorsOptions.Key).Get<CorsOptions>();
     if (corsOptions is not null)
