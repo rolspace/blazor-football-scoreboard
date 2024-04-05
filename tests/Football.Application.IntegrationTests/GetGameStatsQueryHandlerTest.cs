@@ -73,15 +73,9 @@ public class GetGameStatsQueryHandlerTest : IClassFixture<TestDatabaseFixture>
     }
 
     [Fact]
-    public async Task Handle_GameStatsNotFoundForGameId_ReturnsGameStatsDtoWithEmptyGameStatsCollection()
+    public async Task Handle_GameNotFoundForGameId_ReturnsNull()
     {
         using FootballDbContext dbContext = Fixture.CreateContext();
-
-        GameStatDto expected = new()
-        {
-            GameId = 1,
-            Stats = Enumerable.Empty<StatDto>().ToList()
-        };
 
         GetGameStatsQueryHandler handler = new(dbContext, _mapper);
 
@@ -90,6 +84,6 @@ public class GetGameStatsQueryHandlerTest : IClassFixture<TestDatabaseFixture>
             Id = 1
         }, new CancellationToken());
 
-        result.Should().BeEquivalentTo(expected);
+        result.Should().BeNull();
     }
 }

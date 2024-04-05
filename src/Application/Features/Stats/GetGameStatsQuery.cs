@@ -27,7 +27,13 @@ public class GetGameStatsQueryHandler : IRequestHandler<GetGameStatsQuery, GameS
 
     public async Task<GameStatDto?> Handle(GetGameStatsQuery request, CancellationToken cancellationToken)
     {
-        List<StatDto> gameStats = await _footballDbContext.Stats.Where(s => s.GameId == request.GameId)
+        Game? game = await _footballDbContext.Games
+                .Where(game => game.Id == request.Id)
+                .SingleOrDefaultAsync(cancellationToken: cancellationToken);
+
+        if (game is null) return default;
+
+        List<StatDto> gameStats = await _footballDbContext.Stats.Where(s => s.GameId == request.Id)
             .ProjectTo<StatDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
