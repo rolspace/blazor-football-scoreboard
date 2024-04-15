@@ -1,4 +1,7 @@
 using Asp.Versioning;
+using FluentValidation;
+using FluentValidation.Results;
+using Football.Api.Models.Errors;
 using Football.Application.Features.Games;
 using Football.Application.Features.Games.Models;
 using Football.Application.Features.Stats;
@@ -15,14 +18,30 @@ namespace Football.Api.Controllers.V1;
 [Route("api/v{version:apiVersion}/games")]
 public class GamesController : ControllerBase
 {
-    private readonly ScoreboardOptions _scoreboardOptions;
-
     private readonly ISender _mediator;
 
-    public GamesController(ISender mediator, IOptions<ScoreboardOptions> scoreboardOptions)
+    private readonly ScoreboardOptions _scoreboardOptions;
+
+    private readonly ILogger<GamesController> _logger;
+
+    private readonly IValidator<GetGameQuery> _getGameQueryValidator;
+
+    private readonly IValidator<GetGamesQuery> _getGamesQueryValidator;
+
+    private readonly IValidator<GetGameStatsQuery> _getGameStatsQueryValidator;
+
+    public GamesController(ISender mediator,
+        IOptions<ScoreboardOptions> scoreboardOptions,
+        ILogger<GamesController> logger,
+        IValidator<GetGameQuery> getGameQueryValidator,
+        IValidator<GetGamesQuery> getGamesQueryValidator,
+        IValidator<GetGameStatsQuery> getGameStatsQueryValidator)
     {
         _mediator = mediator;
-
+        _getGameQueryValidator = getGameQueryValidator;
+        _getGamesQueryValidator = getGamesQueryValidator;
+        _getGameStatsQueryValidator = getGameStatsQueryValidator;
+        _logger = logger;
         _scoreboardOptions = scoreboardOptions.Value;
     }
 
@@ -31,7 +50,14 @@ public class GamesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IEnumerable<GameDto>>> GetGamesByWeek([FromQuery] GetGamesQuery query)
     {
-        if (query == null) return BadRequest();
+        ValidationResult validationResult = await _getGamesQueryValidator.ValidateAsync(query);
+
+        if (!validationResult.IsValid)
+        {
+            BadRequestInvalidParamsDetails problemDetails = new(validationResult.Errors);
+
+            return BadRequest(problemDetails);
+        }
 
         IEnumerable<GameDto> games = await _mediator.Send(query);
 
@@ -59,11 +85,20 @@ public class GamesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GameDto>> GetGameById([FromRoute] GetGameQuery query)
     {
-        if (query == null) return BadRequest();
+        if (query is null) return BadRequest();
+
+        ValidationResult validationResult = await _getGameQueryValidator.ValidateAsync(query);
+
+        if (!validationResult.IsValid)
+        {
+            BadRequestInvalidParamsDetails problemDetails = new(validationResult.Errors);
+
+            return BadRequest(problemDetails);
+        }
 
         GameDto game = await _mediator.Send(query);
 
-        if (game == null) return NotFound();
+        if (game is null) return NotFound();
 
         return Ok(game);
     }
@@ -71,11 +106,23 @@ public class GamesController : ControllerBase
     [HttpGet("{id}/stats")]
     [ProducesResponseType(typeof(GameStatDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GameStatDto>> GetStatsById([FromRoute] GetGameStatsQuery query)
     {
         if (query is null) return BadRequest();
 
+        ValidationResult validationResult = await _getGameStatsQueryValidator.ValidateAsync(query);
+
+        if (!validationResult.IsValid)
+        {
+            BadRequestInvalidParamsDetails problemDetails = new(validationResult.Errors);
+
+            return BadRequest(problemDetails);
+        }
+
         GameStatDto gameStats = await _mediator.Send(query);
+
+        if (gameStats is null) return NotFound();
 
         return Ok(gameStats);
     }
