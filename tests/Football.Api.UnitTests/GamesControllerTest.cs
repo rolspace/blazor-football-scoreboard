@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.Results;
 using Football.Api.Controllers.V1;
 using Football.Application.Features.Games;
 using Football.Application.Features.Games.Models;
@@ -6,7 +8,7 @@ using Football.Application.Features.Stats.Models;
 using Football.Infrastructure.Options;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 
@@ -16,19 +18,32 @@ public class GamesControllerTest
 {
     private Mock<ISender> _mockSender;
 
-    private Mock<IOptions<ScoreboardOptions>> _mockScoreboardOptions;
+    private readonly Mock<IOptions<ScoreboardOptions>> _mockScoreboardOptions;
+
+    private readonly Mock<ILogger<GamesController>> _mockLogger;
+
+    private readonly Mock<IValidator<GetGameQuery>> _mockGetGameQueryValidator;
+
+    private readonly Mock<IValidator<GetGamesQuery>> _mockGetGamesQueryValidator;
+
+    private readonly Mock<IValidator<GetGameStatsQuery>> _mockGetGameStatsQueryValidator;
 
     public GamesControllerTest()
     {
         _mockSender = new Mock<ISender>();
-        _mockScoreboardOptions = new Mock<IOptions<ScoreboardOptions>>();
 
+        _mockScoreboardOptions = new Mock<IOptions<ScoreboardOptions>>();
         _mockScoreboardOptions.Setup(options => options.Value)
             .Returns(new ScoreboardOptions { Week = 1});
+
+        _mockLogger = new Mock<ILogger<GamesController>>();
+        _mockGetGameQueryValidator = new Mock<IValidator<GetGameQuery>>();
+        _mockGetGamesQueryValidator = new Mock<IValidator<GetGamesQuery>>();
+        _mockGetGameStatsQueryValidator = new Mock<IValidator<GetGameStatsQuery>>();
     }
 
     [Fact]
-    public async Task GetGamesById_GameIdFound_ReturnsHttpOkAndGameDto()
+    public async Task GetGameById_GameIdFound_ReturnsHttpOkAndGameDto()
     {
         var getGameQuery = new GetGameQuery { Id = 1 };
         var gameDto = new GameDto
@@ -42,7 +57,12 @@ public class GamesControllerTest
         _mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()))
             .ReturnsAsync(gameDto);
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
+        _mockGetGameQueryValidator.Setup(validator => validator.ValidateAsync(getGameQuery, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+            _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
+
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
         OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
@@ -50,14 +70,19 @@ public class GamesControllerTest
     }
 
     [Fact]
-    public async Task GetGamesById_GameIdNotFound_ReturnsNotFound()
+    public async Task GetGameById_GameIdNotFound_ReturnsNotFound()
     {
-        var getGameQuery = new GetGameQuery { Id = 0 };
+        var getGameQuery = new GetGameQuery { Id = 1 };
 
-        _mockSender.Setup<Task<GameDto?>>(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()))
+        _mockSender.Setup(sender => sender.Send<GameDto?>(getGameQuery, new CancellationToken()))
             .ReturnsAsync((GameDto?)null);
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
+        _mockGetGameQueryValidator.Setup(validator => validator.ValidateAsync(getGameQuery, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+            _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
+
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
         NotFoundResult notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
@@ -70,10 +95,18 @@ public class GamesControllerTest
 
         _mockSender.Setup(sender => sender.Send(getGameQuery, new CancellationToken()));
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
+        ValidationResult validationResult = new();
+        validationResult.Errors.Add(new ValidationFailure("TestProperty", "Test Error Message"));
+
+        _mockGetGameQueryValidator.Setup(validator => validator.ValidateAsync(getGameQuery, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(validationResult);
+
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+            _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
+
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
 
-        BadRequestResult notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
+        BadRequestObjectResult badRequestResult = Assert.IsType<BadRequestObjectResult>(actionResult.Result);
     }
 
     [Fact]
@@ -98,7 +131,12 @@ public class GamesControllerTest
         _mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
             .ReturnsAsync(gameDtos);
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
+        _mockGetGamesQueryValidator.Setup(validator => validator.ValidateAsync(getGamesQuery, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+            _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
+
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
         OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
@@ -106,17 +144,23 @@ public class GamesControllerTest
     }
 
     [Fact]
-    public async Task GetGamesByWeek_WeekNotFound_ReturnsNotFound()
+    public async Task GetGamesByWeek_WeekNotFound_ReturnsEmptyCollection()
     {
         var getGamesQuery = new GetGamesQuery { Week = 0 };
 
         _mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()))
             .ReturnsAsync(new List<GameDto>());
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
+        _mockGetGamesQueryValidator.Setup(validator => validator.ValidateAsync(getGamesQuery, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+            _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
+
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
-        NotFoundResult notFoundResult = Assert.IsType<NotFoundResult>(actionResult.Result);
+        OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        Assert.Equal(new List<GameDto>(), okResult.Value);
     }
 
     [Fact]
@@ -126,10 +170,18 @@ public class GamesControllerTest
 
         _mockSender.Setup(sender => sender.Send(getGamesQuery, new CancellationToken()));
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
+        ValidationResult validationResult = new();
+        validationResult.Errors.Add(new ValidationFailure("TestProperty", "Test Error Message"));
+
+        _mockGetGamesQueryValidator.Setup(validator => validator.ValidateAsync(getGamesQuery, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(validationResult);
+
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+            _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
+
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
 
-        BadRequestResult notFoundResult = Assert.IsType<BadRequestResult>(actionResult.Result);
+        BadRequestObjectResult BadRequestResult = Assert.IsType<BadRequestObjectResult>(actionResult.Result);
     }
 
     [Fact]
@@ -164,7 +216,12 @@ public class GamesControllerTest
         _mockSender.Setup(sender => sender.Send(getGameStatsQuery, new CancellationToken()))
             .ReturnsAsync(gameStatDto);
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object);
+        _mockGetGameStatsQueryValidator.Setup(validator => validator.ValidateAsync(getGameStatsQuery, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+            _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
+
         ActionResult<GameStatDto> actionResult = await gamesController.GetStatsById(getGameStatsQuery);
 
         OkObjectResult okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
