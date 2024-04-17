@@ -85,8 +85,6 @@ public class GamesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GameDto>> GetGameById([FromRoute] GetGameQuery query)
     {
-        if (query is null) return BadRequest();
-
         ValidationResult validationResult = await _getGameQueryValidator.ValidateAsync(query);
 
         if (!validationResult.IsValid)
@@ -109,8 +107,6 @@ public class GamesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GameStatDto>> GetStatsById([FromRoute] GetGameStatsQuery query)
     {
-        if (query is null) return BadRequest();
-
         ValidationResult validationResult = await _getGameStatsQueryValidator.ValidateAsync(query);
 
         if (!validationResult.IsValid)
