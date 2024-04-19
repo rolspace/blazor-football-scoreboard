@@ -3,26 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 16.0.0.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{40CCC003-B388-4FCE-933F-75FCC4582A47}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "localdb", "localdb", "{101A9747-F462-48C3-B372-B1BA48BFA9A2}"
 	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
-		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		docker-compose.app.yml = docker-compose.app.yml
-		docker-compose.db.yml = docker-compose.db.yml
-		global.json = global.json
+		scripts\localdb\footballscoreboard_localdb.sql = scripts\localdb\footballscoreboard_localdb.sql
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{40CCC003-B388-4FCE-933F-75FCC4582A47}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{98905046-DCD0-49E1-B146-8B78F006F800}"
-	ProjectSection(SolutionItems) = preProject
-		tests\docker-compose.teststorage.yml = tests\docker-compose.teststorage.yml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{4024C7EA-EC1E-4EA0-8AEF-BDA064A0C6BB}"
-	ProjectSection(SolutionItems) = preProject
-		data\football_db.sql = data\football_db.sql
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Football.Domain", "src\Domain\Football.Domain.csproj", "{600C309A-C887-404F-9116-0A9C23DA090E}"
 EndProject
@@ -41,6 +29,26 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Football.Api.UnitTests", "tests\Football.Api.UnitTests\Football.Api.UnitTests.csproj", "{5BE540F6-B78A-4AD0-A232-CF616228FCD2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Football.Application.IntegrationTests", "tests\Football.Application.IntegrationTests\Football.Application.IntegrationTests.csproj", "{A6FC206F-F3C4-41A1-96BD-D6BFC1BF522C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "testdb", "testdb", "{94B8E058-FCD4-4D64-A953-62FA3F655EEB}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\testdb\footballscoreboard_testdb.sql = scripts\testdb\footballscoreboard_testdb.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D3F4921-4D2A-48E2-96FF-CF491AC54F25}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		global.json = global.json
+        .gitattributes = .gitattributes
+        .gitignore = .gitignore
+        .dockerignore = .dockerignore
+        docker-compose.testdb.yml = docker-compose.testdb.yml
+		docker-compose.localdb.yml = docker-compose.localdb.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{1394B2D2-324E-48C8-90FB-B80379048F22}"
+	ProjectSection(SolutionItems) = preProject
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +93,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{101A9747-F462-48C3-B372-B1BA48BFA9A2} = {1394B2D2-324E-48C8-90FB-B80379048F22}
 		{600C309A-C887-404F-9116-0A9C23DA090E} = {40CCC003-B388-4FCE-933F-75FCC4582A47}
 		{E54394BF-6499-4317-8529-5D4FD8BD5931} = {40CCC003-B388-4FCE-933F-75FCC4582A47}
 		{6283EACE-F703-41B0-80B7-72E13A690C23} = {40CCC003-B388-4FCE-933F-75FCC4582A47}
@@ -94,6 +103,8 @@ Global
 		{48E06C0B-B696-4AF3-A64E-8FC4B960C070} = {C138333C-C403-4F0D-8D0F-674DDA8F5253}
 		{5BE540F6-B78A-4AD0-A232-CF616228FCD2} = {98905046-DCD0-49E1-B146-8B78F006F800}
 		{A6FC206F-F3C4-41A1-96BD-D6BFC1BF522C} = {98905046-DCD0-49E1-B146-8B78F006F800}
+		{94B8E058-FCD4-4D64-A953-62FA3F655EEB} = {1394B2D2-324E-48C8-90FB-B80379048F22}
+		{1394B2D2-324E-48C8-90FB-B80379048F22} = {2D3F4921-4D2A-48E2-96FF-CF491AC54F25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89C2AE1B-F33B-43F7-A6F2-BA0ADDDA0720}
