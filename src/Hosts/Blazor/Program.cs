@@ -34,6 +34,6 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Blazor host application terminated unexpectedly.");
+    Log.Fatal(ex, "Blazor host application unexpected shut down.");
     throw;
 }

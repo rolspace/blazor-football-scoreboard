@@ -46,15 +46,16 @@ try
         Message = "Web application for the PlayLogHostedService."
     });
 
-    app.Run();
+    await app.RunAsync();
+
+    Log.Information("Worker host application shut down.");
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "Worker host application could not be started.");
+    Log.Fatal(ex, "Worker host application unexpected shut down.");
     throw;
 }
 finally
 {
-    Log.Information("Worker host application shut down.");
     Log.CloseAndFlush();
 }

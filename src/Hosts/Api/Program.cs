@@ -37,7 +37,6 @@ try
         .Enrich.FromLogContext()
     );
 
-
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
 
@@ -111,15 +110,16 @@ try
         endpoints.MapControllers();
     });
 
-    app.Run();
+    await app.RunAsync();
+
+    Log.Information("API host application shut down.");
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "API host application could not be started.");
+    Log.Fatal(ex, "API host application unexpected shut down.");
     throw;
 }
 finally
 {
-    Log.Information("API host application shut down.");
     Log.CloseAndFlush();
 }
