@@ -34,7 +34,7 @@ public class GamesControllerTest
 
         _mockScoreboardOptions = new Mock<IOptions<ScoreboardOptions>>();
         _mockScoreboardOptions.Setup(options => options.Value)
-            .Returns(new ScoreboardOptions { Week = 1});
+            .Returns(new ScoreboardOptions { Week = 1 });
 
         _mockLogger = new Mock<ILogger<GamesController>>();
         _mockGetGameQueryValidator = new Mock<IValidator<GetGameQuery>>();

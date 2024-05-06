@@ -90,9 +90,9 @@ try
             {
                 string url = $"/swagger/{description.GroupName}/swagger.json";
                 string name = description.GroupName.ToUpperInvariant();
-                options.SwaggerEndpoint( url, name );
+                options.SwaggerEndpoint(url, name);
             }
-        } );
+        });
     }
 
     app.UseSerilogRequestLogging();
