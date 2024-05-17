@@ -1,5 +1,5 @@
-name: build-test
-run-name: Run build and tests
+name: ci
+run-name: Run CI
 
 on:
   push:
@@ -17,16 +17,18 @@ on:
 concurrency: ${{ github.workflow }}
 
 jobs:
-  build:
+  ci-build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         dotnet-version: ['6.0.x']
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Create test database
         env:
@@ -38,7 +40,7 @@ jobs:
           docker run --name footballscoreboard_testdb -e MYSQL_ROOT_PASSWORD="$DB_ROOT_PASSWORD" -e MYSQL_USER="$DB_USER" -e MYSQL_PASSWORD="$DB_PASSWORD" -e MYSQL_DATABASE=${{ vars.DB_NAME }} -p 3306:3306 -v ${{github.workspace}}/scripts/testdb:/docker-entrypoint-initdb.d -d mysql:8.0.28
 
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
@@ -57,8 +59,3 @@ jobs:
           dotnet tool install --global dotnet-coverage
           dotnet-coverage collect 'dotnet test --no-restore' -f xml  -o 'coverage.xml'
 
-      - name: Upload coverage
-        uses: actions/upload-artifact@v3
-        with:
-          path: |
-            coverage.xml
