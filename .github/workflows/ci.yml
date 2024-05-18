@@ -19,12 +19,9 @@ concurrency: ${{ github.workflow }}
 jobs:
   ci-build:
     name: Build
-    runs-on: ubuntu-latest
     permissions:
       contents: read
-    strategy:
-      matrix:
-        dotnet-version: ['6.0.x']
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -39,10 +36,10 @@ jobs:
           docker pull mysql:8.0.28
           docker run --name footballscoreboard_testdb -e MYSQL_ROOT_PASSWORD="$DB_ROOT_PASSWORD" -e MYSQL_USER="$DB_USER" -e MYSQL_PASSWORD="$DB_PASSWORD" -e MYSQL_DATABASE=${{ vars.DB_NAME }} -p 3306:3306 -v ${{github.workspace}}/scripts/testdb:/docker-entrypoint-initdb.d -d mysql:8.0.28
 
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          global-json-file: global.json
 
       - name: Restore
         run: |
