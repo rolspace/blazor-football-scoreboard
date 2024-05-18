@@ -3,9 +3,12 @@
 This repository contains libraries and web applications that are used to run a simulation of the 2019 football season.
 
 The system is split into three main elements:
-- **Web API**: exposes HTTP endpoints to get data and statistics for football games from the 2019 season. It includes a SignalR Hub used to send messages to connected clients.
+- **Web API**: exposes HTTP endpoints to get data and statistics for football games from the 2019 regular season. It includes a SignalR Hub used to send messages to connected clients.
 - **Blazor UI**: displays the scores and the play-by-play for each game. The user can also browse to a dedicated page for each game, with additional data.
 - **Web Worker**: reads play data from an existing database. This process sends the play data to the SignalR Hub, which communicates with the Blazor client.
+
+> [!NOTE]
+> The data for the 2019 regular season games was obtained from https://github.com/ryurko/nflscrapR-data.
 
 ## Requirements
 
