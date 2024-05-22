@@ -1,5 +1,7 @@
 # Blazor Football Scoreboard
 
+[![ci](https://github.com/rolspace/blazor-football-scoreboard/actions/workflows/ci.yml/badge.svg)](https://github.com/rolspace/blazor-football-scoreboard/actions/workflows/ci.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rolspace_blazor-football-scoreboard&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=rolspace_blazor-football-scoreboard) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rolspace_blazor-football-scoreboard&metric=coverage)](https://sonarcloud.io/summary/new_code?id=rolspace_blazor-football-scoreboard)
+
 This repository contains libraries and web applications that are used to run a simulation of the 2019 football season.
 
 The system is split into three main elements:
