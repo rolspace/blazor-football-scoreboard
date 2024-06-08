@@ -5,7 +5,7 @@ using Football.Application.Features.Games;
 using Football.Application.Features.Games.Models;
 using Football.Application.Features.Stats;
 using Football.Application.Features.Stats.Models;
-using Football.Infrastructure.Options;
+using Football.Application.Options;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

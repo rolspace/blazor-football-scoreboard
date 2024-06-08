@@ -1,4 +1,5 @@
 using Football.Application.Interfaces;
+using Football.Application.Options;
 using Football.Infrastructure.Hub;
 using Football.Infrastructure.Options;
 using Football.Infrastructure.Persistence;

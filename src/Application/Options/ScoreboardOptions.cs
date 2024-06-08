@@ -1,4 +1,4 @@
-namespace Football.Infrastructure.Options;
+namespace Football.Application.Options;
 
 public class ScoreboardOptions
 {

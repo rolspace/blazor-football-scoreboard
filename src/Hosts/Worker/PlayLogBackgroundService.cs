@@ -6,7 +6,7 @@ using Football.Application.Features.Plays.Models;
 using Football.Application.Features.Stats;
 using Football.Application.Interfaces;
 using Football.Application.Services;
-using Football.Infrastructure.Options;
+using Football.Application.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
 
