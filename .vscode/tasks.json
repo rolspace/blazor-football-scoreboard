@@ -237,7 +237,7 @@
                 "containerName": "footballscoreboard_worker",
                 "ports": [
                     {
-                        "containerPort": 80,
+                        "containerPort": 443,
                         "hostPort": 5003
                     }
                 ],
