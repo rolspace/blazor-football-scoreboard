@@ -56,7 +56,7 @@ public class Play
 
     public string Desc { get; set; } = null!;
 
-    public string PlayType { get; set; } = null!;
+    public string? PlayType { get; set; }
 
     public int YardsGained { get; set; }
 
