@@ -1,10 +1,11 @@
 using Football.Application.Interfaces;
 using Football.Blazor;
 using Football.Blazor.Options;
-using Football.Infrastructure.Hub;
+using Football.Infrastructure.Factories;
 using Football.Infrastructure.Options;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.SignalR.Client;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -28,7 +29,7 @@ try
 
     builder.Services.AddSingleton(apiOptions ?? new ApiOptions());
     builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-    builder.Services.AddSingleton<IHubProvider, HubProvider>();
+    builder.Services.AddSingleton<IHubConnectionFactory<HubConnection>, HubConnectionFactory>();
 
     await builder.Build().RunAsync();
 }

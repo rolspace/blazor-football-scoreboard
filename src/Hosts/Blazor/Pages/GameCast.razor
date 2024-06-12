@@ -10,11 +10,11 @@
 @using Serilog
 @using Serilog.Extensions.Logging
 
-
-@inject HttpClient Http
-@inject IHubProvider HubProvider
-@inject NavigationManager NavigationManager
 @inject ApiOptions ApiOptions
+@inject HttpClient Http
+@inject IHubConnectionFactory<HubConnection> HubConnectionFactory
+@inject NavigationManager NavigationManager
+
 
 <div class="mdc-layout-grid__inner">
     @if (currentPlay is null && !errorOcurred)
@@ -54,6 +54,8 @@
 @code {
     private bool errorOcurred = false;
 
+    private HubConnection? hubConnection;
+
     private PlayDto? currentPlay = null;
 
     private StatDto? homeTeamStats = null;
@@ -72,6 +74,8 @@
 
             if (game is null) throw new Exception("Game not found.");
 
+            hubConnection = HubConnectionFactory.CreateHubConnection();
+
             currentPlay = new PlayDto
             {
                 Id = 0,
@@ -88,7 +92,7 @@
             homeTeamStats = gameStats?.Stats.Find(s => s.Home);
             awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
-            HubProvider.On<PlayDto>("ReceivePlay", async (nextPlay) =>
+            hubConnection.On<PlayDto>("ReceivePlay", async (nextPlay) =>
             {
                 if (GameId == nextPlay.GameId)
                 {
@@ -112,7 +116,7 @@
                 StateHasChanged();
             });
 
-            await HubProvider.StartAsync(new CancellationToken());
+            await hubConnection.StartAsync(new CancellationToken());
         }
         catch (Exception ex)
         {

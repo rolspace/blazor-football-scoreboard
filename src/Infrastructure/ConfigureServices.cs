@@ -1,6 +1,5 @@
 using Football.Application.Interfaces;
 using Football.Application.Options;
-using Football.Infrastructure.Hub;
 using Football.Infrastructure.Options;
 using Football.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,6 @@ public static class ConfigureServices
 
         services.Configure<ScoreboardOptions>(configuration.GetSection(ScoreboardOptions.Key));
         services.Configure<HubOptions>(configuration.GetSection(HubOptions.Key));
-        services.AddTransient<IHubProvider, HubProvider>();
 
         return services;
     }
