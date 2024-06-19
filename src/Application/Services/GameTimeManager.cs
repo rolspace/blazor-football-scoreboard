@@ -57,7 +57,6 @@ public class GameTimeManager : IGameTimeManager
             {
                 Interlocked.Increment(ref _quarter);
                 Interlocked.Exchange(ref _quarterSecondsRemaining, 600);
-                return;
             }
         }
     }

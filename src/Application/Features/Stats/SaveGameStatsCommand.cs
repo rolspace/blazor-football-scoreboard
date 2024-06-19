@@ -48,7 +48,7 @@ public class SaveGameStatsCommandHandler : IRequestHandler<SaveGameStatsCommand,
         Game? game = await _footballDbContext.Games
             .AsQueryable()
             .Where(g => g.Id == saveGameStatsCommand.GameId)
-            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
+            .SingleOrDefaultAsync(cancellationToken);
 
         if (game is null) return 0;
 
@@ -56,7 +56,7 @@ public class SaveGameStatsCommandHandler : IRequestHandler<SaveGameStatsCommand,
         {
             Stat? stat = await _footballDbContext.Stats
                 .Where(s => s.GameId == saveGameStatsCommand.GameId && s.Team == saveGameStatCommandItem.Team)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (stat is not null)
             {

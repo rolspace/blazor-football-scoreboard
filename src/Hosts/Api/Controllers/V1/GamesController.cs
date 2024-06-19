@@ -22,8 +22,6 @@ public class GamesController : ControllerBase
 
     private readonly ScoreboardOptions _scoreboardOptions;
 
-    private readonly ILogger<GamesController> _logger;
-
     private readonly IValidator<GetGameQuery> _getGameQueryValidator;
 
     private readonly IValidator<GetGamesQuery> _getGamesQueryValidator;
@@ -32,7 +30,6 @@ public class GamesController : ControllerBase
 
     public GamesController(ISender mediator,
         IOptions<ScoreboardOptions> scoreboardOptions,
-        ILogger<GamesController> logger,
         IValidator<GetGameQuery> getGameQueryValidator,
         IValidator<GetGamesQuery> getGamesQueryValidator,
         IValidator<GetGameStatsQuery> getGameStatsQueryValidator)
@@ -41,7 +38,6 @@ public class GamesController : ControllerBase
         _getGameQueryValidator = getGameQueryValidator;
         _getGamesQueryValidator = getGamesQueryValidator;
         _getGameStatsQueryValidator = getGameStatsQueryValidator;
-        _logger = logger;
         _scoreboardOptions = scoreboardOptions.Value;
     }
 

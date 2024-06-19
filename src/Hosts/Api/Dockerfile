@@ -19,11 +19,11 @@ COPY src/Application/ "Application/"
 COPY src/Infrastructure/ "Infrastructure/"
 COPY src/Hosts/Api/ "Hosts/Api/"
 WORKDIR "/src/Hosts/Api"
-RUN dotnet build "Football.Api.csproj" -c $configuration -o /app/build
+RUN dotnet build "Football.Api.csproj" -c "$configuration" -o /app/build
 
 FROM build AS publish
 ARG configuration=Release
-RUN dotnet publish "Football.Api.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Football.Api.csproj" -c "$configuration" -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app

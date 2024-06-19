@@ -86,10 +86,10 @@ try
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            foreach (ApiVersionDescription description in app.DescribeApiVersions())
+            foreach (string groupName in app.DescribeApiVersions().Select(a => a.GroupName))
             {
-                string url = $"/swagger/{description.GroupName}/swagger.json";
-                string name = description.GroupName.ToUpperInvariant();
+                string url = $"/swagger/{groupName}/swagger.json";
+                string name = groupName.ToUpperInvariant();
                 options.SwaggerEndpoint(url, name);
             }
         });

@@ -35,7 +35,7 @@ public class GetGameStatsQueryHandler : IRequestHandler<GetGameStatsQuery, GameS
 
         List<StatDto> gameStats = await _footballDbContext.Stats.Where(s => s.GameId == request.Id)
             .ProjectTo<StatDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return new GameStatDto()
         {

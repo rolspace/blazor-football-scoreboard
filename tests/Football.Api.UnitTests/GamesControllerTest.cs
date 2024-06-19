@@ -20,8 +20,6 @@ public class GamesControllerTest
 
     private readonly Mock<IOptions<ScoreboardOptions>> _mockScoreboardOptions;
 
-    private readonly Mock<ILogger<GamesController>> _mockLogger;
-
     private readonly Mock<IValidator<GetGameQuery>> _mockGetGameQueryValidator;
 
     private readonly Mock<IValidator<GetGamesQuery>> _mockGetGamesQueryValidator;
@@ -36,7 +34,6 @@ public class GamesControllerTest
         _mockScoreboardOptions.Setup(options => options.Value)
             .Returns(new ScoreboardOptions { Week = 1 });
 
-        _mockLogger = new Mock<ILogger<GamesController>>();
         _mockGetGameQueryValidator = new Mock<IValidator<GetGameQuery>>();
         _mockGetGamesQueryValidator = new Mock<IValidator<GetGamesQuery>>();
         _mockGetGameStatsQueryValidator = new Mock<IValidator<GetGameStatsQuery>>();
@@ -60,7 +57,7 @@ public class GamesControllerTest
         _mockGetGameQueryValidator.Setup(validator => validator.ValidateAsync(getGameQuery, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult());
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object,
             _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
 
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
@@ -80,7 +77,7 @@ public class GamesControllerTest
         _mockGetGameQueryValidator.Setup(validator => validator.ValidateAsync(getGameQuery, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult());
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object,
             _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
 
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
@@ -101,7 +98,7 @@ public class GamesControllerTest
         _mockGetGameQueryValidator.Setup(validator => validator.ValidateAsync(getGameQuery, It.IsAny<CancellationToken>()))
             .ReturnsAsync(validationResult);
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object,
             _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
 
         ActionResult<GameDto> actionResult = await gamesController.GetGameById(getGameQuery);
@@ -134,7 +131,7 @@ public class GamesControllerTest
         _mockGetGamesQueryValidator.Setup(validator => validator.ValidateAsync(getGamesQuery, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult());
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object,
             _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
 
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
@@ -154,7 +151,7 @@ public class GamesControllerTest
         _mockGetGamesQueryValidator.Setup(validator => validator.ValidateAsync(getGamesQuery, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult());
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object,
             _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
 
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
@@ -176,7 +173,7 @@ public class GamesControllerTest
         _mockGetGamesQueryValidator.Setup(validator => validator.ValidateAsync(getGamesQuery, It.IsAny<CancellationToken>()))
             .ReturnsAsync(validationResult);
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object,
             _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
 
         ActionResult<IEnumerable<GameDto>> actionResult = await gamesController.GetGamesByWeek(getGamesQuery);
@@ -219,7 +216,7 @@ public class GamesControllerTest
         _mockGetGameStatsQueryValidator.Setup(validator => validator.ValidateAsync(getGameStatsQuery, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult());
 
-        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object, _mockLogger.Object,
+        var gamesController = new GamesController(_mockSender.Object, _mockScoreboardOptions.Object,
             _mockGetGameQueryValidator.Object, _mockGetGamesQueryValidator.Object, _mockGetGameStatsQueryValidator.Object);
 
         ActionResult<GameStatDto> actionResult = await gamesController.GetStatsById(getGameStatsQuery);
