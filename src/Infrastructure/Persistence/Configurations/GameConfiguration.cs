@@ -30,6 +30,8 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
             .IsRequired()
             .HasColumnName("week");
 
+        entityTypeBuilder.HasIndex(g => new { g.Week }).HasDatabaseName("IX_Week");
+
         entityTypeBuilder.Property(e => e.State).HasColumnName("state_type").HasConversion<string>();
 
         entityTypeBuilder.Property(e => e.Quarter).HasColumnName("quarter");

@@ -575,6 +575,11 @@ public class PlayConfiguration : IEntityTypeConfiguration<Play>
             .HasMaxLength(6)
             .HasColumnName("yrdln");
 
+        entityTypeBuilder
+            .HasIndex(p => new { p.Week, p.Qtr, p.QuarterSecondsRemaining })
+            .IsDescending(false, false, true)
+            .HasDatabaseName("IX_Week_Quarter_QuarterSecondsRemaining");
+
         entityTypeBuilder.HasOne(d => d.Game)
             .WithMany(p => p.Plays)
             .HasForeignKey(d => d.GameId)
