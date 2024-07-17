@@ -29,7 +29,7 @@ public class GameTimeManager : IGameTimeManager
 
     public int GetQuarterSecondsRemaining() => _quarterSecondsRemaining;
 
-    public void SetTime()
+    public void AdvanceTime()
     {
         lock (_locker)
         {

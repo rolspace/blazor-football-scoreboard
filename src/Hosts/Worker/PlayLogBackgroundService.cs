@@ -113,7 +113,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                         _logger.LogInformation("{quarter}/{quarterSecondsRemaining} - {playDto}", quarter, quarterSecondsRemaining, playDto);
                     }
 
-                    _gameTimeManager.SetTime();
+                    _gameTimeManager.AdvanceTime();
                 }
             }
             catch (Exception ex)

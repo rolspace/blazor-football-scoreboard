@@ -9,7 +9,7 @@ public interface IGameTimeManager
 
     int GetQuarterSecondsRemaining();
 
-    void SetTime();
+    void AdvanceTime();
 
     void IncrementGamesFinished(int count);
 }
