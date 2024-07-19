@@ -8,32 +8,53 @@ public class StatConfiguration : IEntityTypeConfiguration<Stat>
 {
     public void Configure(EntityTypeBuilder<Stat> entityTypeBuilder)
     {
-        entityTypeBuilder.HasKey(e => new { e.GameId, e.Team })
-            .HasName("PRIMARY")
-            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
         entityTypeBuilder.ToTable("stat");
 
-        entityTypeBuilder.Property(e => e.GameId).HasColumnName("game_id");
+        entityTypeBuilder
+            .HasKey(e => new { e.GameId, e.Team })
+            .HasName("PRIMARY");
 
-        entityTypeBuilder.Property(e => e.Team)
+        entityTypeBuilder
+            .Property(e => e.GameId)
+            .IsRequired()
+            .HasColumnName("game_id");
+
+        entityTypeBuilder
+            .HasOne(d => d.Game)
+            .WithMany(p => p.Stats)
+            .HasForeignKey(d => d.GameId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("FK_Stat_GameId");
+
+        entityTypeBuilder
+            .Property(e => e.Team)
+            .IsRequired()
             .HasMaxLength(3)
             .HasColumnName("team");
 
-        entityTypeBuilder.Property(e => e.Score).HasColumnName("score");
+        entityTypeBuilder
+            .Property(e => e.Score)
+            .IsRequired()
+            .HasColumnName("score");
 
-        entityTypeBuilder.Property(e => e.PassingYards).HasColumnName("passing_yards");
+        entityTypeBuilder
+            .Property(e => e.PassingYards)
+            .IsRequired()
+            .HasColumnName("passing_yards");
 
-        entityTypeBuilder.Property(e => e.Sacks).HasColumnName("sacks");
+        entityTypeBuilder
+            .Property(e => e.Sacks)
+            .IsRequired()
+            .HasColumnName("sacks");
 
-        entityTypeBuilder.Property(e => e.Punts).HasColumnName("punts");
+        entityTypeBuilder
+            .Property(e => e.Punts)
+            .IsRequired()
+            .HasColumnName("punts");
 
-        entityTypeBuilder.Property(e => e.ReturnYards).HasColumnName("return_yards");
-
-        entityTypeBuilder.HasOne(d => d.Game)
-            .WithMany(p => p.Stats)
-            .HasForeignKey(d => d.GameId)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("stat_ibfk_1");
+        entityTypeBuilder
+            .Property(e => e.ReturnYards)
+            .IsRequired()
+            .HasColumnName("return_yards");
     }
 }

@@ -2,7 +2,7 @@ namespace Football.Domain.Enums;
 
 public enum GameState
 {
-    Started = 1,
+    Started,
 
-    Finished = 2
+    Finished
 }
