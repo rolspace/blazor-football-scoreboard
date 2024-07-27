@@ -16,11 +16,11 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
 
         entityTypeBuilder
             .Property(e => e.Id)
-            .HasColumnName("id");
+            .HasColumnName("id")
+            .ValueGeneratedNever();
 
         entityTypeBuilder
             .Property(e => e.Week)
-            .IsRequired()
             .HasColumnName("week");
 
         entityTypeBuilder
@@ -43,14 +43,18 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
         entityTypeBuilder
             .Property(e => e.State)
             .HasConversion<string>()
+            .HasDefaultValue(null)
+            .HasMaxLength(10)
             .HasColumnName("state");
 
         entityTypeBuilder
             .Property(e => e.Quarter)
+            .HasDefaultValue(null)
             .HasColumnName("quarter");
 
         entityTypeBuilder
             .Property(e => e.QuarterSecondsRemaining)
+            .HasDefaultValue(null)
             .HasColumnName("quarter_seconds_remaining");
     }
 }

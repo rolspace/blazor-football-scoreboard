@@ -16,7 +16,6 @@ public class StatConfiguration : IEntityTypeConfiguration<Stat>
 
         entityTypeBuilder
             .Property(e => e.GameId)
-            .IsRequired()
             .HasColumnName("game_id");
 
         entityTypeBuilder
@@ -34,27 +33,22 @@ public class StatConfiguration : IEntityTypeConfiguration<Stat>
 
         entityTypeBuilder
             .Property(e => e.Score)
-            .IsRequired()
             .HasColumnName("score");
 
         entityTypeBuilder
             .Property(e => e.PassingYards)
-            .IsRequired()
             .HasColumnName("passing_yards");
 
         entityTypeBuilder
             .Property(e => e.Sacks)
-            .IsRequired()
             .HasColumnName("sacks");
 
         entityTypeBuilder
             .Property(e => e.Punts)
-            .IsRequired()
             .HasColumnName("punts");
 
         entityTypeBuilder
             .Property(e => e.ReturnYards)
-            .IsRequired()
             .HasColumnName("return_yards");
     }
 }
