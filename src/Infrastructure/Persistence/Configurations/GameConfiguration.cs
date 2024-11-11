@@ -39,7 +39,6 @@ public class GameConfiguration : IEntityTypeConfiguration<Game>
             .HasMaxLength(3)
             .HasColumnName("away_team");
 
-        // TODO: check how to represent status table
         entityTypeBuilder
             .Property(e => e.State)
             .HasConversion<string>()

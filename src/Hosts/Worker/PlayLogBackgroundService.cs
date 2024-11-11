@@ -57,8 +57,6 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                 _gameTimeManager.GamesScheduled = gameDtos.Count();
             }
 
-
-
             await _hubConnection.StartAsync(cancellationToken);
         }
         catch (Exception ex)
