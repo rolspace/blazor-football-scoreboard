@@ -29,10 +29,14 @@
     {
         <!-- Back button row -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-            <NavLink href="/">Back</NavLink>
+            <NavLink href="/">
+                <span class="mdc-typography--body2">Back</span>
+            </NavLink>
         </div>
         <!-- GameCast title -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">@currentPlay.AwayTeam @@ @currentPlay.HomeTeam</div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">
+            <span class="mdc-typography--body2">@currentPlay.AwayTeam @@ @currentPlay.HomeTeam</span>
+        </div>
         <!-- GameCast layout -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-desktop">
@@ -44,7 +48,9 @@
         </div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
         <!-- GameCast title -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">Stats</div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">
+            <span class="mdc-typography--body2">Stats</span>
+        </div>
         <!-- GameStats layout -->
         <StatsTable Team="@currentPlay.HomeTeam" TeamStats=@homeTeamStats />
         <StatsTable Team="@currentPlay.AwayTeam" TeamStats=@awayTeamStats />

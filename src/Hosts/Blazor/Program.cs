@@ -1,11 +1,11 @@
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.SignalR.Client;
 using Football.Application.Interfaces;
 using Football.Blazor;
 using Football.Blazor.Options;
 using Football.Infrastructure.Factories;
 using Football.Infrastructure.Options;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.SignalR.Client;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

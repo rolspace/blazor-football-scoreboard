@@ -15,19 +15,13 @@
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">Games</div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center">
+        <span class="mdc-typography--body2">Games</span>
+    </div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner">
-            @if (currentPlays.Count() == 0 && !errorOcurred)
-            {
-                <div>Loading</div>
-            }
-            else if (currentPlays.Count() == 0 && errorOcurred)
-            {
-                <div>An error ocurred. The game could not be loaded.</div>
-            }
-            else if (currentPlays.Count() > 0)
+            @if (currentPlays.Count() > 0)
             {
                 foreach (var currentPlay in currentPlays)
                 {
@@ -35,6 +29,14 @@
                         <GameCard GameId="@currentPlay.GameId" Play="@currentPlay" />
                     </div>
                 }
+            }
+            else if (!errorOcurred)
+            {
+                <div>Loading</div>
+            }
+            else if (errorOcurred)
+            {
+                <div>An error ocurred. The games could not be loaded.</div>
             }
         </div>
     </div>

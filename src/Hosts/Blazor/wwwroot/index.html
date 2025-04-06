@@ -3,18 +3,24 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blazor Football Scoreboard</title>
     <base href="/" />
-    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.css" rel="stylesheet" integrity="sha384-Dv/31bNdy5iSIdT3DbFwGhN3LnetXu2VyL8xFYMqdHvfA1BFqWmoIHum+ocjdjtu" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="Football.Blazor.styles.css" rel="stylesheet" />
 </head>
 
-<body class="mdc-typography">
-    <div id="app">Loading...</div>
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -22,8 +28,7 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-    <script src="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.js" integrity="sha384-NQs9Lm2CZqPDbiQog4Tl9+s+LYnPbrwOF7kGY1ks7rl5A7rJypS6Cuqt6HFYtPC+">
-    </script>
+    <script src="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.js" integrity="sha384-NQs9Lm2CZqPDbiQog4Tl9+s+LYnPbrwOF7kGY1ks7rl5A7rJypS6Cuqt6HFYtPC+" crossorigin="anonymous"></script>
 </body>
 
 </html>
