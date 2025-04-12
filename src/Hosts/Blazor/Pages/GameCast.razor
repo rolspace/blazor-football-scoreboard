@@ -11,7 +11,7 @@
 @using Serilog.Extensions.Logging
 
 @inject ApiOptions ApiOptions
-@inject HttpClient Http
+@inject HttpClient HttpClient
 @inject IHubConnectionFactory<HubConnection> HubConnectionFactory
 @inject NavigationManager NavigationManager
 
@@ -76,11 +76,9 @@
         try
         {
             Uri apiUri = new Uri(ApiOptions.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
-            GameDto? game = await Http.GetFromJsonAsync<GameDto>(new Uri(apiUri, $"games/{GameId}"));
+            GameDto? game = await HttpClient.GetFromJsonAsync<GameDto>(new Uri(apiUri, $"games/{GameId}"));
 
             if (game is null) throw new Exception("Game not found.");
-
-            hubConnection = HubConnectionFactory.CreateHubConnection();
 
             currentPlay = new PlayDto
             {
@@ -94,10 +92,11 @@
                 QuarterSecondsRemaining = game.QuarterSecondsRemaining
             };
 
-            GameStatDto? gameStats = await Http.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
+            GameStatDto? gameStats = await HttpClient.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
             homeTeamStats = gameStats?.Stats.Find(s => s.Home);
             awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
+            hubConnection = HubConnectionFactory.CreateHubConnection();
             hubConnection.On<PlayDto>("ReceivePlay", async (nextPlay) =>
             {
                 if (GameId == nextPlay.GameId)
@@ -114,7 +113,7 @@
                         Description = nextPlay.Description
                     };
 
-                    GameStatDto? updatedGameStats = await Http.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
+                    GameStatDto? updatedGameStats = await HttpClient.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
                     homeTeamStats = updatedGameStats?.Stats.Find(s => s.Home);
                     awayTeamStats = updatedGameStats?.Stats.Find(s => !s.Home);
                 };

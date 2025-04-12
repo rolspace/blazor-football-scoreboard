@@ -10,9 +10,9 @@ public class HubConnectionFactory : IHubConnectionFactory<HubConnection>
 {
     private readonly Uri _hubUri;
 
-    public HubConnectionFactory(IOptions<HubOptions> hubOptions)
+    public HubConnectionFactory(IOptions<HubOptions> hubOptionsAccesor)
     {
-        _hubUri = new Uri(hubOptions.Value.HubUrl);
+        _hubUri = new Uri(hubOptionsAccesor.Value.HubUrl);
     }
 
     public HubConnection CreateHubConnection()
