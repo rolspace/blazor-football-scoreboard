@@ -27,14 +27,16 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     private readonly HubConnection _hubConnection;
 
-    public PlayLogBackgroundService(IHubConnectionFactory<HubConnection> hubConnectionFactory, IMapper mapper,
-        IServiceScopeFactory scopeFactory, ILogger<PlayLogBackgroundService> logger,
-        IOptions<ScoreboardOptions> scoreboardOptions)
+    public PlayLogBackgroundService(IMapper mapper,
+        IServiceScopeFactory scopeFactory,
+        ILogger<PlayLogBackgroundService> logger,
+        IHubConnectionFactory<HubConnection> hubConnectionFactory,
+        IOptions<ScoreboardOptions> scoreboardOptionsAccesor)
     {
         _mapper = mapper;
         _scopeFactory = scopeFactory;
         _logger = logger;
-        _scoreboardOptions = scoreboardOptions.Value;
+        _scoreboardOptions = scoreboardOptionsAccesor.Value;
 
         _gameTimeManager = new GameTimeManager();
         _hubConnection = hubConnectionFactory.CreateHubConnection();
