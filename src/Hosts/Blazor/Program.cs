@@ -21,15 +21,13 @@ try
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
-    ApiOptions? apiOptions = builder.Configuration
-        .GetSection(ApiOptions.Key)
-        .Get<ApiOptions>();
-
+    builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection(ApiOptions.Key));
     builder.Services.Configure<HubOptions>(builder.Configuration.GetSection(HubOptions.Key));
 
-    builder.Services.AddSingleton(apiOptions ?? new ApiOptions());
-    builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
     builder.Services.AddSingleton<IHubConnectionFactory<HubConnection>, HubConnectionFactory>();
+
+    builder.Services.AddScoped(serviceProvider =>
+        new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
     await builder.Build().RunAsync();
 }
