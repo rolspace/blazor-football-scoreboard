@@ -5,14 +5,11 @@
 @using Football.Application.Features.Plays.Models
 @using Football.Application.Interfaces
 @using Microsoft.AspNetCore.SignalR.Client
-@using Microsoft.Extensions.Options
-@using Options
 @using Serilog
 @using Serilog.Extensions.Logging
 
-@inject HttpClient HttpClient
+@inject IHttpClientFactory HttpClientFactory
 @inject IHubConnectionFactory<HubConnection> HubConnectionFactory
-@inject IOptions<ApiOptions> ApiOptionsAccessor
 @inject NavigationManager NavigationManager
 
 <div class="mdc-layout-grid__inner">
@@ -47,8 +44,6 @@
 @code {
     private bool errorOcurred = false;
 
-    private ApiOptions ApiOptions => ApiOptionsAccessor.Value;
-
     private HubConnection? hubConnection;
 
     private IReadOnlyList<PlayDto> currentPlays = new List<PlayDto>();
@@ -57,10 +52,8 @@
     {
         try
         {
-            Uri apiUri = new Uri(ApiOptions.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
-            GameDto[]? games = await HttpClient.GetFromJsonAsync<GameDto[]>(new Uri(apiUri, $"games/now"));
-
-            hubConnection = HubConnectionFactory.CreateHubConnection();
+            HttpClient httpClient = HttpClientFactory.CreateClient(Constants.DefaultHttpClient);
+            GameDto[]? games = await httpClient.GetFromJsonAsync<GameDto[]>($"games/now");
 
             if (games is not null && games.Count() > 0)
             {
@@ -79,6 +72,7 @@
                     };
                 }).ToList();
 
+                hubConnection = HubConnectionFactory.CreateHubConnection();
                 hubConnection.On<PlayDto>("ReceivePlay", (nextPlay) =>
                 {
                     PlayDto newPlay = currentPlays.Single(play => play.GameId == nextPlay.GameId);

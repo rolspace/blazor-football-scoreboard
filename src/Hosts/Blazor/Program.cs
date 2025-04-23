@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Options;
 using Football.Application.Interfaces;
 using Football.Blazor;
 using Football.Blazor.Options;
 using Football.Infrastructure.Factories;
 using Football.Infrastructure.Options;
+using Polly;
 using Serilog;
+using Polly.Retry;
+using Polly.Timeout;
 
 Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -26,8 +30,20 @@ try
 
     builder.Services.AddSingleton<IHubConnectionFactory<HubConnection>, HubConnectionFactory>();
 
-    builder.Services.AddScoped(serviceProvider =>
-        new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+    builder.Services.AddHttpClient(Constants.DefaultHttpClient, (serviceProvider, client) =>
+    {
+        ApiOptions apiOptions = serviceProvider.GetRequiredService<IOptions<ApiOptions>>().Value;
+        client.BaseAddress = new Uri(apiOptions.ApiBaseUrl);
+    }).AddResilienceHandler(Constants.DefaultPipeline, handlerBuilder =>
+    {
+        handlerBuilder
+            .AddRetry(new RetryStrategyOptions<HttpResponseMessage>
+            {
+                MaxRetryAttempts = 2,
+                BackoffType = DelayBackoffType.Exponential
+            })
+            .AddTimeout(new TimeoutStrategyOptions());
+    });
 
     await builder.Build().RunAsync();
 }

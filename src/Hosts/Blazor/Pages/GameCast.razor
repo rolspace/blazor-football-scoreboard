@@ -6,14 +6,11 @@
 @using Football.Application.Features.Stats.Models
 @using Football.Application.Interfaces
 @using Microsoft.AspNetCore.SignalR.Client
-@using Microsoft.Extensions.Options
-@using Options
 @using Serilog
 @using Serilog.Extensions.Logging
 
-@inject HttpClient HttpClient
+@inject IHttpClientFactory HttpClientFactory
 @inject IHubConnectionFactory<HubConnection> HubConnectionFactory
-@inject IOptions<ApiOptions> ApiOptionsAccessor
 @inject NavigationManager NavigationManager
 
 
@@ -61,8 +58,6 @@
 @code {
     private bool errorOcurred = false;
 
-    private ApiOptions ApiOptions => ApiOptionsAccessor.Value;
-
     private HubConnection? hubConnection;
 
     private PlayDto? currentPlay = null;
@@ -78,8 +73,8 @@
     {
         try
         {
-            Uri apiUri = new Uri(ApiOptions.ApiBaseUrl ?? throw new Exception("ApiBaseUrl setting is not defined."));
-            GameDto? game = await HttpClient.GetFromJsonAsync<GameDto>(new Uri(apiUri, $"games/{GameId}"));
+            HttpClient httpClient = HttpClientFactory.CreateClient(Constants.DefaultHttpClient);
+            GameDto? game = await httpClient.GetFromJsonAsync<GameDto>($"games/{GameId}");
 
             if (game is null) throw new Exception("Game not found.");
 
@@ -95,7 +90,7 @@
                 QuarterSecondsRemaining = game.QuarterSecondsRemaining
             };
 
-            GameStatDto? gameStats = await HttpClient.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
+            GameStatDto? gameStats = await httpClient.GetFromJsonAsync<GameStatDto>($"games/{GameId}/stats");
             homeTeamStats = gameStats?.Stats.Find(s => s.Home);
             awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
@@ -116,7 +111,7 @@
                         Description = nextPlay.Description
                     };
 
-                    GameStatDto? updatedGameStats = await HttpClient.GetFromJsonAsync<GameStatDto>(new Uri(apiUri, $"games/{GameId}/stats"));
+                    GameStatDto? updatedGameStats = await httpClient.GetFromJsonAsync<GameStatDto>($"games/{GameId}/stats");
                     homeTeamStats = updatedGameStats?.Stats.Find(s => s.Home);
                     awayTeamStats = updatedGameStats?.Stats.Find(s => !s.Home);
                 };
