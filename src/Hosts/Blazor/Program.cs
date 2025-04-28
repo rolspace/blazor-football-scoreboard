@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Options;
 using Football.Application.Interfaces;
 using Football.Blazor;
-using Football.Blazor.Options;
 using Football.Infrastructure.Factories;
 using Football.Infrastructure.Options;
 using Polly;
-using Serilog;
 using Polly.Retry;
 using Polly.Timeout;
+using Serilog;
 
 Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -25,23 +23,27 @@ try
     builder.RootComponents.Add<App>("#app");
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
-    builder.Services.Configure<ApiOptions>(builder.Configuration.GetSection(ApiOptions.Key));
     builder.Services.Configure<HubOptions>(builder.Configuration.GetSection(HubOptions.Key));
 
     builder.Services.AddSingleton<IHubConnectionFactory<HubConnection>, HubConnectionFactory>();
 
     builder.Services.AddHttpClient(Constants.DefaultHttpClient, (serviceProvider, client) =>
     {
-        ApiOptions apiOptions = serviceProvider.GetRequiredService<IOptions<ApiOptions>>().Value;
-        client.BaseAddress = new Uri(apiOptions.ApiBaseUrl);
+        string? baseAddress = builder.Configuration.GetValue<string>("HttpClient:BaseAddress");
+
+        if (string.IsNullOrWhiteSpace(baseAddress))
+        {
+             throw new InvalidOperationException("The HttpClient BaseAddress has not been configured.");
+        }
+
+        client.BaseAddress = new Uri(baseAddress);
     }).AddResilienceHandler(Constants.DefaultPipeline, handlerBuilder =>
     {
+        RetryStrategyOptions<HttpResponseMessage>? retryOptions = builder.Configuration.GetSection("HttpClient:RetryStrategy")
+            .Get<RetryStrategyOptions<HttpResponseMessage>>();
+
         handlerBuilder
-            .AddRetry(new RetryStrategyOptions<HttpResponseMessage>
-            {
-                MaxRetryAttempts = 2,
-                BackoffType = DelayBackoffType.Exponential
-            })
+            .AddRetry(retryOptions ?? new RetryStrategyOptions<HttpResponseMessage>())
             .AddTimeout(new TimeoutStrategyOptions());
     });
 
