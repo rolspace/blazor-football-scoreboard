@@ -99,16 +99,9 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     foreach (PlayDto playDto in playDtos)
                     {
                         SaveGameStatsCommand saveGameStatsCommand = _mapper.Map<SaveGameStatsCommand>(playDto);
-                        await mediator.Send(saveGameStatsCommand, stoppingToken);
 
-                        if (_hubConnection.State == HubConnectionState.Connected)
-                        {
-                            await _hubConnection.SendAsync("SendPlay", playDto, stoppingToken);
-                        }
-                        else
-                        {
-                            _logger.LogWarning("The hub connection is not connected, play data was not sent");
-                        }
+                        await mediator.Send(saveGameStatsCommand, stoppingToken);
+                        await _hubConnection.SendAsync("SendPlay", playDto, stoppingToken);
 
                         _logger.LogInformation("{quarter}/{quarterSecondsRemaining} - {playDto}", quarter, quarterSecondsRemaining, playDto);
                     }
@@ -123,8 +116,6 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
             await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
-
-        await _hubConnection.DisposeAsync();
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
