@@ -37,7 +37,7 @@ try
         }
 
         client.BaseAddress = new Uri(baseAddress);
-    }).AddResilienceHandler(Constants.DefaultPipeline, handlerBuilder =>
+    }).AddResilienceHandler("DefaultPipeline", handlerBuilder =>
     {
         RetryStrategyOptions<HttpResponseMessage>? retryOptions = builder.Configuration.GetSection("HttpClient:RetryStrategy")
             .Get<RetryStrategyOptions<HttpResponseMessage>>();

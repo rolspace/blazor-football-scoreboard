@@ -1,6 +1,5 @@
 using System.Reflection;
 using Asp.Versioning;
-using Asp.Versioning.ApiExplorer;
 using Football.Api.Hubs;
 using Football.Api.Options;
 using Football.Infrastructure.Extensions;
