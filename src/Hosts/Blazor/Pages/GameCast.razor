@@ -5,6 +5,7 @@
 @using Football.Application.Features.Plays.Models
 @using Football.Application.Features.Stats.Models
 @using Football.Application.Interfaces
+@using Football.Infrastructure.Extensions
 @using Microsoft.AspNetCore.SignalR.Client
 @using Serilog
 @using Serilog.Extensions.Logging
@@ -119,7 +120,7 @@
                 StateHasChanged();
             });
 
-            await hubConnection.StartAsync(new CancellationToken());
+            await hubConnection.StartWithRetryAsync(new CancellationToken());
         }
         catch (Exception ex)
         {

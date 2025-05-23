@@ -10,6 +10,7 @@ using Football.Application.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.SignalR.Client;
+using Football.Infrastructure.Extensions;
 
 namespace Football.Worker;
 
@@ -59,23 +60,21 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                 _gameTimeManager.GamesScheduled = gameDtos.Count();
             }
 
-            await _hubConnection.StartAsync(cancellationToken);
+            await _hubConnection.StartWithRetryAsync(cancellationToken);
+            await base.StartAsync(cancellationToken);
+
+            _logger.LogInformation("Worker hosted service started.");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred starting the background service");
-        }
-        finally
-        {
-            await base.StartAsync(cancellationToken);
-            _logger.LogInformation("Background service started");
+            _logger.LogCritical(ex, "Worker hosted service did not start.");
         }
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         // TODO: finish loop if all the games are finished
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
@@ -91,7 +90,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     };
 
                     ISender mediator = scope.ServiceProvider.GetRequiredService<ISender>();
-                    IEnumerable<PlayDto> playDtos = await mediator.Send(query, stoppingToken);
+                    IEnumerable<PlayDto> playDtos = await mediator.Send(query, cancellationToken);
 
                     int gameOverCount = playDtos.Count(p => p.GameOver);
                     if (gameOverCount > 0) _gameTimeManager.IncrementGamesFinished(gameOverCount);
@@ -100,8 +99,8 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                     {
                         SaveGameStatsCommand saveGameStatsCommand = _mapper.Map<SaveGameStatsCommand>(playDto);
 
-                        await mediator.Send(saveGameStatsCommand, stoppingToken);
-                        await _hubConnection.SendAsync("SendPlay", playDto, stoppingToken);
+                        await mediator.Send(saveGameStatsCommand, cancellationToken);
+                        await _hubConnection.SendPlayWithRetryAsync(playDto, cancellationToken);
 
                         _logger.LogInformation("{quarter}/{quarterSecondsRemaining} - {playDto}", quarter, quarterSecondsRemaining, playDto);
                     }
@@ -111,28 +110,28 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error ocurred trying to retrieve play log data.");
+                _logger.LogError(ex, "An error ocurred trying to read play log data.");
             }
 
-            await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
         }
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
         await _hubConnection.StopAsync(cancellationToken);
-        _logger.LogInformation("Hub connection stopped");
+        _logger.LogInformation("Hub connection stopped.");
 
         await base.StopAsync(cancellationToken);
-        _logger.LogInformation("Background service stopped");
+        _logger.LogInformation("Worker hosted service stopped.");
     }
 
     public async ValueTask DisposeAsync()
     {
         await _hubConnection.DisposeAsync();
-        _logger.LogInformation("Hub connection disposed");
+        _logger.LogInformation("Hub connection disposed.");
 
         base.Dispose();
-        _logger.LogInformation("Background service disposed");
+        _logger.LogInformation("Worker hosted service disposed.");
     }
 }
