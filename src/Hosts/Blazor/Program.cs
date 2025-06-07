@@ -24,12 +24,14 @@ try
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
     builder.Services.Configure<HubOptions>(builder.Configuration.GetSection(HubOptions.Key));
-
     builder.Services.AddSingleton<IHubConnectionFactory<HubConnection>, HubConnectionFactory>();
+
+    HttpClientOptions httpClientOptions = builder.Configuration.GetSection(HttpClientOptions.Key)
+        .Get<HttpClientOptions>() ?? throw new InvalidOperationException("The HttpClientOptions have not been configured.");
 
     builder.Services.AddHttpClient(Constants.DefaultHttpClient, (serviceProvider, client) =>
     {
-        string? baseAddress = builder.Configuration.GetValue<string>("HttpClient:BaseAddress");
+        string? baseAddress = httpClientOptions.BaseAddress;
 
         if (string.IsNullOrWhiteSpace(baseAddress))
         {
@@ -39,11 +41,14 @@ try
         client.BaseAddress = new Uri(baseAddress);
     }).AddResilienceHandler("DefaultPipeline", handlerBuilder =>
     {
-        RetryStrategyOptions<HttpResponseMessage>? retryOptions = builder.Configuration.GetSection("HttpClient:RetryStrategy")
-            .Get<RetryStrategyOptions<HttpResponseMessage>>();
+        RetryStrategyOptions<HttpResponseMessage>? retryOptions = new()
+        {
+            MaxRetryAttempts = httpClientOptions.RetryOptions.MaxRetryAttempts,
+            BackoffType = httpClientOptions.RetryOptions.BackoffType
+        };
 
         handlerBuilder
-            .AddRetry(retryOptions ?? new RetryStrategyOptions<HttpResponseMessage>())
+            .AddRetry(retryOptions)
             .AddTimeout(new TimeoutStrategyOptions());
     });
 
