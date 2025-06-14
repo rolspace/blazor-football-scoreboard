@@ -6,14 +6,18 @@
 @using Football.Application.Features.Stats.Models
 @using Football.Application.Interfaces
 @using Football.Infrastructure.Extensions
+@using Football.Infrastructure.Options
 @using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.Extensions.Options
+@using Polly
 @using Serilog
 @using Serilog.Extensions.Logging
+@using FootballHubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions
 
 @inject IHttpClientFactory HttpClientFactory
 @inject IHubConnectionFactory<HubConnection> HubConnectionFactory
+@inject IOptions<HubOptions> HubOptions
 @inject NavigationManager NavigationManager
-
 
 <div class="mdc-layout-grid__inner">
     @if (currentPlay is null && !errorOcurred)
@@ -60,6 +64,8 @@
     private bool errorOcurred = false;
 
     private HubConnection? hubConnection;
+
+    private HubOptions hubOptions => HubOptions.Value;
 
     private PlayDto? currentPlay = null;
 
@@ -120,7 +126,8 @@
                 StateHasChanged();
             });
 
-            await hubConnection.StartWithRetryAsync(new CancellationToken());
+            ResiliencePipeline pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptions);
+            await hubConnection.StartWithRetryAsync(pipeline, new CancellationToken());
         }
         catch (Exception ex)
         {

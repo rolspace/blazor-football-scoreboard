@@ -1,4 +1,5 @@
 using Football.Application.Features.Plays.Models;
+using Football.Infrastructure.Options;
 using Microsoft.AspNetCore.SignalR.Client;
 using Polly;
 using Polly.Retry;
@@ -8,33 +9,38 @@ namespace Football.Infrastructure.Extensions
 {
     public static class HubConnectionExtensions
     {
-        private static readonly ResiliencePipeline s_resiliencePipeline;
-
-        static HubConnectionExtensions()
+        public static ResiliencePipeline GetHubConnectionPipeline(HubOptions hubOptions)
         {
-            s_resiliencePipeline = new ResiliencePipelineBuilder()
-                .AddRetry(new RetryStrategyOptions())
+            ArgumentNullException.ThrowIfNull(hubOptions);
+
+            return new ResiliencePipelineBuilder()
+                .AddRetry(new RetryStrategyOptions {
+                    MaxRetryAttempts = hubOptions.RetryOptions.MaxRetryAttempts,
+                    BackoffType = hubOptions.RetryOptions.BackoffType
+                })
                 .AddTimeout(new TimeoutStrategyOptions())
                 .Build();
         }
 
-        public static async Task StartWithRetryAsync(this HubConnection hubConnection, CancellationToken cancellationToken = default)
+        public static async Task StartWithRetryAsync(this HubConnection hubConnection,
+            ResiliencePipeline pipeline, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(hubConnection);
 
-            await s_resiliencePipeline.ExecuteAsync(async (token) =>
+            await pipeline.ExecuteAsync(async (token) =>
             {
                 await hubConnection.StartAsync(token);
             }, cancellationToken);
         }
 
-        public static async Task SendPlayWithRetryAsync(this HubConnection hubConnection, PlayDto playDto, CancellationToken cancellationToken = default)
+        public static async Task SendPlayWithRetryAsync(this HubConnection hubConnection,
+            ResiliencePipeline pipeline, PlayDto playDto, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(hubConnection);
 
             ArgumentNullException.ThrowIfNull(playDto);
 
-            await s_resiliencePipeline.ExecuteAsync(async (token) =>
+            await pipeline.ExecuteAsync(async (token) =>
             {
                 await hubConnection.SendAsync("SendPlay", playDto, token);
             }, cancellationToken);
