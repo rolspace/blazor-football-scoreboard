@@ -33,17 +33,21 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     private readonly HubConnection _hubConnection;
 
+    private readonly IHostApplicationLifetime _applicationLifetime;
+
     public PlayLogBackgroundService(IMapper mapper,
         IServiceScopeFactory scopeFactory,
         ILogger<PlayLogBackgroundService> logger,
         IHubConnectionFactory<HubConnection> hubConnectionFactory,
         IOptions<HubOptions> hubOptionsAccessor,
-        IOptions<ScoreboardOptions> scoreboardOptionsAccesor)
+        IOptions<ScoreboardOptions> scoreboardOptionsAccesor,
+        IHostApplicationLifetime applicationLifetime)
     {
         _mapper = mapper;
         _scopeFactory = scopeFactory;
         _logger = logger;
         _scoreboardOptions = scoreboardOptionsAccesor.Value;
+        _applicationLifetime = applicationLifetime;
 
         _gameTimeManager = new GameTimeManager();
         _hubConnection = hubConnectionFactory.CreateHubConnection();
@@ -76,6 +80,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
         catch (Exception ex)
         {
             _logger.LogCritical(ex, "Worker hosted service did not start.");
+            _applicationLifetime.StopApplication();
         }
     }
 
