@@ -265,6 +265,21 @@
                 "appProject": "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
                 "enableDebugging": true
             }
+        },
+        {
+            "label": "run-sql-script-in-mysql-container",
+            "type": "shell",
+            "command": "docker exec -i footballscoreboard_localdb /bin/sh -c 'MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db' < ${workspaceFolder}/scripts/localdb/clean_db.sql",
+            "problemMatcher": [],
+            "detail": "Runs the init.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
+        }
+    ],
+    "inputs": [
+        {
+            "id": "mysqlPassword",
+            "type": "promptString",
+            "description": "Enter the MySQL root password",
+            "password": true
         }
     ]
 }
