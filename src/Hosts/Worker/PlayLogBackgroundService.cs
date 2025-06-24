@@ -52,7 +52,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
         _gameTimeManager = new GameTimeManager();
         _hubConnection = hubConnectionFactory.CreateHubConnection();
 
-        _pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptionsAccessor.Value);
+        _pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptionsAccessor.Value, _logger);
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)

@@ -10,14 +10,15 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.Extensions.Options
 @using Polly
-@using Serilog
-@using Serilog.Extensions.Logging
+@using Microsoft.Extensions.Logging
 @using FootballHubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions
 
 @inject IHttpClientFactory HttpClientFactory
 @inject IHubConnectionFactory<HubConnection> HubConnectionFactory
 @inject IOptions<HubOptions> HubOptions
 @inject NavigationManager NavigationManager
+@inject ILogger<GameCast> Logger
+
 
 <div class="mdc-layout-grid__inner">
     @if (currentPlay is null && !errorOcurred)
@@ -126,13 +127,13 @@
                 StateHasChanged();
             });
 
-            ResiliencePipeline pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptions);
+            ResiliencePipeline pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
             await hubConnection.StartWithRetryAsync(pipeline, new CancellationToken());
         }
         catch (Exception ex)
         {
             errorOcurred = true;
-            Log.Error(ex, "GameCast page: There was an error loading the game data.");
+            Logger.LogError(ex, "GameCast page: There was an error loading the game data.");
         }
     }
 }
