@@ -48,7 +48,6 @@
                 "target": "base",
                 "dockerfile": "${workspaceFolder}/src/Hosts/Api/Dockerfile",
                 "context": "${workspaceFolder}",
-                "customOptions": "--no-cache",
                 "pull": true
             },
             "netCore": {
@@ -200,7 +199,6 @@
                 "target": "base",
                 "dockerfile": "${workspaceFolder}/src/Hosts/Worker/Dockerfile",
                 "context": "${workspaceFolder}",
-                "customOptions": "--no-cache",
                 "pull": true
             },
             "netCore": {
