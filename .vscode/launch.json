@@ -57,6 +57,7 @@
             "name": "Launch Web: Football Scoreboard Blazor",
             "type": "blazorwasm",
             "request": "launch",
+            "browser": "chrome",
             "cwd": "${workspaceFolder}/src/Hosts/Blazor",
             "url": "https://localhost:5002"
         },
