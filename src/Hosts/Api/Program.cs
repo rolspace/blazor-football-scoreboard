@@ -102,12 +102,9 @@ try
         app.UseCors(corsOptions.PolicyName);
     }
 
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapHealthChecks("/health");
-        endpoints.MapHub<PlayHub>("/hub/plays");
-        endpoints.MapControllers();
-    });
+    app.MapHealthChecks("/health");
+    app.MapHub<PlayHub>("/hub/plays");
+    app.MapControllers();
 
     await app.RunAsync();
 
