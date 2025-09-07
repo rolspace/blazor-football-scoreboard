@@ -4,28 +4,16 @@
 @using Football.Application.Features.Games.Models
 @using Football.Application.Features.Plays.Models
 @using Football.Application.Features.Stats.Models
-@using Football.Application.Interfaces
-@using Football.Infrastructure.Extensions
-@using Football.Infrastructure.Options
-@using Microsoft.AspNetCore.SignalR.Client
-@using Microsoft.Extensions.Options
-@using Polly
-@using Microsoft.Extensions.Logging
-@using FootballHubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions
+@using Football.Blazor.Components
 
-@inject IHttpClientFactory HttpClientFactory
-@inject IHubConnectionFactory<HubConnection> HubConnectionFactory
-@inject IOptions<HubOptions> HubOptions
-@inject NavigationManager NavigationManager
-@inject ILogger<GameCast> Logger
-
+@inherits GameComponentBase
 
 <div class="mdc-layout-grid__inner">
-    @if (currentPlay is null && !errorOcurred)
+    @if (previousPlay is null && !errorOcurred)
     {
         <div>Loading</div>
     }
-    else if (currentPlay is null)
+    else if (previousPlay is null)
     {
         <div>An error ocurred. The game could not be loaded.</div>
     }
@@ -39,14 +27,14 @@
         </div>
         <!-- GameCast title -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">
-            <span class="mdc-typography--body2">@currentPlay.AwayTeam @@ @currentPlay.HomeTeam</span>
+            <span class="mdc-typography--body2">@previousPlay.AwayTeam @@ @previousPlay.HomeTeam</span>
         </div>
         <!-- GameCast layout -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-desktop">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
-                    <GameCard GameId="@currentPlay.GameId" Play="@currentPlay" />
+                    <GameCard GameId="@previousPlay.GameId" Play="@previousPlay" />
                 </div>
             </div>
         </div>
@@ -56,22 +44,14 @@
             <span class="mdc-typography--body2">Stats</span>
         </div>
         <!-- GameStats layout -->
-        <StatsTable Team="@currentPlay.HomeTeam" TeamStats=@homeTeamStats />
-        <StatsTable Team="@currentPlay.AwayTeam" TeamStats=@awayTeamStats />
+        <StatsTable Team="@previousPlay.HomeTeam" TeamStats=@homeTeamStats />
+        <StatsTable Team="@previousPlay.AwayTeam" TeamStats=@awayTeamStats />
     }
 </div>
 
 @code {
-    private bool errorOcurred = false;
-
-    private HubConnection? hubConnection;
-
-    private HubOptions hubOptions => HubOptions.Value;
-
-    private PlayDto? currentPlay = null;
-
+    private PlayDto? previousPlay = null;
     private StatDto? homeTeamStats = null;
-
     private StatDto? awayTeamStats = null;
 
     [Parameter]
@@ -86,28 +66,17 @@
 
             if (game is null) throw new Exception("Game not found.");
 
-            currentPlay = new PlayDto
-            {
-                Id = 0,
-                GameId = game.Id,
-                HomeTeam = game.HomeTeam,
-                HomeScore = game.HomeScore,
-                AwayTeam = game.AwayTeam,
-                AwayScore = game.AwayScore,
-                Quarter = game.Quarter,
-                QuarterSecondsRemaining = game.QuarterSecondsRemaining
-            };
+            previousPlay = GetPreviousPlayFromGame(game);
 
             GameStatDto? gameStats = await httpClient.GetFromJsonAsync<GameStatDto>($"games/{GameId}/stats");
             homeTeamStats = gameStats?.Stats.Find(s => s.Home);
             awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
-            hubConnection = HubConnectionFactory.CreateHubConnection();
-            hubConnection.On<PlayDto>("ReceivePlay", async (nextPlay) =>
+            await InitializeHubConnection(async (nextPlay) =>
             {
                 if (GameId == nextPlay.GameId)
                 {
-                    currentPlay = new PlayDto
+                    previousPlay = new PlayDto
                     {
                         Id = nextPlay.Id,
                         HomeTeam = nextPlay.HomeTeam,
@@ -122,13 +91,10 @@
                     GameStatDto? updatedGameStats = await httpClient.GetFromJsonAsync<GameStatDto>($"games/{GameId}/stats");
                     homeTeamStats = updatedGameStats?.Stats.Find(s => s.Home);
                     awayTeamStats = updatedGameStats?.Stats.Find(s => !s.Home);
-                };
 
-                StateHasChanged();
+                    StateHasChanged();
+                }
             });
-
-            ResiliencePipeline pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
-            await hubConnection.StartWithRetryAsync(pipeline, new CancellationToken());
         }
         catch (Exception ex)
         {
