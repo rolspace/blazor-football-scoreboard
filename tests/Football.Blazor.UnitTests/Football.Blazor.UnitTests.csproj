@@ -30,6 +30,11 @@
 		  </PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\src\Application\Football.Application.csproj" />
+	  <ProjectReference Include="..\..\src\Hosts\Blazor\Football.Blazor.csproj" />
+	</ItemGroup>
+
 
 
 </Project>
