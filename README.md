@@ -81,7 +81,7 @@ To run the tests, perform the following steps:
 
 1. Install the [dotnet coverage](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage) tool globally with the command, `dotnet tool install --global dotnet-coverage`.
 
-2. Install the [dotnet report generator](https://www.nuget.org/packages/dotnet-reportgenerator-globaltool) tool globally with the command, `dotnet tool install dotnet-reportgenerator-globaltool`.
+2. Install the [dotnet report generator](https://www.nuget.org/packages/dotnet-reportgenerator-globaltool) tool globally with the command, `dotnet tool install --global dotnet-reportgenerator-globaltool`.
 
 3. Set the current working directory in your terminal of choice to the root of the repository.
 
