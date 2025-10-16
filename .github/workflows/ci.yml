@@ -91,6 +91,7 @@ jobs:
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"rolspace_blazor-football-scoreboard" /o:"rolspace" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml" \
+            /d:sonar.inclusions="**/src/**" /d:sonar.test.inclusions="**/tests/**" \
 
           dotnet restore
           dotnet build --configuration Release --no-restore
