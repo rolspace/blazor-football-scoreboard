@@ -8,7 +8,7 @@ using Football.Application.Interfaces;
 using Football.Infrastructure.Extensions;
 using Football.Infrastructure.Options;
 using Polly;
-using FootballHubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions;
+using HubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions;
 
 namespace Football.Blazor.Components;
 
@@ -40,7 +40,7 @@ public class GameComponentBase : ComponentBase
         hubConnection = HubConnectionFactory.CreateHubConnection();
         hubConnection.On<PlayDto>("ReceivePlay", onPlayReceived);
 
-        ResiliencePipeline pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
+        ResiliencePipeline pipeline = HubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
         await hubConnection.StartWithRetryAsync(pipeline, new CancellationToken());
     }
 

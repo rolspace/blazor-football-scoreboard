@@ -13,7 +13,7 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.SignalR.Client;
 using Polly;
-using FootballHubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions;
+using HubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions;
 
 namespace Football.Worker;
 
@@ -52,7 +52,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
         _gameTimeManager = new GameTimeManager();
         _hubConnection = hubConnectionFactory.CreateHubConnection();
 
-        _pipeline = FootballHubExtensions.GetHubConnectionPipeline(hubOptionsAccessor.Value, _logger);
+        _pipeline = HubExtensions.GetHubConnectionPipeline(hubOptionsAccessor.Value, _logger);
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)
