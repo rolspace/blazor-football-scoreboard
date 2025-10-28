@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.AspNetCore.SignalR.Client;
 using Football.Application.Interfaces;
 using Football.Blazor;
 using Football.Infrastructure.Factories;
@@ -24,7 +23,7 @@ try
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
     builder.Services.Configure<HubOptions>(builder.Configuration.GetSection(HubOptions.Key));
-    builder.Services.AddSingleton<IHubConnectionFactory<HubConnection>, HubConnectionFactory>();
+    builder.Services.AddSingleton<IHubConnectionFactory<IHub>, HubConnectionFactory>();
 
     HttpClientOptions httpClientOptions = builder.Configuration.GetSection(HttpClientOptions.Key)
         .Get<HttpClientOptions>() ?? throw new InvalidOperationException("The HttpClientOptions have not been configured.");

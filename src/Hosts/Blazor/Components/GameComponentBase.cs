@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Football.Application.Features.Games.Models;
 using Football.Application.Features.Plays.Models;
@@ -23,7 +21,7 @@ public class GameComponentBase : ComponentBase
     protected IHttpClientFactory HttpClientFactory { get; set; } = null!;
 
     [Inject]
-    protected IHubConnectionFactory<HubConnection> HubConnectionFactory { get; set; } = null!;
+    protected IHubConnectionFactory<IHub> HubConnectionFactory { get; set; } = null!;
 
     [Inject]
     protected ILogger<GameComponentBase> Logger { get; set; } = null!;
@@ -31,17 +29,17 @@ public class GameComponentBase : ComponentBase
     [Inject]
     protected NavigationManager NavigationManager { get; set; } = null!;
 
-    protected HubConnection? hubConnection;
+    protected IHub? hub;
 
     protected bool errorOcurred = false;
 
     protected async Task InitializeHubConnection(Action<PlayDto> onPlayReceived)
     {
-        hubConnection = HubConnectionFactory.CreateHubConnection();
-        hubConnection.On<PlayDto>("ReceivePlay", onPlayReceived);
+        hub = HubConnectionFactory.CreateHub();
+        hub.On("ReceivePlay", onPlayReceived);
 
         ResiliencePipeline pipeline = HubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
-        await hubConnection.StartWithRetryAsync(pipeline, new CancellationToken());
+        await hub.StartWithRetryAsync(pipeline, new CancellationToken());
     }
 
     protected PlayDto GetPreviousPlayFromGame(GameDto game)

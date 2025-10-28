@@ -3,7 +3,6 @@ using Football.Application.Interfaces;
 using Football.Infrastructure.Extensions;
 using Football.Infrastructure.Factories;
 using Football.Worker;
-using Microsoft.AspNetCore.SignalR.Client;
 using Serilog;
 using Serilog.Events;
 
@@ -40,7 +39,7 @@ try
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
 
-    builder.Services.AddTransient<IHubConnectionFactory<HubConnection>, HubConnectionFactory>();
+    builder.Services.AddTransient<IHubConnectionFactory<IHub>, HubConnectionFactory>();
 
     builder.Services.AddHostedService<PlayLogBackgroundService>();
 

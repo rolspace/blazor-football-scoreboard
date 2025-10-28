@@ -11,7 +11,6 @@ using Football.Infrastructure.Extensions;
 using Football.Infrastructure.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.SignalR.Client;
 using Polly;
 using HubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions;
 
@@ -31,26 +30,26 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     private readonly IGameTimeManager _gameTimeManager;
 
-    private readonly HubConnection _hubConnection;
+    private readonly IHub _hub;
 
     private readonly IHostApplicationLifetime _applicationLifetime;
 
-    public PlayLogBackgroundService(IMapper mapper,
-        IServiceScopeFactory scopeFactory,
+    public PlayLogBackgroundService(IServiceScopeFactory scopeFactory,
+        IMapper mapper,
         ILogger<PlayLogBackgroundService> logger,
-        IHubConnectionFactory<HubConnection> hubConnectionFactory,
+        IHubConnectionFactory<IHub> hubConnectionFactory,
         IOptions<HubOptions> hubOptionsAccessor,
         IOptions<ScoreboardOptions> scoreboardOptionsAccesor,
         IHostApplicationLifetime applicationLifetime)
     {
-        _mapper = mapper;
         _scopeFactory = scopeFactory;
+        _mapper = mapper;
         _logger = logger;
         _scoreboardOptions = scoreboardOptionsAccesor.Value;
         _applicationLifetime = applicationLifetime;
 
         _gameTimeManager = new GameTimeManager();
-        _hubConnection = hubConnectionFactory.CreateHubConnection();
+        _hub = hubConnectionFactory.CreateHub();
 
         _pipeline = HubExtensions.GetHubConnectionPipeline(hubOptionsAccessor.Value, _logger);
     }
@@ -72,7 +71,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                 _gameTimeManager.GamesScheduled = gameDtos.Count();
             }
 
-            await _hubConnection.StartWithRetryAsync(_pipeline, cancellationToken);
+            await _hub.StartWithRetryAsync(_pipeline, cancellationToken);
             await base.StartAsync(cancellationToken);
 
             _logger.LogInformation("Worker hosted service started.");
@@ -113,7 +112,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
                         SaveGameStatsCommand saveGameStatsCommand = _mapper.Map<SaveGameStatsCommand>(playDto);
 
                         await mediator.Send(saveGameStatsCommand, cancellationToken);
-                        await _hubConnection.SendPlayWithRetryAsync(_pipeline, playDto, cancellationToken);
+                        await _hub.SendPlayWithRetryAsync(_pipeline, playDto, cancellationToken);
 
                         _logger.LogInformation("{quarter}/{quarterSecondsRemaining} - {playDto}", quarter, quarterSecondsRemaining, playDto);
                     }
@@ -132,7 +131,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        await _hubConnection.StopAsync(cancellationToken);
+        await _hub.StopAsync(cancellationToken);
         _logger.LogInformation("Hub connection stopped.");
 
         await base.StopAsync(cancellationToken);
@@ -141,7 +140,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await _hubConnection.DisposeAsync();
+        await _hub.DisposeAsync();
         _logger.LogInformation("Hub connection disposed.");
 
         base.Dispose();

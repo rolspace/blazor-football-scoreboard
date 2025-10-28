@@ -1,4 +1,5 @@
 using Football.Application.Features.Plays.Models;
+using Football.Application.Interfaces;
 using Football.Infrastructure.Options;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
@@ -37,27 +38,28 @@ namespace Football.Infrastructure.Extensions
                 .Build();
         }
 
-        public static async Task StartWithRetryAsync(this HubConnection hubConnection,
+        public static async Task StartWithRetryAsync(this IHub hub,
             ResiliencePipeline pipeline, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(hubConnection);
+            ArgumentNullException.ThrowIfNull(hub);
+            ArgumentNullException.ThrowIfNull(pipeline);
 
             await pipeline.ExecuteAsync(async (token) =>
             {
-                await hubConnection.StartAsync(token);
+                await hub.StartAsync(token);
             }, cancellationToken);
         }
 
-        public static async Task SendPlayWithRetryAsync(this HubConnection hubConnection,
+        public static async Task SendPlayWithRetryAsync(this IHub hub,
             ResiliencePipeline pipeline, PlayDto playDto, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(hubConnection);
-
+            ArgumentNullException.ThrowIfNull(hub);
+            ArgumentNullException.ThrowIfNull(pipeline);
             ArgumentNullException.ThrowIfNull(playDto);
 
             await pipeline.ExecuteAsync(async (token) =>
             {
-                await hubConnection.SendAsync("SendPlay", playDto, token);
+                await hub.SendAsync("SendPlay", playDto, token);
             }, cancellationToken);
         }
     }

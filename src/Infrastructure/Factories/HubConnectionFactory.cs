@@ -1,12 +1,11 @@
-using System;
 using Football.Application.Interfaces;
 using Football.Infrastructure.Options;
-using Microsoft.AspNetCore.SignalR.Client;
+using Football.Infrastructure.Services;
 using Microsoft.Extensions.Options;
 
 namespace Football.Infrastructure.Factories;
 
-public class HubConnectionFactory : IHubConnectionFactory<HubConnection>
+public class HubConnectionFactory : IHubConnectionFactory<IHub>
 {
     private readonly Uri _hubUri;
 
@@ -15,8 +14,8 @@ public class HubConnectionFactory : IHubConnectionFactory<HubConnection>
         _hubUri = new Uri(hubOptionsAccesor.Value.HubUrl);
     }
 
-    public HubConnection CreateHubConnection()
+    public IHub CreateHub()
     {
-        return new HubConnectionBuilder().WithUrl(_hubUri).Build();
+        return new Hub(_hubUri);
     }
 }
