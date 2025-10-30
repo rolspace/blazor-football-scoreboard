@@ -47,6 +47,22 @@ public class GameCardTests : TestContext
         captionElements.Should().Contain(e => e.TextContent.Contains("Pass complete for 15 yards"));
     }
 
+    [Fact]
+    public void GameCard_RendersWithEmptyData() // TODO: Consider options here, rending with empty data may not be ideal
+    {
+        // Arrange
+        var emptyPlay = new PlayDto();
+
+        // Act
+        var cut = RenderComponent<GameCard>(parameters => parameters
+            .Add(p => p.GameId, 1)
+            .Add(p => p.Play, emptyPlay));
+
+        // Assert
+        cut.Find(".score-card").Should().NotBeNull();
+        cut.Find(".mdc-card").Should().NotBeNull();
+    }
+
     [Theory]
     [InlineData(1, "1st")]
     [InlineData(2, "2nd")]
@@ -77,22 +93,6 @@ public class GameCardTests : TestContext
     }
 
     [Fact]
-    public void GameCard_RendersWithEmptyPlayDto()
-    {
-        // Arrange
-        var emptyPlay = new PlayDto();
-
-        // Act
-        var cut = RenderComponent<GameCard>(parameters => parameters
-            .Add(p => p.GameId, 1)
-            .Add(p => p.Play, emptyPlay));
-
-        // Assert
-        cut.Find(".score-card").Should().NotBeNull();
-        cut.Find(".mdc-card").Should().NotBeNull();
-    }
-
-    [Fact]
     public void GameCard_NavLinkUsesCorrectGameId()
     {
         // Arrange
@@ -114,7 +114,7 @@ public class GameCardTests : TestContext
     }
 
     [Fact]
-    public void GameCard_DisplaysFormattedTime()
+    public void GameCard_DisplaysCorrectFormattedTime()
     {
         // Arrange
         var play = new PlayDto
