@@ -273,10 +273,12 @@ public class IndexTests : TestContext
             AwayScore = 17,
             Quarter = 4,
             QuarterSecondsRemaining = 900,
-            Description = "Touchdown Chiefs!"
+            Description = "Field Goal Chiefs!"
         };
 
         cut.InvokeAsync(() => capturedAction!.Invoke(updatedPlay));
+
+        Thread.Sleep(1000); // Allow time for UI to update
 
         // Assert
         IRenderedComponent<GameCard> gameCard = cut.FindComponent<GameCard>();
@@ -284,7 +286,7 @@ public class IndexTests : TestContext
         gameCard.Instance.Play.AwayScore.Should().Be(17);
         gameCard.Instance.Play.Quarter.Should().Be(4);
         gameCard.Instance.Play.QuarterSecondsRemaining.Should().Be(900);
-        gameCard.Instance.Play.Description.Should().Be("Touchdown Chiefs!");
+        gameCard.Instance.Play.Description.Should().Be("Field Goal Chiefs!");
     }
 
     [Fact]
