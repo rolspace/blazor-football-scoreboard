@@ -270,6 +270,46 @@
             "command": "docker exec -i footballscoreboard_localdb /bin/sh -c 'MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db' < ${workspaceFolder}/scripts/localdb/clean_db.sql",
             "problemMatcher": [],
             "detail": "Runs the init.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
+        },
+        {
+            "label": "collect-test-coverage",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "dotnet-coverage",
+                "collect",
+                "dotnet test --no-restore",
+                "-f",
+                "cobertura",
+                "-o",
+                "coverage.xml"
+            ],
+            "problemMatcher": [],
+            "detail": "Collects test coverage in cobertura format"
+        },
+        {
+            "label": "generate-coverage-report",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "reportgenerator",
+                "-reports:coverage.xml",
+                "-reporttypes:Html",
+                "-targetdir:coverage",
+                "-assemblyfilters:+Football.*;-Football.*Tests"
+            ],
+            "problemMatcher": [],
+            "detail": "Generates HTML coverage report from coverage.xml"
+        },
+        {
+            "label": "test-with-coverage",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "collect-test-coverage",
+                "generate-coverage-report"
+            ],
+            "problemMatcher": [],
+            "detail": "Runs tests with coverage collection and generates HTML report"
         }
     ],
     "inputs": [
