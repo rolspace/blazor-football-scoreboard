@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Football.Application.Interfaces;
 using Football.Infrastructure.Extensions;
@@ -63,3 +64,6 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+[ExcludeFromCodeCoverage]
+public partial class Program { }

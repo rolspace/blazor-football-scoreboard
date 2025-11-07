@@ -8,6 +8,7 @@ using Polly;
 using Polly.Retry;
 using Polly.Timeout;
 using Serilog;
+using System.Diagnostics.CodeAnalysis;
 
 Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -58,3 +59,6 @@ catch (Exception ex)
     Log.Fatal(ex, "Blazor host application unexpected shut down.");
     throw;
 }
+
+[ExcludeFromCodeCoverage]
+public partial class Program { }

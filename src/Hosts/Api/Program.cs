@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Asp.Versioning;
 using Football.Api.Hubs;
@@ -119,3 +120,6 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+[ExcludeFromCodeCoverage]
+public partial class Program { }
