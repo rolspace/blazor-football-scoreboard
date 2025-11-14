@@ -54,6 +54,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Football.Blazor.UnitTests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Football.Application.UnitTests", "tests\Football.Application.UnitTests\Football.Application.UnitTests.csproj", "{C6479CCA-FF28-4667-A526-EB137A1539C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Football.Worker.UnitTests", "tests\Football.Worker.UnitTests\Football.Worker.UnitTests.csproj", "{590FE4DE-E5C6-4499-B11C-C9754A9AAD23}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{C6479CCA-FF28-4667-A526-EB137A1539C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6479CCA-FF28-4667-A526-EB137A1539C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6479CCA-FF28-4667-A526-EB137A1539C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{590FE4DE-E5C6-4499-B11C-C9754A9AAD23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{590FE4DE-E5C6-4499-B11C-C9754A9AAD23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{590FE4DE-E5C6-4499-B11C-C9754A9AAD23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{590FE4DE-E5C6-4499-B11C-C9754A9AAD23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +125,7 @@ Global
 		{8AB60484-6C4A-4306-BEA0-6C963BF1ABAF} = {C138333C-C403-4F0D-8D0F-674DDA8F5253}
 		{F5AF2360-226A-4E0B-9DB6-7AC8D8A772BA} = {98905046-DCD0-49E1-B146-8B78F006F800}
 		{C6479CCA-FF28-4667-A526-EB137A1539C2} = {98905046-DCD0-49E1-B146-8B78F006F800}
+		{590FE4DE-E5C6-4499-B11C-C9754A9AAD23} = {98905046-DCD0-49E1-B146-8B78F006F800}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {89C2AE1B-F33B-43F7-A6F2-BA0ADDDA0720}

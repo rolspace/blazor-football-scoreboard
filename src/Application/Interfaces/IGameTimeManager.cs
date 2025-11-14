@@ -3,7 +3,7 @@ public interface IGameTimeManager
 {
     int GamesScheduled { get; set; }
 
-    bool GameTimeOver { get; }
+    bool GamesOver { get; }
 
     int GetQuarter();
 

@@ -6,15 +6,15 @@ public class GameTimeManager : IGameTimeManager
 {
     private readonly object _locker = new();
 
-    private int _gamesFinished;
-
     private int _quarterSecondsRemaining;
 
     private int _quarter;
 
+    private int _gamesFinished;
+
     public int GamesScheduled { get; set; } = 0;
 
-    public bool GameTimeOver => _gamesFinished == GamesScheduled;
+    public bool GamesOver => _gamesFinished == GamesScheduled;
 
     public GameTimeManager()
         : this(Constants.FIRST_QUARTER, Constants.SECONDS_IN_QUARTER) { }
@@ -63,6 +63,11 @@ public class GameTimeManager : IGameTimeManager
 
     public void IncrementGamesFinished(int count)
     {
+        if (_gamesFinished + count > GamesScheduled)
+        {
+            throw new InvalidOperationException("Cannot increment games finished beyond games scheduled.");
+        }
+
         lock (_locker)
         {
             Interlocked.Add(ref _gamesFinished, count);
