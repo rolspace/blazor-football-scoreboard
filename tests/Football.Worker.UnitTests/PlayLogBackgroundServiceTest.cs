@@ -101,7 +101,7 @@ public class PlayLogBackgroundServiceTest
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Worker hosted service started")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Worker hosted service started")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -135,7 +135,7 @@ public class PlayLogBackgroundServiceTest
             x => x.Log(
                 LogLevel.Critical,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Worker hosted service did not start")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Worker hosted service did not start")),
                 exception,
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -208,7 +208,7 @@ public class PlayLogBackgroundServiceTest
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Hub connection stopped")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Hub connection stopped")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -218,7 +218,7 @@ public class PlayLogBackgroundServiceTest
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Worker hosted service stopped")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Worker hosted service stopped")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -287,7 +287,7 @@ public class PlayLogBackgroundServiceTest
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Hub connection disposed")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Hub connection disposed")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
@@ -325,7 +325,7 @@ public class PlayLogBackgroundServiceTest
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Worker hosted service disposed")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Worker hosted service disposed")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
