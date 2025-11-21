@@ -265,11 +265,37 @@
             }
         },
         {
-            "label": "run-sql-script-in-mysql-container",
+            "label": "run-sql-script-in-mysql-container-bash",
             "type": "shell",
             "command": "docker exec -i footballscoreboard_localdb /bin/sh -c 'MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db' < ${workspaceFolder}/scripts/localdb/clean_db.sql",
             "problemMatcher": [],
-            "detail": "Runs the init.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
+            "detail": "Bash: Runs the clean_db.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
+        },
+        {
+            "label": "run-sql-script-in-mysql-container-windows",
+            "type": "shell",
+            "command": "Get-Content",
+            "args": [
+                "${workspaceFolder}\\scripts\\localdb\\clean_db.sql",
+                "|",
+                "docker",
+                "exec",
+                "-i",
+                "footballscoreboard_localdb",
+                "/bin/sh",
+                "-c",
+                "MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db"
+            ],
+            "options": {
+                "shell": {
+                    "executable": "powershell.exe",
+                    "args": [
+                        "-Command"
+                    ]
+                }
+            },
+            "problemMatcher": [],
+            "detail": "Windows: Runs the clean_db.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
         },
         {
             "label": "collect-test-coverage",
