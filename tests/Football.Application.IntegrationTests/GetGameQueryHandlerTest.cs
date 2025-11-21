@@ -4,6 +4,7 @@ using Football.Application.Features.Games;
 using Football.Application.Features.Games.Mappings;
 using Football.Application.Features.Games.Models;
 using Football.Application.IntegrationTests.Fixtures;
+using Football.Domain.Enums;
 using Football.Infrastructure.Persistence;
 
 namespace Football.Application.IntegrationTests;
@@ -42,7 +43,7 @@ public class GetGameQueryHandlerTest : IClassFixture<TestDatabaseFixture>
             HomeScore = 7,
             AwayTeam = "GB",
             AwayScore = 7,
-            State = string.Empty,
+            State = null!,
             Quarter = 1,
             QuarterSecondsRemaining = 900
         };

@@ -44,7 +44,7 @@ public class GetGamesQueryHandlerTest : IClassFixture<TestDatabaseFixture>
                 HomeScore = 7,
                 AwayTeam = "GB",
                 AwayScore = 7,
-                State = string.Empty,
+                State = null!,
                 Quarter = 1,
                 QuarterSecondsRemaining = 900
             }
