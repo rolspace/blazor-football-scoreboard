@@ -267,7 +267,7 @@
         {
             "label": "run-sql-script-in-mysql-container-bash",
             "type": "shell",
-            "command": "docker exec -i footballscoreboard_localdb /bin/sh -c 'MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db' < ${workspaceFolder}/scripts/localdb/clean_db.sql",
+            "command": "docker exec -i footballscoreboard_localdb /bin/sh -c 'MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db' < ${workspaceFolder}/scripts/clean_db.sql",
             "problemMatcher": [],
             "detail": "Bash: Runs the clean_db.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
         },
@@ -276,7 +276,7 @@
             "type": "shell",
             "command": "Get-Content",
             "args": [
-                "${workspaceFolder}\\scripts\\localdb\\clean_db.sql",
+                "${workspaceFolder}\\scripts\\clean_db.sql",
                 "|",
                 "docker",
                 "exec",
