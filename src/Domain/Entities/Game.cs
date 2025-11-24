@@ -18,7 +18,7 @@ public class Game
 
     public int? QuarterSecondsRemaining { get; set; }
 
-    public IList<Play> Plays { get; private set; } = new List<Play>();
+    public virtual ICollection<Play> Plays { get; set; } = new List<Play>();
 
-    public IList<Stat> Stats { get; private set; } = new List<Stat>();
+    public virtual ICollection<Stat> Stats { get; set; } = new List<Stat>();
 }

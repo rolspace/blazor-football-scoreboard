@@ -8,8 +8,6 @@ public class Play
 
     public int GameId { get; set; }
 
-    public Game? Game { get; set; }
-
     public int Week { get; set; }
 
     public string HomeTeam { get; set; } = null!;
@@ -20,7 +18,7 @@ public class Play
 
     public int AwayScore { get; set; }
 
-    public int Qtr { get; set; }
+    public int Quarter { get; set; }
 
     public int? QuarterSecondsRemaining { get; set; }
 
@@ -32,13 +30,13 @@ public class Play
 
     public string GameHalf { get; set; } = null!;
 
-    public string Desc { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
-    public string Time { get; set; } = null!;
+    public string PlayTime { get; set; } = null!;
 
     public string SideOfField { get; set; } = null!;
 
-    public string Yrdln { get; set; } = null!;
+    public string YardLine { get; set; } = null!;
 
     public string? PlayType { get; set; }
 
@@ -50,9 +48,7 @@ public class Play
 
     public int Drive { get; set; }
 
-    public int Ydstogo { get; set; }
-
-    public bool Sp { get; set; }
+    public int YardsToGo { get; set; }
 
     public bool QuarterEnd { get; set; }
 
@@ -164,7 +160,7 @@ public class Play
 
     public string? TdTeam { get; set; }
 
-    public int Ydsnet { get; set; }
+    public int NetYards { get; set; }
 
     public int YardsGained { get; set; }
 
@@ -211,4 +207,6 @@ public class Play
     public int? PosteamTimeoutsRemaining { get; set; }
 
     public int? DefteamTimeoutsRemaining { get; set; }
+
+    public virtual Game Game { get; set; } = null!;
 }

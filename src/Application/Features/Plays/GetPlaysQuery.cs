@@ -32,7 +32,7 @@ public class GetPlaysQueryHandler : IRequestHandler<GetPlaysQuery, IEnumerable<P
     {
         return await _footballDbContext.Plays
             .Where(p => p.Week == request.Week
-                && p.Qtr == request.Quarter
+                && p.Quarter == request.Quarter
                 && p.QuarterSecondsRemaining.HasValue
                 && p.QuarterSecondsRemaining == request.QuarterSecondsRemaining)
             .ProjectTo<PlayDto>(_mapper.ConfigurationProvider)

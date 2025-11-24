@@ -4,8 +4,6 @@ public class Stat
 {
     public int GameId { get; set; }
 
-    public Game? Game { get; set; }
-
     public string Team { get; set; } = null!;
 
     public int Score { get; set; }
@@ -17,4 +15,6 @@ public class Stat
     public int Punts { get; set; }
 
     public int ReturnYards { get; set; }
+
+    public virtual Game Game { get; set; } = null!;
 }

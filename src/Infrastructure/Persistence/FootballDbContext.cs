@@ -7,11 +7,11 @@ namespace Football.Infrastructure.Persistence;
 
 public class FootballDbContext : DbContext, IFootballDbContext
 {
-    public DbSet<Game> Games => Set<Game>();
+    public virtual DbSet<Game> Games { get; set; }
 
-    public DbSet<Play> Plays => Set<Play>();
+    public virtual DbSet<Play> Plays { get; set; }
 
-    public DbSet<Stat> Stats => Set<Stat>();
+    public virtual DbSet<Stat> Stats { get; set; }
 
     public FootballDbContext(DbContextOptions<FootballDbContext> options) : base(options) { }
 
