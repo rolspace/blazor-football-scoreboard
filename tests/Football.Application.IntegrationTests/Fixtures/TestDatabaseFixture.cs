@@ -21,6 +21,6 @@ public class TestDatabaseFixture
     public FootballDbContext CreateContext()
         => new(
             new DbContextOptionsBuilder<FootballDbContext>()
-                .UseMySql(_connectionString, new MySqlServerVersion(new Version(8, 0, 28)))
+                .UseNpgsql(_connectionString)
                 .Options);
 }
