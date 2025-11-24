@@ -267,9 +267,9 @@
         {
             "label": "run-sql-script-in-mysql-container-bash",
             "type": "shell",
-            "command": "docker exec -i footballscoreboard_localdb /bin/sh -c 'MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db' < ${workspaceFolder}/scripts/clean_db.sql",
+            "command": "docker exec -i footballscoreboard_localdb /bin/sh -c 'PGPASSWORD=\"${input:postgresPassword}\" psql -U postgres -d footballscoreboard_db' < ${workspaceFolder}/scripts/clean_db.sql",
             "problemMatcher": [],
-            "detail": "Bash: Runs the clean_db.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
+            "detail": "Bash: Runs the clean_db.sql script inside the footballscoreboard_localdb PostgreSQL container. Prompts for PostgreSQL password using an input variable."
         },
         {
             "label": "run-sql-script-in-mysql-container-windows",
@@ -284,7 +284,7 @@
                 "footballscoreboard_localdb",
                 "/bin/sh",
                 "-c",
-                "MYSQL_PWD=\"${input:mysqlPassword}\" mysql -ufootballscoreboard_dbuser footballscoreboard_db"
+                "PGPASSWORD=\"${input:postgresPassword}\" psql -U postgres -d footballscoreboard_db"
             ],
             "options": {
                 "shell": {
@@ -295,7 +295,7 @@
                 }
             },
             "problemMatcher": [],
-            "detail": "Windows: Runs the clean_db.sql script inside the footballscoreboard_localdb MySQL container. Prompts for MySQL password using an input variable."
+            "detail": "Windows: Runs the clean_db.sql script inside the footballscoreboard_localdb PostgreSQL container. Prompts for PostgreSQL password using an input variable."
         },
         {
             "label": "collect-test-coverage",
@@ -340,9 +340,9 @@
     ],
     "inputs": [
         {
-            "id": "mysqlPassword",
+            "id": "postgresPassword",
             "type": "promptString",
-            "description": "Enter the MySQL root password",
+            "description": "Enter the PostgreSQL password",
             "password": true
         }
     ]

@@ -1,11 +1,11 @@
-START TRANSACTION;
+BEGIN;
 
-DELETE FROM `stat`;
+DELETE FROM "football"."stat";
 
-UPDATE `game`
+UPDATE "football"."game"
 SET
-    `state` = NULL,
-    `quarter` = NULL,
-    `quarter_seconds_remaining` = NULL;
+    "state" = NULL,
+    "quarter" = NULL,
+    "quarter_seconds_remaining" = NULL;
 
 COMMIT;
