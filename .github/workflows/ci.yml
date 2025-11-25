@@ -29,12 +29,10 @@ jobs:
 
       - name: Create test database
         env:
-          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-          DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          docker pull mysql:8.0.28
-          docker run --name footballscoreboard_testdb -e MYSQL_ROOT_PASSWORD="$DB_ROOT_PASSWORD" -e MYSQL_USER="$DB_USER" -e MYSQL_PASSWORD="$DB_PASSWORD" -e MYSQL_DATABASE=${{ vars.DB_NAME }} -p 3306:3306 -v ${{github.workspace}}/scripts/testdb:/docker-entrypoint-initdb.d -d mysql:8.0.28
+          docker pull postgres:17
+          docker run --name footballscoreboard_testdb -e POSTGRES_PASSWORD="$DB_PASSWORD" -e POSTGRES_DB=${{ vars.DB_NAME }} -p 5432:5432 -v ${{github.workspace}}/scripts/testdb:/docker-entrypoint-initdb.d -d postgres:17
 
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v4
@@ -86,7 +84,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          MYSQLCONNSTR_FootballDbConnection: Server=localhost;Database=${{ vars.DB_NAME }};Uid=${{ secrets.DB_USER }};Pwd=${{ secrets.DB_PASSWORD }};
+          CUSTOMCONNSTR_FootballDbConnection: Host=localhost;Database=${{ vars.DB_NAME }};Username=postgres;Password=${{ secrets.DB_PASSWORD }}
         run: |
           ./.sonar/scanner/dotnet-sonarscanner begin /k:"rolspace_blazor-football-scoreboard" /o:"rolspace" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" \
