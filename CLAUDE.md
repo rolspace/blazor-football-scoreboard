@@ -4,153 +4,204 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository simulates the 2019 NFL football season through three interconnected applications:
-- **Football.Api**: ASP.NET Core Web API with SignalR Hub for real-time play-by-play communication
-- **Football.Blazor**: Blazor WebAssembly UI displaying live game scores and statistics
-- **Football.Worker**: Background service that replays game data from the database and sends it to the SignalR Hub
+A .NET 10 system that simulates the 2019 NFL football season with real-time play-by-play using SignalR. Three main components communicate to replay game data:
 
-The applications must be launched in this specific order: API → Blazor → Worker.
+- **Football.Api**: Web API with HTTP endpoints and SignalR Hub (port 5001)
+- **Football.Blazor**: Blazor WebAssembly UI displaying live scores and plays (port 5002)
+- **Football.Worker**: Background service that reads and sends play data via SignalR (port 5003)
 
 ## Architecture
 
-The solution follows Clean Architecture principles with clear separation of concerns:
-
-### Layer Structure
+### Clean Architecture Layers
 
 ```
 src/
-├── Domain/           # Entities and enums (Game, Play, Stat, GameState)
-├── Application/      # Business logic using CQRS pattern
-├── Infrastructure/   # Persistence, external services, SignalR
-└── Hosts/           # Entry points
-    ├── Api/         # REST API + SignalR Hub
-    ├── Blazor/      # WebAssembly UI
-    └── Worker/      # Background service
+├── Domain/              # Entities and enums (no dependencies)
+├── Application/         # Business logic, MediatR queries, AutoMapper, FluentValidation
+│   └── Features/        # Organized by domain (Games, Plays, Stats)
+├── Infrastructure/      # EF Core, SignalR client, Polly, Npgsql
+│   ├── Persistence/     # DbContext and configurations
+│   └── Services/        # External service implementations
+└── Hosts/              # Entry points
+    ├── Api/            # ASP.NET Core Web API + SignalR Hub
+    ├── Blazor/         # Blazor WebAssembly
+    └── Worker/         # Background worker service
 ```
 
 ### Key Patterns
 
-**CQRS with MediatR**: All application logic is implemented as queries and commands (e.g., `GetGamesQuery`, `SaveGameStatsCommand`) with corresponding handlers. Each query/command has a FluentValidation validator.
+- **CQRS with MediatR**: All queries in `Application/Features/` follow the pattern: Query → Validator → Handler
+- **AutoMapper**: DTOs mapped in `Mappings` folders within each feature
+- **FluentValidation**: Validators registered via DI in `ConfigureServices.cs`
+- **Entity Framework Core**: PostgreSQL with Npgsql provider (migrated from MySQL)
+- **SignalR**: Hub at `/hub/plays` for real-time communication
 
-**Dependency Injection Setup**: Each layer exposes a `ConfigureServices` extension method:
-- `AddApplicationServices()` - Registers AutoMapper, FluentValidation, MediatR
-- `AddInfrastructureServices(IConfiguration)` - Registers EF Core DbContext, options
+### Important Configuration
 
-**SignalR Communication**: The Worker sends `PlayDto` objects to the `PlayHub` (/hub/plays), which broadcasts to all connected Blazor clients. The Hub implements `Hub<IPlayClient>` for strongly-typed client methods.
+**Scoreboard:Week Setting**: Must match between Football.Api and Football.Worker (values 1-17). This determines which week's games are simulated.
 
-**Environment Handling**: Uses custom environment extension `IsLocalhost()` in addition to standard `IsDevelopment()`. Localhost environment loads user secrets and enables Swagger.
+## Build and Test Commands
 
-**Database**: MySQL 8.0.28 accessed through Entity Framework Core with explicit configurations in `Infrastructure/Persistence/Configurations/`.
-
-## Development Commands
-
-### Tool Setup
+### Build
 ```bash
-# Restore local dotnet tools (required once after cloning)
+dotnet build
+```
+
+### Run All Tests
+```bash
+dotnet test
+```
+
+### Run Specific Test Project
+```bash
+dotnet test tests/Football.Api.UnitTests/
+dotnet test tests/Football.Application.UnitTests/
+dotnet test tests/Football.Application.IntegrationTests/
+dotnet test tests/Football.Blazor.UnitTests/
+dotnet test tests/Football.Worker.UnitTests/
+```
+
+### Test Coverage
+```bash
+# Restore tools first
 dotnet tool restore
-```
 
-### Building
-```bash
-dotnet restore
-dotnet build --configuration Release --no-restore
-```
+# Collect coverage
+dotnet dotnet-coverage collect 'dotnet test --no-restore' -f xml -o 'coverage.xml'
 
-### Running Tests
-```bash
-# All tests (requires test database running on port 3307)
-dotnet test --no-restore
-
-# With coverage
-dotnet dotnet-coverage collect 'dotnet test --no-restore' -f cobertura -o 'coverage.xml'
-
-# Generate HTML coverage report
+# Generate HTML report
 dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests"
+
+# View report
+start coverage/index.html  # Windows
+open coverage/index.html   # macOS
 ```
 
-### Running Individual Tests
-```bash
-# Run specific test project
-dotnet test tests/Football.Application.UnitTests/Football.Application.UnitTests.csproj
+## Database Setup
 
-# Run specific test
-dotnet test --filter "FullyQualifiedName~MapGameDtoFromEntityProfileTest"
+### Test Database (PostgreSQL 17, Port 5433)
+
+Required for integration tests.
+
+1. Create `.env.testdb` at repository root:
+```env
+POSTGRES_PASSWORD=your_password
+POSTGRES_USER=postgres
 ```
 
-### Database Setup
-
-**Test Database** (port 3307, required for integration tests):
+2. Start database:
 ```bash
 docker-compose -f docker-compose.testdb.yml up -d
 ```
-Requires `.env.testdb` file with MYSQL_ROOT_PASSWORD, MYSQL_USER, MYSQL_PASSWORD.
 
-**Local Database** (port 3306, required for running applications):
+Database name: `footballscoreboard_db`
+Adminer UI: http://localhost:8081
+
+3. Configure connection for integration tests:
+```bash
+dotnet user-secrets set "ConnectionStrings:FootballDbConnection" "Host=localhost;Port=5433;Database=footballscoreboard_db;Username=postgres;Password=your_password"
+```
+
+Or set environment variable:
+```bash
+export CUSTOMCONNSTR_FootballDbConnection="Host=localhost;Port=5433;Database=footballscoreboard_db;Username=postgres;Password=your_password"
+```
+
+### Local Development Database (PostgreSQL 17, Port 5432)
+
+Required for running the applications locally.
+
+1. Create `.env.localdb` at repository root:
+```env
+POSTGRES_PASSWORD=your_password
+POSTGRES_USER=postgres
+```
+
+2. Start database:
 ```bash
 docker-compose -f docker-compose.localdb.yml up -d
 ```
-Requires `.env.localdb` file with MYSQL_ROOT_PASSWORD, MYSQL_USER, MYSQL_PASSWORD.
 
-### Running Applications Locally
+Database is seeded from `scripts/localdb/footballscoreboard_localdb.sql` (takes a few minutes on first start).
+Adminer UI: http://localhost:8080
 
-**API** (https://localhost:5001):
+## Running Applications Locally
+
+Applications must start in order: API → Blazor → Worker
+
+### Football.Api
+
+**Via dotnet CLI:**
 ```bash
 cd src/Hosts/Api
 dotnet run
 ```
-- Uses `appsettings.Localhost.json` when ASPNETCORE_ENVIRONMENT=Localhost
-- Connection string must be in user secrets: `ConnectionStrings:FootballDbConnection`
-- Set `Scoreboard:Week` (1-17) to match Worker
+Environment: `Localhost`, uses `appsettings.Localhost.json`
 
-**Blazor** (https://localhost:5002):
+**Required user secrets:**
+```bash
+dotnet user-secrets set "ConnectionStrings:FootballDbConnection" "Host=localhost;Port=5432;Database=footballscoreboard_db;Username=postgres;Password=your_password"
+```
+
+**Required appsettings.Localhost.json:**
+- `Cors:PolicyName`: CORS policy name
+- `Cors:AllowedOrigins`: `https://localhost:5002`
+- `Cors:AllowedMethods`: `GET`
+- `Scoreboard:Week`: 1-17
+
+URL: https://localhost:5001
+
+**Via Docker:**
+Requires custom certificate in `.docker/volumes/certs/api/`. See `src/Hosts/Api/README.md`.
+
+### Football.Blazor
+
+**Via dotnet CLI:**
 ```bash
 cd src/Hosts/Blazor
 dotnet run
 ```
-- Configure `Hub:HubUrl` and `Api:ApiBaseUrl` in `wwwroot/appsettings.Localhost.json`
+Environment: `Localhost`, uses `wwwroot/appsettings.Localhost.json`
 
-**Worker** (https://localhost:5003):
+**Required appsettings.Localhost.json:**
+- `Hub:HubUrl`: SignalR Hub URL (from Football.Api)
+- `Api:ApiBaseUrl`: Base API URL (from Football.Api)
+
+URL: https://localhost:5002
+
+### Football.Worker
+
+**Via dotnet CLI:**
 ```bash
 cd src/Hosts/Worker
 dotnet run
 ```
-- Set `Hub:HubUrl` and `Scoreboard:Week` in `appsettings.Localhost.json`
-- Connection string must be in user secrets
+Environment: `Localhost`, uses `appsettings.Localhost.json`
 
-## Testing
+**Required user secrets:**
+```bash
+dotnet user-secrets set "ConnectionStrings:FootballDbConnection" "Host=localhost;Port=5432;Database=footballscoreboard_db;Username=postgres;Password=your_password"
+```
 
-**Unit Tests**: `Football.Application.UnitTests`, `Football.Api.UnitTests`, `Football.Blazor.UnitTests`
-- Focus on AutoMapper profiles and validation logic
-- Use xUnit framework
+**Required appsettings.Localhost.json:**
+- `Hub:HubUrl`: SignalR Hub URL (from Football.Api)
+- `Scoreboard:Week`: 1-17 (must match Football.Api)
 
-**Integration Tests**: `Football.Application.IntegrationTests`
-- Test database operations end-to-end
-- Require test database container running on port 3307
-- Use connection string environment variable: `MYSQLCONNSTR_FootballDbConnection`
+URL: https://localhost:5003 (no UI, console output only)
 
-## Important Configuration Notes
+## API Endpoints
 
-**Week Synchronization**: The `Scoreboard:Week` setting MUST match between Football.Api and Football.Worker for the simulation to work correctly.
+- `GET /api/v1/games?week={week}` - Get all games for a week
+- `GET /api/v1/games/now` - Get current week's games (based on Scoreboard:Week setting)
+- `GET /api/v1/games/{id}` - Get specific game
+- `GET /api/v1/games/{id}/stats` - Get game statistics
+- SignalR Hub: `/hub/plays` - Real-time play updates
 
-**CORS Configuration**: API must allow origin `https://localhost:5002` for Blazor client to connect.
+## Development Notes
 
-**SignalR Hub URL**: All applications reference `/hub/plays` endpoint on the API server.
-
-**Docker Certificates**: When running via Docker, API and Worker require custom SSL certificates. See individual README files in src/Hosts/ for certificate generation commands.
-
-## CI/CD
-
-GitHub Actions workflow (`.github/workflows/ci.yml`) runs on all pushes:
-1. Spins up MySQL test database container
-2. Restores and builds in Release mode
-3. Runs all tests with coverage
-4. Sends coverage to SonarCloud
-
-Uses .NET 8.0.407 SDK (see `global.json`).
-
-## Key Files for Understanding System Flow
-
-- `src/Hosts/Api/Hubs/PlayHub.cs` - SignalR Hub receiving plays from Worker
-- `src/Application/Features/Games/GetGamesQuery.cs` - Example CQRS query pattern
-- `src/Infrastructure/Persistence/FootballDbContext.cs` - EF Core context
-- `src/Hosts/Blazor/Components/GameCard.razor` - Example Blazor component
+- **Target Framework**: .NET 10.0 (see `global.json`)
+- **Database**: PostgreSQL 17 with Npgsql provider
+- **Logging**: Serilog configured in all hosts
+- **API Versioning**: Uses `Asp.Versioning` library
+- **Data Source**: 2019 NFL season data from https://github.com/ryurko/nflscrapR-data
+- **VSCode Launch Configs**: Available in `.vscode/launch.json` for all three applications

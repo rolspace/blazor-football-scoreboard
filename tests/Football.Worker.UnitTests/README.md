@@ -1,6 +1,6 @@
-# Football.Api Unit Tests
+# Football.Worker Unit Tests
 
-Unit tests for the [Football.Api](/src/Hosts/Api/) web application project.
+Unit tests for the [Football.Worker](/src/Hosts/Worker/) background service project.
 
 ## Requirements
 
@@ -13,7 +13,7 @@ Unit tests for the [Football.Api](/src/Hosts/Api/) web application project.
 From the repository root:
 
 ```bash
-dotnet test tests/Football.Api.UnitTests/Football.Api.UnitTests.csproj
+dotnet test tests/Football.Worker.UnitTests/Football.Worker.UnitTests.csproj
 ```
 
 ### With Coverage
@@ -25,7 +25,7 @@ From the repository root:
 dotnet tool restore
 
 # Run tests with coverage
-dotnet dotnet-coverage collect 'dotnet test tests/Football.Api.UnitTests/Football.Api.UnitTests.csproj --no-restore' -f xml -o 'coverage.xml'
+dotnet dotnet-coverage collect 'dotnet test tests/Football.Worker.UnitTests/Football.Worker.UnitTests.csproj --no-restore' -f xml -o 'coverage.xml'
 
 # Generate HTML report
 dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests"

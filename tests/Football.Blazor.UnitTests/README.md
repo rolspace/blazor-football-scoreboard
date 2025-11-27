@@ -1,6 +1,6 @@
-# Football.Api Unit Tests
+# Football.Blazor Unit Tests
 
-Unit tests for the [Football.Api](/src/Hosts/Api/) web application project.
+Unit tests for the [Football.Blazor](/src/Hosts/Blazor/) WebAssembly application project.
 
 ## Requirements
 
@@ -13,7 +13,7 @@ Unit tests for the [Football.Api](/src/Hosts/Api/) web application project.
 From the repository root:
 
 ```bash
-dotnet test tests/Football.Api.UnitTests/Football.Api.UnitTests.csproj
+dotnet test tests/Football.Blazor.UnitTests/Football.Blazor.UnitTests.csproj
 ```
 
 ### With Coverage
@@ -25,7 +25,7 @@ From the repository root:
 dotnet tool restore
 
 # Run tests with coverage
-dotnet dotnet-coverage collect 'dotnet test tests/Football.Api.UnitTests/Football.Api.UnitTests.csproj --no-restore' -f xml -o 'coverage.xml'
+dotnet dotnet-coverage collect 'dotnet test tests/Football.Blazor.UnitTests/Football.Blazor.UnitTests.csproj --no-restore' -f xml -o 'coverage.xml'
 
 # Generate HTML report
 dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests"

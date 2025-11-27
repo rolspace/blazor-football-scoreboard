@@ -14,9 +14,9 @@ The system is split into three main elements:
 
 ## Requirements
 
-- .NET 6+ SDK
+- .NET 10+ SDK
 - Visual Studio Code 1.83+
-- Docker Desktop 4.30+
+- Docker Desktop 4.53+
 
 ## How to run locally
 
@@ -29,62 +29,53 @@ For details on how to launch each application, refer to its README file: [Web AP
 
 ## How to run the tests
 
-The repository includes both unit tests and integration tests.
-
-The integration tests require a database in order to run successfully.
+The repository includes unit tests and integration tests. Integration tests require a PostgreSQL test database.
 
 ### Preparing the test database
 
 The Docker Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database and a database management tool, [Adminer](https://www.adminer.org/).
 
-The test database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a `.env.testdb` file at the root of the repository, which must include the following variables:
-- **MYSQL_ROOT_PASSWORD**
-- **MYSQL_USER**
-- **MYSQL_PASSWORD**
+The test database runs from a PostgreSQL 17 Docker image. Create a `.env.testdb` file at the root of the repository:
 
-The variables are required to launch the database container.
-The contents of the `.env.testdb` file should be similar to the example below:
-
-```
-MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
-MYSQL_USER={MYSQL USER IDENTIFIER}
-MYSQL_PASSWORD={MYSQL USER PASSWORD}
+```env
+POSTGRES_PASSWORD=your_password
+POSTGRES_USER=postgres
 ```
 
 > [!IMPORTANT]
-> The test database is configured to run on a different port (3307) than the default port used by MySQL databases (3306).
+> The test database runs on port **5433** and the database name is `footballscoreboard_db`.
 
 ### Starting the test database
 
-Once the `.env.testdb` file has been set up, the test database is ready for launch.
+Start the database and Adminer:
 
-The test database can be launched in two ways:
-1. If you have the Docker extension for VSCode, right-click the [docker-compose.testdb.yml](/docker-compose.testdb.yml) file and select `Compose Up`.
-2. Run the command, `docker-compose -f docker-compose.testdb.yml up -d`, from a terminal set at the root of the repository.
+```bash
+docker-compose -f docker-compose.testdb.yml up -d
+```
 
-The Docker Compose file will start the containers for the test database and Adminer.
+The database is automatically seeded from [footballscoreboard_testdb.sql](/scripts/testdb/footballscoreboard_testdb.sql). Initial startup takes a few minutes. Adminer is available at http://localhost:8081.
 
-For the initial launch of the database container, there is an automated seeding process to generate the tables and data, based on the [footballscoreboard_testdb.sql](/scripts/testdb/footballscoreboard_testdb.sql) file.
-
-Due to the size of the test database, the container startup will take a few minutes. Once the container is ready, the database will be persisted locally with a Docker Volume in the *.docker/volumes/testdb* folder.
-
-Adminer will be available at the following URL: *http&ZeroWidthSpace;://localhost:8081*.
+For integration tests, configure the connection string using user secrets or the `CUSTOMCONNSTR_FootballDbConnection` environment variable. See [integration tests README](/tests/Football.Application.IntegrationTests/README.md) for details.
 
 ### Running the tests
 
-To run the tests, perform the following steps:
+Basic test run:
 
-1. In a terminal, set the current working directory to the root of the repository.
-2. Run the tests with the `dotnet test` command.
+```bash
+dotnet test
+```
 
-### Running the tests with coverage
+With coverage:
 
-1. Restore the local dotnet tools with the command, `dotnet tool restore`.
+```bash
+# Restore tools
+dotnet tool restore
 
-2. Set the current working directory in your terminal of choice to the root of the repository.
+# Run tests with coverage
+dotnet dotnet-coverage collect 'dotnet test --no-restore' -f xml -o 'coverage.xml'
 
-3. Run the tests with the command, `dotnet dotnet-coverage collect 'dotnet test --no-restore' -f cobertura  -o 'coverage.xml'`. It is possible to change the report output by [changing the `-f` and `-o` parameters from the collect command](https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage#dotnet-coverage-collect).
+# Generate HTML report
+dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests"
+```
 
-4. Generate the coverage report using the reportgenerator tool with the command, `dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests";`.
-
-The HTML coverage report will be found in the *coverage* folder at the root of the repository, open the *index.html* file on your browser of choice to view the results.
+Open `coverage/index.html` to view results.
