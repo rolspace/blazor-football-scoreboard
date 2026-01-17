@@ -35,14 +35,22 @@ public class GameComponentBase : ComponentBase
 
     protected async Task InitializeHubConnection(Action<PlayDto> onPlayReceived)
     {
-        hub = HubConnectionFactory.CreateHub();
-        hub.On("ReceivePlay", onPlayReceived);
+        try
+        {
+            hub = HubConnectionFactory.CreateHub();
+            hub.On("ReceivePlay", onPlayReceived);
 
-        ResiliencePipeline pipeline = HubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
-        await hub.StartWithRetryAsync(pipeline, new CancellationToken());
+            ResiliencePipeline pipeline = HubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
+            await hub.StartWithRetryAsync(pipeline, new CancellationToken());
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error initializing Hub connection.");
+            throw;
+        }
     }
 
-    protected PlayDto GetPreviousPlayFromGame(GameDto game)
+    protected static PlayDto GetPreviousPlayFromGame(GameDto game)
     {
         return new PlayDto
         {

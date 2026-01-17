@@ -7,15 +7,22 @@ namespace Football.Infrastructure.Factories;
 
 public class HubConnectionFactory : IHubConnectionFactory<IHub>
 {
-    private readonly Uri _hubUri;
+    private readonly string _hubUrl;
 
     public HubConnectionFactory(IOptions<HubOptions> hubOptionsAccesor)
     {
-        _hubUri = new Uri(hubOptionsAccesor.Value.HubUrl);
+        _hubUrl = hubOptionsAccesor?.Value?.HubUrl ?? string.Empty;
     }
 
     public IHub CreateHub()
     {
-        return new Hub(_hubUri);
+        if (string.IsNullOrEmpty(_hubUrl))
+        {
+            throw new InvalidOperationException("Hub URL is not configured.");
+        }
+
+        Uri hubUri = new(_hubUrl);
+
+        return new Hub(hubUri);
     }
 }
