@@ -5,14 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace Football.Infrastructure.Factories;
 
-public class HubConnectionFactory : IHubConnectionFactory<IHub>
+public class HubFactory(IOptions<HubOptions> hubOptionsAccesor) : IHubFactory<IHub>
 {
-    private readonly string _hubUrl;
-
-    public HubConnectionFactory(IOptions<HubOptions> hubOptionsAccesor)
-    {
-        _hubUrl = hubOptionsAccesor?.Value?.HubUrl ?? string.Empty;
-    }
+    private readonly string _hubUrl = hubOptionsAccesor?.Value?.HubUrl ?? string.Empty;
 
     public IHub CreateHub()
     {

@@ -40,7 +40,7 @@ try
     builder.Services.AddApplicationServices();
     builder.Services.AddInfrastructureServices(builder.Configuration);
 
-    builder.Services.AddTransient<IHubConnectionFactory<IHub>, HubConnectionFactory>();
+    builder.Services.AddTransient<IHubFactory<IHub>, HubFactory>();
 
     builder.Services.AddHostedService<PlayLogBackgroundService>();
 

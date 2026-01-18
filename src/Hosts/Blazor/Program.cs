@@ -24,7 +24,7 @@ try
     builder.RootComponents.Add<HeadOutlet>("head::after");
 
     builder.Services.Configure<HubOptions>(builder.Configuration.GetSection(HubOptions.Key));
-    builder.Services.AddSingleton<IHubConnectionFactory<IHub>, HubConnectionFactory>();
+    builder.Services.AddSingleton<IHubFactory<IHub>, HubFactory>();
 
     HttpClientOptions httpClientOptions = builder.Configuration.GetSection(HttpClientOptions.Key)
         .Get<HttpClientOptions>() ?? throw new InvalidOperationException("The HttpClientOptions have not been configured.");

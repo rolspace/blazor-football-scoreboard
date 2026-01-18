@@ -1,6 +1,6 @@
 namespace Football.Application.Interfaces;
 
-public interface IHubConnectionFactory<out T>
+public interface IHubFactory<out T>
 {
     T CreateHub();
 }

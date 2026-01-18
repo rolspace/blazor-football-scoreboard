@@ -9,9 +9,9 @@ using Polly.Timeout;
 
 namespace Football.Infrastructure.Extensions
 {
-    public static class HubConnectionExtensions
+    public static class HubExtensions
     {
-        public static ResiliencePipeline GetHubConnectionPipeline(HubOptions hubOptions, ILogger logger)
+        public static ResiliencePipeline GetHubPipeline(HubOptions hubOptions, ILogger logger)
         {
             ArgumentNullException.ThrowIfNull(hubOptions);
 
@@ -23,7 +23,6 @@ namespace Football.Infrastructure.Extensions
                     OnRetry = args =>
                     {
                         logger.LogWarning("Retrying connection to hub. Attempt {AttemptNumber}", args.AttemptNumber);
-
                         return default;
                     }
                 })
@@ -41,7 +40,7 @@ namespace Football.Infrastructure.Extensions
         public static async Task StartWithRetryAsync(this IHub hub,
             ResiliencePipeline pipeline, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(hub);
+            ArgumentNullException.ThrowIfNull(hub, nameof(hub));
             ArgumentNullException.ThrowIfNull(pipeline);
 
             await pipeline.ExecuteAsync(async (token) =>
@@ -53,9 +52,9 @@ namespace Football.Infrastructure.Extensions
         public static async Task SendPlayWithRetryAsync(this IHub hub,
             ResiliencePipeline pipeline, PlayDto playDto, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(hub);
-            ArgumentNullException.ThrowIfNull(pipeline);
-            ArgumentNullException.ThrowIfNull(playDto);
+            ArgumentNullException.ThrowIfNull(hub, nameof(hub));
+            ArgumentNullException.ThrowIfNull(pipeline, nameof(pipeline));
+            ArgumentNullException.ThrowIfNull(playDto, nameof(playDto));
 
             await pipeline.ExecuteAsync(async (token) =>
             {

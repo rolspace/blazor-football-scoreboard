@@ -12,7 +12,7 @@ using Football.Infrastructure.Options;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Polly;
-using HubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions;
+using HubExtensions = Football.Infrastructure.Extensions.HubExtensions;
 
 namespace Football.Worker;
 
@@ -37,7 +37,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
     public PlayLogBackgroundService(IServiceScopeFactory scopeFactory,
         IMapper mapper,
         ILogger<PlayLogBackgroundService> logger,
-        IHubConnectionFactory<IHub> hubConnectionFactory,
+        IHubFactory<IHub> hubConnectionFactory,
         IOptions<HubOptions> hubOptionsAccessor,
         IOptions<ScoreboardOptions> scoreboardOptionsAccesor,
         IHostApplicationLifetime applicationLifetime)
@@ -51,7 +51,7 @@ public class PlayLogBackgroundService : BackgroundService, IAsyncDisposable
         _gameTimeManager = new GameTimeManager();
         _hub = hubConnectionFactory.CreateHub();
 
-        _pipeline = HubExtensions.GetHubConnectionPipeline(hubOptionsAccessor.Value, _logger);
+        _pipeline = HubExtensions.GetHubPipeline(hubOptionsAccessor.Value, _logger);
     }
 
     public override async Task StartAsync(CancellationToken cancellationToken)

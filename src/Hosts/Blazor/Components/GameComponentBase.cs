@@ -6,7 +6,7 @@ using Football.Application.Interfaces;
 using Football.Infrastructure.Extensions;
 using Football.Infrastructure.Options;
 using Polly;
-using HubExtensions = Football.Infrastructure.Extensions.HubConnectionExtensions;
+using HubExtensions = Football.Infrastructure.Extensions.HubExtensions;
 
 namespace Football.Blazor.Components;
 
@@ -21,7 +21,7 @@ public class GameComponentBase : ComponentBase
     protected IHttpClientFactory HttpClientFactory { get; set; } = null!;
 
     [Inject]
-    protected IHubConnectionFactory<IHub> HubConnectionFactory { get; set; } = null!;
+    protected IHubFactory<IHub> HubConnectionFactory { get; set; } = null!;
 
     [Inject]
     protected ILogger<GameComponentBase> Logger { get; set; } = null!;
@@ -40,11 +40,12 @@ public class GameComponentBase : ComponentBase
             hub = HubConnectionFactory.CreateHub();
             hub.On("ReceivePlay", onPlayReceived);
 
-            ResiliencePipeline pipeline = HubExtensions.GetHubConnectionPipeline(hubOptions, Logger);
+            ResiliencePipeline pipeline = HubExtensions.GetHubPipeline(hubOptions, Logger);
             await hub.StartWithRetryAsync(pipeline, new CancellationToken());
         }
         catch (Exception ex)
         {
+            // TODO: Create a custom connection exception
             Logger.LogError(ex, "Error initializing Hub connection.");
             throw;
         }

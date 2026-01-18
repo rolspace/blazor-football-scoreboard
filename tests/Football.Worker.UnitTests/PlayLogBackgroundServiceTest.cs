@@ -25,7 +25,7 @@ public class PlayLogBackgroundServiceTest
     private readonly Mock<IServiceProvider> _mockServiceProvider;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<ILogger<PlayLogBackgroundService>> _mockLogger;
-    private readonly Mock<IHubConnectionFactory<IHub>> _mockHubConnectionFactory;
+    private readonly Mock<IHubFactory<IHub>> _mockHubConnectionFactory;
     private readonly Mock<IHub> _mockHub;
     private readonly Mock<ISender> _mockMediator;
     private readonly Mock<IHostApplicationLifetime> _mockApplicationLifetime;
@@ -39,7 +39,7 @@ public class PlayLogBackgroundServiceTest
         _mockServiceProvider = new Mock<IServiceProvider>();
         _mockMapper = new Mock<IMapper>();
         _mockLogger = new Mock<ILogger<PlayLogBackgroundService>>();
-        _mockHubConnectionFactory = new Mock<IHubConnectionFactory<IHub>>();
+        _mockHubConnectionFactory = new Mock<IHubFactory<IHub>>();
         _mockHub = new Mock<IHub>();
         _mockMediator = new Mock<ISender>();
         _mockApplicationLifetime = new Mock<IHostApplicationLifetime>();

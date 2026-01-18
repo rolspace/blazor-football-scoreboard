@@ -24,7 +24,7 @@ namespace Football.Blazor.UnitTests.Pages;
 public class GameCastTests : TestContext
 {
     private readonly MockHttpMessageHandler mockHttp;
-    private readonly Mock<IHubConnectionFactory<IHub>> mockHubFactory;
+    private readonly Mock<IHubFactory<IHub>> mockHubFactory;
     private readonly Mock<IHub> mockHub;
     private readonly Mock<IOptions<HubOptions>> mockHubOptions;
     private readonly Mock<ILogger<Blazor.Components.GameComponentBase>> mockLogger;
@@ -40,7 +40,7 @@ public class GameCastTests : TestContext
         mockHttpClientFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(httpClient);
         Services.AddSingleton(mockHttpClientFactory.Object);
 
-        mockHubFactory = new Mock<IHubConnectionFactory<IHub>>();
+        mockHubFactory = new Mock<IHubFactory<IHub>>();
         mockHub = new Mock<IHub>();
         mockHubOptions = new Mock<IOptions<HubOptions>>();
         mockLogger = new Mock<ILogger<Blazor.Components.GameComponentBase>>();
