@@ -3,6 +3,7 @@
 @using Football.Application.Features.Games.Models
 @using Football.Application.Features.Plays.Models
 @using Football.Blazor.Components
+@using Football.Infrastructure.Exceptions
 
 @inherits GameComponentBase
 
@@ -61,6 +62,10 @@
                     StateHasChanged();
                 });
             }
+        }
+        catch (HubException ex)
+        {
+            Logger.LogError(ex, "Index page: There was an error with the hub connection.");
         }
         catch (Exception ex)
         {

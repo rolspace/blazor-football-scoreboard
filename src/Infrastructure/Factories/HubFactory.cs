@@ -2,6 +2,7 @@ using Football.Application.Interfaces;
 using Football.Infrastructure.Options;
 using Football.Infrastructure.Services;
 using Microsoft.Extensions.Options;
+using HubException = Football.Infrastructure.Exceptions.HubException;
 
 namespace Football.Infrastructure.Factories;
 
@@ -13,11 +14,18 @@ public class HubFactory(IOptions<HubOptions> hubOptionsAccesor) : IHubFactory<IH
     {
         if (string.IsNullOrEmpty(_hubUrl))
         {
-            throw new InvalidOperationException("Hub URL is not configured.");
+            throw new HubException("Hub URL is not configured.");
         }
 
-        Uri hubUri = new(_hubUrl);
+        try
+        {
+            Uri hubUri = new(_hubUrl);
 
-        return new Hub(hubUri);
+            return new Hub(hubUri);
+        }
+        catch (Exception ex)
+        {
+            throw new HubException("Failed to create Hub connection.", ex);
+        }
     }
 }

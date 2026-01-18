@@ -1,5 +1,6 @@
 using Football.Application.Features.Plays.Models;
 using Football.Application.Interfaces;
+using Football.Infrastructure.Exceptions;
 using Football.Infrastructure.Options;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
@@ -40,26 +41,40 @@ namespace Football.Infrastructure.Extensions
         public static async Task StartWithRetryAsync(this IHub hub,
             ResiliencePipeline pipeline, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(hub, nameof(hub));
-            ArgumentNullException.ThrowIfNull(pipeline);
-
-            await pipeline.ExecuteAsync(async (token) =>
+            try
             {
-                await hub.StartAsync(token);
-            }, cancellationToken);
+                ArgumentNullException.ThrowIfNull(hub, nameof(hub));
+                ArgumentNullException.ThrowIfNull(pipeline);
+
+                await pipeline.ExecuteAsync(async (token) =>
+                {
+                    await hub.StartAsync(token);
+                }, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new HubException("Failed to start hub connection.", ex);
+            }
         }
 
         public static async Task SendPlayWithRetryAsync(this IHub hub,
             ResiliencePipeline pipeline, PlayDto playDto, CancellationToken cancellationToken = default)
         {
-            ArgumentNullException.ThrowIfNull(hub, nameof(hub));
-            ArgumentNullException.ThrowIfNull(pipeline, nameof(pipeline));
-            ArgumentNullException.ThrowIfNull(playDto, nameof(playDto));
-
-            await pipeline.ExecuteAsync(async (token) =>
+            try
             {
-                await hub.SendAsync("SendPlay", playDto, token);
-            }, cancellationToken);
+                ArgumentNullException.ThrowIfNull(hub, nameof(hub));
+                ArgumentNullException.ThrowIfNull(pipeline, nameof(pipeline));
+                ArgumentNullException.ThrowIfNull(playDto, nameof(playDto));
+
+                await pipeline.ExecuteAsync(async (token) =>
+                {
+                    await hub.SendAsync("SendPlay", playDto, token);
+                }, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new HubException("Failed to send play to hub.", ex);
+            }
         }
     }
 }
