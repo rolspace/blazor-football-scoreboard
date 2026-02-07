@@ -10,5 +10,5 @@ public interface IHub
 
     IDisposable On<T>(string methodName, Action<T> handler);
 
-    Task DisposeAsync();
+    ValueTask DisposeAsync();
 }

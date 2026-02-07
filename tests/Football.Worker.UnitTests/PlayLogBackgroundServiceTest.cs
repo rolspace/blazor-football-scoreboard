@@ -235,7 +235,7 @@ public class PlayLogBackgroundServiceTest
         _mockHub.Setup(h => h.StartAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _mockHub.Setup(h => h.DisposeAsync())
-            .Returns(Task.CompletedTask);
+            .Returns(ValueTask.CompletedTask);
 
         var service = new PlayLogBackgroundService(
             _mockScopeFactory.Object,
@@ -266,7 +266,7 @@ public class PlayLogBackgroundServiceTest
         _mockHub.Setup(h => h.StartAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _mockHub.Setup(h => h.DisposeAsync())
-            .Returns(Task.CompletedTask);
+            .Returns(ValueTask.CompletedTask);
 
         var service = new PlayLogBackgroundService(
             _mockScopeFactory.Object,
@@ -304,7 +304,7 @@ public class PlayLogBackgroundServiceTest
         _mockHub.Setup(h => h.StartAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         _mockHub.Setup(h => h.DisposeAsync())
-            .Returns(Task.CompletedTask);
+            .Returns(ValueTask.CompletedTask);
 
         var service = new PlayLogBackgroundService(
             _mockScopeFactory.Object,

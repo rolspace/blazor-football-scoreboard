@@ -35,7 +35,7 @@ public class Hub(Uri hubUri) : IHub
         return _hubConnection.On(methodName, handler);
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         await _hubConnection.DisposeAsync();
     }
