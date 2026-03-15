@@ -63,6 +63,8 @@ public class IndexTests : TestContext
             .Returns(Mock.Of<IDisposable>());
         mockHub.Setup(x => x.StartAsync(It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
+        mockHub.Setup(x => x.DisposeAsync())
+            .Returns(ValueTask.CompletedTask);
 
         // Register services
         Services.AddSingleton(mockHubFactory.Object);
@@ -131,7 +133,7 @@ public class IndexTests : TestContext
         gameCards[1].Instance.Play.AwayTeam.Should().Be("Eagles");
 
         // Verify no error message is displayed
-        cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error ocurred"));
+        cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error occurred"));
 
         // Verify Hub was initialized
         mockHubFactory.Verify(x => x.CreateHub(), Times.Once);
@@ -156,7 +158,7 @@ public class IndexTests : TestContext
         gameCards.Count.Should().Be(0);
 
         // Verify no error message is displayed
-        cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error ocurred"));
+        cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error occurred"));
 
         // Verify Hub was NOT initialized (no games to track)
         mockHubFactory.Verify(x => x.CreateHub(), Times.Never);
@@ -179,7 +181,7 @@ public class IndexTests : TestContext
         gameCards.Count.Should().Be(0);
 
         // Verify no error message is displayed
-        cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error ocurred"));
+        cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error occurred"));
 
         // Verify Hub was NOT initialized
         mockHubFactory.Verify(x => x.CreateHub(), Times.Never);
@@ -196,11 +198,11 @@ public class IndexTests : TestContext
         IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
 
         // Assert
-        cut.WaitForState(() => cut.Markup.Contains("An error ocurred"), TimeSpan.FromSeconds(2));
+        cut.WaitForState(() => cut.Markup.Contains("An error occurred"), TimeSpan.FromSeconds(2));
 
-        IEnumerable<AngleSharp.Dom.IElement> errorElements = cut.FindAll("div").Where(e => e.TextContent.Contains("An error ocurred"));
+        IEnumerable<AngleSharp.Dom.IElement> errorElements = cut.FindAll("div").Where(e => e.TextContent.Contains("An error occurred"));
         errorElements.Should().NotBeEmpty();
-        errorElements.First().TextContent.Should().Contain("An error ocurred. The games could not be loaded.");
+        errorElements.First().TextContent.Should().Contain("An error occurred. The games could not be loaded.");
 
         // Verify no game cards are rendered
         IReadOnlyList<IRenderedComponent<GameCard>> gameCards = cut.FindComponents<GameCard>();
@@ -221,9 +223,9 @@ public class IndexTests : TestContext
         IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
 
         // Assert
-        cut.WaitForState(() => cut.Markup.Contains("An error ocurred"), TimeSpan.FromSeconds(2));
+        cut.WaitForState(() => cut.Markup.Contains("An error occurred"), TimeSpan.FromSeconds(2));
 
-        IEnumerable<AngleSharp.Dom.IElement> errorElements = cut.FindAll("div").Where(e => e.TextContent.Contains("An error ocurred"));
+        IEnumerable<AngleSharp.Dom.IElement> errorElements = cut.FindAll("div").Where(e => e.TextContent.Contains("An error occurred"));
         errorElements.Should().NotBeEmpty();
 
         // Verify no game cards are rendered
@@ -327,11 +329,126 @@ public class IndexTests : TestContext
         // Assert - component should render successfully
         cut.Should().NotBeNull();
 
-        // Wait for async loading to complete - when games are loaded, Loading text disappears
+        // Wait for async loading to complete - when games are loaded, circular progress indicator disappears
         cut.WaitForState(() => cut.FindComponents<GameCard>().Count > 0, TimeSpan.FromSeconds(2));
 
-        // Verify Loading state is no longer displayed
-        bool hasLoading = cut.Markup.Contains("Loading");
-        hasLoading.Should().BeFalse();
+        // Verify loading indicator is no longer displayed
+        bool hasLoadingIndicator = cut.Markup.Contains("mdc-circular-progress");
+        hasLoadingIndicator.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Index_RetryButton_AppearsOnError()
+    {
+        // Arrange
+        mockHttp.When("*/games/now")
+            .Respond(HttpStatusCode.InternalServerError);
+
+        // Act
+        IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
+
+        // Assert
+        cut.WaitForState(() => cut.Markup.Contains("An error occurred"), TimeSpan.FromSeconds(2));
+
+        // Verify error message is displayed
+        IEnumerable<AngleSharp.Dom.IElement> errorElements = cut.FindAll("div").Where(e => e.TextContent.Contains("An error occurred"));
+        errorElements.Should().NotBeEmpty();
+
+        // Verify retry button is present
+        var retryButton = cut.FindAll("button").FirstOrDefault(b => b.TextContent.Contains("Retry"));
+        retryButton.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Index_RetryButton_ReloadsGamesSuccessfully()
+    {
+        // Arrange
+        var callCount = 0;
+        GameDto[] games =
+        [
+            new GameDto
+            {
+                Id = 1,
+                Week = 1,
+                HomeTeam = "Chiefs",
+                HomeScore = 21,
+                AwayTeam = "Bills",
+                AwayScore = 17,
+                State = "InProgress",
+                Quarter = 3,
+                QuarterSecondsRemaining = 600
+            }
+        ];
+
+        mockHttp.When("*/games/now")
+            .Respond(() =>
+            {
+                callCount++;
+                if (callCount == 1)
+                {
+                    return Task.FromResult(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+                }
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(
+                        System.Text.Json.JsonSerializer.Serialize(games),
+                        System.Text.Encoding.UTF8,
+                        "application/json")
+                });
+            });
+
+        // Act
+        IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
+
+        // Assert - initial error state
+        cut.WaitForState(() => cut.Markup.Contains("An error occurred"), TimeSpan.FromSeconds(2));
+        cut.FindComponents<GameCard>().Count.Should().Be(0);
+
+        // Act - click retry button
+        var retryButton = cut.FindAll("button").First(b => b.TextContent.Contains("Retry"));
+        retryButton.Click();
+
+        // Assert - games loaded successfully after retry
+        cut.WaitForState(() => cut.FindComponents<GameCard>().Count == 1, TimeSpan.FromSeconds(2));
+        IReadOnlyList<IRenderedComponent<GameCard>> gameCards = cut.FindComponents<GameCard>();
+        gameCards.Count.Should().Be(1);
+        gameCards[0].Instance.GameId.Should().Be(1);
+
+        // Verify error message is no longer displayed
+        cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error occurred"));
+    }
+
+    [Fact]
+    public async Task Index_DisposesHubOnComponentDisposal()
+    {
+        // Arrange
+        GameDto[] games =
+        [
+            new GameDto
+            {
+                Id = 1,
+                Week = 1,
+                HomeTeam = "Chiefs",
+                HomeScore = 21,
+                AwayTeam = "Bills",
+                AwayScore = 17,
+                State = "InProgress",
+                Quarter = 3,
+                QuarterSecondsRemaining = 600
+            }
+        ];
+
+        mockHttp.When("*/games/now")
+            .Respond("application/json", System.Text.Json.JsonSerializer.Serialize(games));
+
+        // Act
+        IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
+        cut.WaitForState(() => cut.FindComponents<GameCard>().Count == 1, TimeSpan.FromSeconds(2));
+
+        // Dispose the component
+        await cut.Instance.DisposeAsync();
+
+        // Assert
+        mockHub.Verify(x => x.DisposeAsync(), Times.Once);
     }
 }

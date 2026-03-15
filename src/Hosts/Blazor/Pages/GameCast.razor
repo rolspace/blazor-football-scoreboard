@@ -10,13 +10,47 @@
 @inherits GameComponentBase
 
 <div class="mdc-layout-grid__inner">
-    @if (previousPlay is null && !errorOcurred)
+    @if (playToUpdate is null && !loadFailed)
     {
-        <div>Loading</div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center; padding: 40px;">
+            <div class="mdc-circular-progress mdc-circular-progress--indeterminate" style="width:48px;height:48px;" role="progressbar" aria-label="Loading..." aria-valuemin="0" aria-valuemax="1">
+                <div class="mdc-circular-progress__determinate-container">
+                    <svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097"/>
+                    </svg>
+                </div>
+                <div class="mdc-circular-progress__indeterminate-container">
+                    <div class="mdc-circular-progress__spinner-layer">
+                        <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
+                            <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549"/>
+                            </svg>
+                        </div>
+                        <div class="mdc-circular-progress__gap-patch">
+                            <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549"/>
+                            </svg>
+                        </div>
+                        <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
+                            <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
-    else if (previousPlay is null)
+    else if (playToUpdate is null)
     {
-        <div>An error ocurred. The game could not be loaded.</div>
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <div style="text-align: center; padding: 20px;">
+                <p class="mdc-typography--body1">An error occurred. The game could not be loaded.</p>
+                <button class="mdc-button mdc-button--raised" @onclick="RetryLoadGame">
+                    <span class="mdc-button__label">Retry</span>
+                </button>
+            </div>
+        </div>
     }
     else
     {
@@ -28,14 +62,14 @@
         </div>
         <!-- GameCast title -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">
-            <span class="mdc-typography--body2">@previousPlay.AwayTeam @@ @previousPlay.HomeTeam</span>
+            <span class="mdc-typography--body2">@playToUpdate.AwayTeam @@ @playToUpdate.HomeTeam</span>
         </div>
         <!-- GameCast layout -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-4-desktop">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
-                    <GameCard GameId="@previousPlay.GameId" Play="@previousPlay" />
+                    <GameCard GameId="@playToUpdate.GameId" Play="@playToUpdate" />
                 </div>
             </div>
         </div>
@@ -45,13 +79,13 @@
             <span class="mdc-typography--body2">Stats</span>
         </div>
         <!-- GameStats layout -->
-        <StatsTable Team="@previousPlay.HomeTeam" TeamStats=@homeTeamStats />
-        <StatsTable Team="@previousPlay.AwayTeam" TeamStats=@awayTeamStats />
+        <StatsTable Team="@playToUpdate.HomeTeam" TeamStats=@homeTeamStats />
+        <StatsTable Team="@playToUpdate.AwayTeam" TeamStats=@awayTeamStats />
     }
 </div>
 
 @code {
-    private PlayDto? previousPlay = null;
+    private PlayDto? playToUpdate = null;
     private StatDto? homeTeamStats = null;
     private StatDto? awayTeamStats = null;
 
@@ -67,26 +101,26 @@
 
             if (game is null) throw new Exception("Game not found.");
 
-            previousPlay = GetPreviousPlayFromGame(game);
+            playToUpdate = GetPlayFromGame(game);
 
             GameStatDto? gameStats = await httpClient.GetFromJsonAsync<GameStatDto>($"games/{GameId}/stats");
             homeTeamStats = gameStats?.Stats.Find(s => s.Home);
             awayTeamStats = gameStats?.Stats.Find(s => !s.Home);
 
-            await InitializeHubConnection(async (nextPlay) =>
+            await InitializeHubConnection(async (playReceived) =>
             {
-                if (GameId == nextPlay.GameId)
+                if (GameId == playReceived.GameId)
                 {
-                    previousPlay = new PlayDto
+                    playToUpdate = new PlayDto
                     {
-                        Id = nextPlay.Id,
-                        HomeTeam = nextPlay.HomeTeam,
-                        HomeScore = nextPlay.HomeScore,
-                        AwayTeam = nextPlay.AwayTeam,
-                        AwayScore = nextPlay.AwayScore,
-                        Quarter = nextPlay.Quarter,
-                        QuarterSecondsRemaining = nextPlay.QuarterSecondsRemaining,
-                        Description = nextPlay.Description
+                        Id = playReceived.Id,
+                        HomeTeam = playReceived.HomeTeam,
+                        HomeScore = playReceived.HomeScore,
+                        AwayTeam = playReceived.AwayTeam,
+                        AwayScore = playReceived.AwayScore,
+                        Quarter = playReceived.Quarter,
+                        QuarterSecondsRemaining = playReceived.QuarterSecondsRemaining,
+                        Description = playReceived.Description
                     };
 
                     GameStatDto? updatedGameStats = await httpClient.GetFromJsonAsync<GameStatDto>($"games/{GameId}/stats");
@@ -99,12 +133,19 @@
         }
         catch (HubException ex)
         {
-            Logger.LogError(ex, "GameCast page: There was an error with the hub connection.");
+            Logger.LogError(ex, "GameCast page: There was an error initializing the Hub connection.");
         }
         catch (Exception ex)
         {
-            errorOcurred = true;
+            loadFailed = true;
             Logger.LogError(ex, "GameCast page: There was an error loading the game data.");
         }
+    }
+
+    private async Task RetryLoadGame()
+    {
+        loadFailed = false;
+        playToUpdate = null;
+        await OnInitializedAsync();
     }
 }

@@ -14,22 +14,56 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner">
-            @if (previousPlays.Count() > 0)
+            @if (playsToUpdate.Count() > 0)
             {
-                foreach (var currentPlay in previousPlays)
+                foreach (var play in playsToUpdate)
                 {
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-6-desktop">
-                        <GameCard GameId="@currentPlay.GameId" Play="@currentPlay" />
+                        <GameCard GameId="@play.GameId" Play="@play" />
                     </div>
                 }
             }
-            else if (!errorOcurred)
+            else if (!loadFailed)
             {
-                <div>Loading</div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop" style="text-align: center; padding: 40px;">
+                    <div class="mdc-circular-progress mdc-circular-progress--indeterminate" style="width:48px;height:48px;" role="progressbar" aria-label="Loading..." aria-valuemin="0" aria-valuemax="1">
+                        <div class="mdc-circular-progress__determinate-container">
+                            <svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097"/>
+                            </svg>
+                        </div>
+                        <div class="mdc-circular-progress__indeterminate-container">
+                            <div class="mdc-circular-progress__spinner-layer">
+                                <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
+                                    <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549"/>
+                                    </svg>
+                                </div>
+                                <div class="mdc-circular-progress__gap-patch">
+                                    <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549"/>
+                                    </svg>
+                                </div>
+                                <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
+                                    <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-            else if (errorOcurred)
+            else if (loadFailed)
             {
-                <div>An error ocurred. The games could not be loaded.</div>
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
+                    <div style="text-align: center; padding: 20px;">
+                        <p class="mdc-typography--body1">An error occurred. The games could not be loaded.</p>
+                        <button class="mdc-button mdc-button--raised" @onclick="RetryLoadGames">
+                            <span class="mdc-button__label">Retry</span>
+                        </button>
+                    </div>
+                </div>
             }
         </div>
     </div>
@@ -37,7 +71,7 @@
 </div>
 
 @code {
-    private IReadOnlyList<PlayDto> previousPlays = new List<PlayDto>();
+    private IReadOnlyList<PlayDto> playsToUpdate = new List<PlayDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,16 +82,17 @@
 
             if (games is not null && games.Count() > 0)
             {
-                previousPlays = games.Select(game => GetPreviousPlayFromGame(game)).ToList();
+                playsToUpdate = games.Select(game => GetPlayFromGame(game)).ToList();
 
-                await InitializeHubConnection((nextPlay) =>
+                await InitializeHubConnection((playReceived) =>
                 {
-                    PlayDto newPlay = previousPlays.Single(play => play.GameId == nextPlay.GameId);
-                    newPlay.HomeScore = nextPlay.HomeScore;
-                    newPlay.AwayScore = nextPlay.AwayScore;
-                    newPlay.Quarter = nextPlay.Quarter;
-                    newPlay.QuarterSecondsRemaining = nextPlay.QuarterSecondsRemaining;
-                    newPlay.Description = nextPlay.Description;
+                    // TODO: check exception state when calling Single() and handle if the play isn't found or found twice
+                    PlayDto playToUpdate = playsToUpdate.Single(play => play.GameId == playReceived.GameId);
+                    playToUpdate.HomeScore = playReceived.HomeScore;
+                    playToUpdate.AwayScore = playReceived.AwayScore;
+                    playToUpdate.Quarter = playReceived.Quarter;
+                    playToUpdate.QuarterSecondsRemaining = playReceived.QuarterSecondsRemaining;
+                    playToUpdate.Description = playReceived.Description;
 
                     StateHasChanged();
                 });
@@ -65,12 +100,19 @@
         }
         catch (HubException ex)
         {
-            Logger.LogError(ex, "Index page: There was an error with the hub connection.");
+            Logger.LogError(ex, "Index page: There was an error initializing the Hub connection.");
         }
         catch (Exception ex)
         {
-            errorOcurred = true;
+            loadFailed = true;
             Logger.LogError(ex, "Index page: There was an error loading the game data.");
         }
+    }
+
+    private async Task RetryLoadGames()
+    {
+        loadFailed = false;
+        playsToUpdate = new List<PlayDto>();
+        await OnInitializedAsync();
     }
 }

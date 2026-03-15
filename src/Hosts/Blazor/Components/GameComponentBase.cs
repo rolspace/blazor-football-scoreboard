@@ -10,7 +10,7 @@ using HubExtensions = Football.Infrastructure.Extensions.HubExtensions;
 
 namespace Football.Blazor.Components;
 
-public class GameComponentBase : ComponentBase
+public class GameComponentBase : ComponentBase, IAsyncDisposable
 {
     private HubOptions hubOptions => HubOptions.Value;
 
@@ -31,7 +31,7 @@ public class GameComponentBase : ComponentBase
 
     protected IHub? hub;
 
-    protected bool errorOcurred = false;
+    protected bool loadFailed = false;
 
     protected async Task InitializeHubConnection(Action<PlayDto> onPlayReceived)
     {
@@ -42,7 +42,7 @@ public class GameComponentBase : ComponentBase
         await hub.StartWithRetryAsync(pipeline, new CancellationToken());
     }
 
-    protected static PlayDto GetPreviousPlayFromGame(GameDto game)
+    protected static PlayDto GetPlayFromGame(GameDto game)
     {
         return new PlayDto
         {
@@ -55,5 +55,14 @@ public class GameComponentBase : ComponentBase
             Quarter = game.Quarter,
             QuarterSecondsRemaining = game.QuarterSecondsRemaining
         };
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hub is not null)
+        {
+            await hub.DisposeAsync();
+            hub = null;
+        }
     }
 }
