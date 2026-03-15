@@ -23,7 +23,7 @@ namespace Football.Infrastructure.Extensions
                     BackoffType = hubOptions.RetryOptions.BackoffType,
                     OnRetry = args =>
                     {
-                        logger.LogWarning("Retrying connection to hub. Attempt {AttemptNumber}", args.AttemptNumber);
+                        logger.LogWarning("Retrying connection to Hub. Attempt {AttemptNumber}", args.AttemptNumber);
                         return default;
                     }
                 })
@@ -31,7 +31,7 @@ namespace Football.Infrastructure.Extensions
                 {
                     OnTimeout = args =>
                     {
-                        logger.LogError("Connection to hub timed out after {TotalSeconds} seconds", args.Timeout.TotalSeconds);
+                        logger.LogError("Connection to Hub timed out after {TotalSeconds} seconds", args.Timeout.TotalSeconds);
                         return default;
                     },
                 })
@@ -44,7 +44,7 @@ namespace Football.Infrastructure.Extensions
             try
             {
                 ArgumentNullException.ThrowIfNull(hub, nameof(hub));
-                ArgumentNullException.ThrowIfNull(pipeline);
+                ArgumentNullException.ThrowIfNull(pipeline, nameof(pipeline));
 
                 await pipeline.ExecuteAsync(async (token) =>
                 {
@@ -53,7 +53,7 @@ namespace Football.Infrastructure.Extensions
             }
             catch (Exception ex)
             {
-                throw new HubException("Failed to start hub connection.", ex);
+                throw new HubException("Failed to start Hub connection.", ex);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Football.Infrastructure.Extensions
             }
             catch (Exception ex)
             {
-                throw new HubException("Failed to send play to hub.", ex);
+                throw new HubException("Failed to send play to Hub.", ex);
             }
         }
     }
