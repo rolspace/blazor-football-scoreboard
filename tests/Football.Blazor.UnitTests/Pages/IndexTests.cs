@@ -10,6 +10,7 @@ using Football.Application.Features.Games.Models;
 using Football.Application.Features.Plays.Models;
 using Football.Application.Interfaces;
 using Football.Blazor.Components;
+using Football.Infrastructure.Exceptions;
 using Football.Infrastructure.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -416,6 +417,143 @@ public class IndexTests : TestContext
 
         // Verify error message is no longer displayed
         cut.FindAll("div").Should().NotContain(e => e.TextContent.Contains("An error occurred"));
+    }
+
+    [Fact]
+    public void Index_HubConnectionFails_DisplaysHubErrorNotification()
+    {
+        // Arrange
+        GameDto[] games =
+        [
+            new GameDto
+            {
+                Id = 1,
+                Week = 1,
+                HomeTeam = "Chiefs",
+                HomeScore = 21,
+                AwayTeam = "Bills",
+                AwayScore = 17,
+                State = "InProgress",
+                Quarter = 3,
+                QuarterSecondsRemaining = 600
+            }
+        ];
+
+        mockHttp.When("*/games/now")
+            .Respond("application/json", System.Text.Json.JsonSerializer.Serialize(games));
+
+        mockHubFactory.Setup(x => x.CreateHub()).Throws(new HubException("connection failed"));
+
+        // Act
+        IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
+
+        // Assert
+        cut.WaitForState(() => cut.Markup.Contains("Live score updates are unavailable"), TimeSpan.FromSeconds(2));
+        cut.Markup.Should().Contain("Live score updates are unavailable");
+    }
+
+    [Fact]
+    public void Index_HubConnectionFails_DoesNotDisplayLoadingIndicator()
+    {
+        // Arrange
+        GameDto[] games =
+        [
+            new GameDto
+            {
+                Id = 1,
+                Week = 1,
+                HomeTeam = "Chiefs",
+                HomeScore = 21,
+                AwayTeam = "Bills",
+                AwayScore = 17,
+                State = "InProgress",
+                Quarter = 3,
+                QuarterSecondsRemaining = 600
+            }
+        ];
+
+        mockHttp.When("*/games/now")
+            .Respond("application/json", System.Text.Json.JsonSerializer.Serialize(games));
+
+        mockHubFactory.Setup(x => x.CreateHub()).Throws(new HubException("connection failed"));
+
+        // Act
+        IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
+
+        // Assert
+        cut.WaitForState(() => cut.Markup.Contains("Live score updates are unavailable"), TimeSpan.FromSeconds(2));
+        cut.Markup.Should().NotContain("mdc-circular-progress");
+    }
+
+    [Fact]
+    public void Index_HubConnectionFails_WithGamesLoaded_DisplaysBothGamesAndNotification()
+    {
+        // Arrange
+        GameDto[] games =
+        [
+            new GameDto
+            {
+                Id = 1,
+                Week = 1,
+                HomeTeam = "Chiefs",
+                HomeScore = 21,
+                AwayTeam = "Bills",
+                AwayScore = 17,
+                State = "InProgress",
+                Quarter = 3,
+                QuarterSecondsRemaining = 600
+            }
+        ];
+
+        mockHttp.When("*/games/now")
+            .Respond("application/json", System.Text.Json.JsonSerializer.Serialize(games));
+
+        mockHubFactory.Setup(x => x.CreateHub()).Throws(new HubException("connection failed"));
+
+        // Act
+        IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
+
+        // Assert
+        cut.WaitForState(() => cut.Markup.Contains("Live score updates are unavailable"), TimeSpan.FromSeconds(2));
+        cut.Markup.Should().Contain("Live score updates are unavailable");
+        cut.FindComponents<GameCard>().Count.Should().Be(1);
+    }
+
+    [Fact]
+    public void Index_HubErrorReloadButton_TriggersPageNavigation()
+    {
+        // Arrange
+        GameDto[] games =
+        [
+            new GameDto
+            {
+                Id = 1,
+                Week = 1,
+                HomeTeam = "Chiefs",
+                HomeScore = 21,
+                AwayTeam = "Bills",
+                AwayScore = 17,
+                State = "InProgress",
+                Quarter = 3,
+                QuarterSecondsRemaining = 600
+            }
+        ];
+
+        mockHttp.When("*/games/now")
+            .Respond("application/json", System.Text.Json.JsonSerializer.Serialize(games));
+
+        mockHubFactory.Setup(x => x.CreateHub()).Throws(new HubException("connection failed"));
+
+        // Act
+        IRenderedComponent<IndexPage> cut = RenderComponent<IndexPage>();
+        cut.WaitForState(() => cut.Markup.Contains("Live score updates are unavailable"), TimeSpan.FromSeconds(2));
+
+        var reloadButton = cut.FindAll("button").First(b => b.TextContent.Contains("Reload"));
+        reloadButton.Click();
+
+        // Assert
+        var navManager = Services.GetRequiredService<Bunit.TestDoubles.FakeNavigationManager>();
+        navManager.History.Should().ContainSingle(e => e.Uri == navManager.Uri && e.Options.ForceLoad == true);
     }
 
     [Fact]

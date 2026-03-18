@@ -14,6 +14,17 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-2-desktop"></div>
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4-tablet mdc-layout-grid__cell--span-8-desktop">
         <div class="mdc-layout-grid__inner">
+            @if (hubConnectionFailed)
+            {
+                <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop">
+                    <div style="text-align: center; padding: 20px;">
+                        <p class="mdc-typography--body1">An error occurred. Live score updates are unavailable.</p>
+                        <button class="mdc-button mdc-button--raised" @onclick="ReloadPage">
+                            <span class="mdc-button__label">Reload</span>
+                        </button>
+                    </div>
+                </div>
+            }
             @if (playsToUpdate.Count() > 0)
             {
                 foreach (var play in playsToUpdate)
@@ -23,7 +34,7 @@
                     </div>
                 }
             }
-            else if (!loadFailed)
+            else if (!loadFailed && !hubConnectionFailed)
             {
                 <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-8-tablet mdc-layout-grid__cell--span-12-desktop" style="text-align: center; padding: 40px;">
                     <div class="mdc-circular-progress mdc-circular-progress--indeterminate" style="width:48px;height:48px;" role="progressbar" aria-label="Loading..." aria-valuemin="0" aria-valuemax="1">
@@ -72,6 +83,7 @@
 
 @code {
     private IReadOnlyList<PlayDto> playsToUpdate = new List<PlayDto>();
+    private bool hubConnectionFailed = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,6 +112,7 @@
         }
         catch (HubException ex)
         {
+            hubConnectionFailed = true;
             Logger.LogError(ex, "Index page: There was an error initializing the Hub connection.");
         }
         catch (Exception ex)
@@ -112,7 +125,13 @@
     private async Task RetryLoadGames()
     {
         loadFailed = false;
+        hubConnectionFailed = false;
         playsToUpdate = new List<PlayDto>();
         await OnInitializedAsync();
+    }
+
+    private void ReloadPage()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
