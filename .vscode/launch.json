@@ -65,6 +65,34 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
+        },
+        {
+            "name": "Compose Up: Local DB",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker compose -f docker-compose.localdb.yml up -d",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Compose Down: Local DB",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker compose -f docker-compose.localdb.yml down",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Compose Up: Test DB",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker compose -f docker-compose.testdb.yml up -d",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Compose Down: Test DB",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker compose -f docker-compose.testdb.yml down",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
