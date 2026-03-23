@@ -82,8 +82,9 @@
 </div>
 
 @code {
-    private IReadOnlyList<PlayDto> playsToUpdate = new List<PlayDto>();
     private bool hubConnectionFailed = false;
+
+    private IReadOnlyList<PlayDto> playsToUpdate = new List<PlayDto>();
 
     protected override async Task OnInitializedAsync()
     {

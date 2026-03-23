@@ -10,7 +10,26 @@
 @inherits GameComponentBase
 
 <div class="mdc-layout-grid__inner">
-    @if (playToUpdate is null && !loadFailed)
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
+    <!-- Back button row -->
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop">
+        <NavLink href="/">
+            <span class="mdc-typography--body2">Back</span>
+        </NavLink>
+    </div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-2-tablet mdc-layout-grid__cell--span-4-desktop"></div>
+    @if (hubConnectionFailed)
+    {
+        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+            <div style="text-align: center; padding: 20px;">
+                <p class="mdc-typography--body1">An error occurred. Live score updates are unavailable.</p>
+                <button class="mdc-button mdc-button--raised" @onclick="ReloadPage">
+                    <span class="mdc-button__label">Reload</span>
+                </button>
+            </div>
+        </div>
+    }
+    @if (playToUpdate is null && !loadFailed && !hubConnectionFailed)
     {
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align: center; padding: 40px;">
             <div class="mdc-circular-progress mdc-circular-progress--indeterminate" style="width:48px;height:48px;" role="progressbar" aria-label="Loading..." aria-valuemin="0" aria-valuemax="1">
@@ -54,12 +73,6 @@
     }
     else
     {
-        <!-- Back button row -->
-        <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-            <NavLink href="/">
-                <span class="mdc-typography--body2">Back</span>
-            </NavLink>
-        </div>
         <!-- GameCast title -->
         <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" style="text-align:center">
             <span class="mdc-typography--body2">@playToUpdate.AwayTeam @@ @playToUpdate.HomeTeam</span>
@@ -85,8 +98,12 @@
 </div>
 
 @code {
+    private bool hubConnectionFailed = false;
+
     private PlayDto? playToUpdate = null;
+
     private StatDto? homeTeamStats = null;
+
     private StatDto? awayTeamStats = null;
 
     [Parameter]
@@ -133,6 +150,7 @@
         }
         catch (HubException ex)
         {
+            hubConnectionFailed = true;
             Logger.LogError(ex, "GameCast page: There was an error initializing the Hub connection.");
         }
         catch (Exception ex)
@@ -145,7 +163,13 @@
     private async Task RetryLoadGame()
     {
         loadFailed = false;
+        hubConnectionFailed = false;
         playToUpdate = null;
         await OnInitializedAsync();
+    }
+
+    private void ReloadPage()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 }
