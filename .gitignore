@@ -370,3 +370,6 @@ FodyWeavers.xsd
 # Path for local Docker data
 .docker/*
 !.docker/.gitkeep
+
+# TODO files
+*TODO*
