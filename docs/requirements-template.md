@@ -41,3 +41,12 @@
 
 ### Usability
 - [Usability requirements]
+
+### Unit Testing
+- [Unit Testing requirements]
+
+### Integration Testing
+- [Integration Testing requirements]
+
+### E2E Testing
+- [E2E Testing requirements]
