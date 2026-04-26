@@ -1,7 +1,7 @@
 using FluentValidation.TestHelper;
 using Football.Application.Features.Plays;
 
-namespace Football.Application.IntegrationTests;
+namespace Football.Application.UnitTests;
 
 public class GetPlaysQueryValidatorTest
 {
