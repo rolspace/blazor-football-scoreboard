@@ -1,12 +1,12 @@
 # Blazor Football Scoreboard Football.Api
 
-This .NET 6 web application provides a collection of HTTP endpoints and a SignalR Hub that are used to request game data and statistics from the 2019 football season.
+This .NET 10 web application provides a collection of HTTP endpoints and a SignalR Hub that are used to request game data and statistics from the 2019 football season.
 
 ## Requirements
 
-- .NET 6+ SDK
+- .NET 10+ SDK
 - Visual Studio Code 1.83+
-- Docker Desktop 4.30+
+- Docker Desktop 4.53+
 
 ## How to run locally
 
@@ -15,20 +15,18 @@ In order for the application to run successfully a local database and the applic
 
 ### Database configuration
 
-The Docker Compose file, [docker-compose.localdb.yml](/docker-compose.localdb.yml), provides a MySQL database and a database management tool, [Adminer](https://www.adminer.org/).
+The Docker Compose file, [docker-compose.localdb.yml](/docker-compose.localdb.yml), provides a PostgreSQL database and a database management tool, [Adminer](https://www.adminer.org/).
 
-The local database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a `.env.localdb` file at the root of the repository, which must include the following variables:
-- **MYSQL_ROOT_PASSWORD**
-- **MYSQL_USER**
-- **MYSQL_PASSWORD**
+The local database runs from a PostgreSQL 17 Docker image. The Docker Compose configuration expects a `.env.localdb` file at the root of the repository, which must include the following variables:
+- **POSTGRES_PASSWORD**
+- **POSTGRES_USER**
 
 The variables are required to launch the database container.
 The contents of the `.env.localdb` file should be similar to the example below:
 
 ```
-MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
-MYSQL_USER={MYSQL USER IDENTIFIER}
-MYSQL_PASSWORD={MYSQL USER PASSWORD}
+POSTGRES_PASSWORD={POSTGRES USER PASSWORD}
+POSTGRES_USER={POSTGRES USER IDENTIFIER}
 ```
 
 The local database can be launched in two ways:
@@ -81,7 +79,7 @@ The keys required for the application settings are the following:
 
 Separately from the environment variables, sensitive settings should be stored in a `.env.api` file, at the root of the repository:
 - **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the custom certificate used by the application.
-- **MYSQLCONNSTR_FootballDbConnection**: database connection string.
+- **CUSTOMCONNSTR_FootballDbConnection**: database connection string.
 
 ### Launch the application
 
@@ -168,4 +166,4 @@ Returns a 404 if the game id cannot be found.
 
 #### /hub/plays
 
-The hub endpoint exposes the method called by the [Web Worker](/src/Hosts/Football.Worker), which sends play data to the [Blazor](/src/Hosts/Football.Blazor) web clients.
+The hub endpoint exposes the method called by the [Web Worker](/src/Hosts/Worker), which sends play data to the [Blazor](/src/Hosts/Blazor) web clients.

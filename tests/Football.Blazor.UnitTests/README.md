@@ -31,4 +31,9 @@ dotnet dotnet-coverage collect 'dotnet test tests/Football.Blazor.UnitTests/Foot
 dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests"
 ```
 
-Open `coverage/index.html` to view results.
+Open `coverage/index.html` to view results:
+
+```bash
+start coverage/index.html  # Windows
+open coverage/index.html   # macOS
+```

@@ -55,7 +55,17 @@ docker-compose -f docker-compose.testdb.yml up -d
 
 The database is automatically seeded from [footballscoreboard_testdb.sql](/scripts/testdb/footballscoreboard_testdb.sql). Initial startup takes a few minutes. Adminer is available at http://localhost:8081.
 
-For integration tests, configure the connection string using user secrets or the `CUSTOMCONNSTR_FootballDbConnection` environment variable. See [integration tests README](/tests/Football.Application.IntegrationTests/README.md) for details.
+For integration tests, configure the connection string using user secrets:
+
+```bash
+dotnet user-secrets set "ConnectionStrings:FootballDbConnection" "Host=localhost;Port=5433;Database=footballscoreboard_db;Username=postgres;Password=your_password" --project tests/Football.Api.IntegrationTests
+```
+
+Or set the `CUSTOMCONNSTR_FootballDbConnection` environment variable:
+
+```bash
+export CUSTOMCONNSTR_FootballDbConnection="Host=localhost;Port=5433;Database=footballscoreboard_db;Username=postgres;Password=your_password"
+```
 
 ### Running the tests
 
@@ -78,4 +88,9 @@ dotnet dotnet-coverage collect 'dotnet test --no-restore' -f xml -o 'coverage.xm
 dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests"
 ```
 
-Open `coverage/index.html` to view results.
+Open `coverage/index.html` to view results:
+
+```bash
+start coverage/index.html  # Windows
+open coverage/index.html   # macOS
+```

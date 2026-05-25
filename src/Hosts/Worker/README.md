@@ -1,12 +1,12 @@
 # Blazor Football Scoreboard Football.Worker
 
-This .NET 6 web application runs a background service that replays game logs from games in the 2019 football season.
+This .NET 10 web application runs a background service that replays game logs from games in the 2019 football season.
 
 ## Requirements
 
-- .NET 6+ SDK
+- .NET 10+ SDK
 - Visual Studio Code 1.83+
-- Docker Desktop 4.30+
+- Docker Desktop 4.53+
 
 ## How to run locally
 
@@ -15,20 +15,18 @@ In order for the application to run successfully a local database and the applic
 
 ### Database configuration
 
-The Docker Compose file, [docker-compose.localdb.yml](/docker-compose.app.yml), provides a MySQL database and a database management tool, [Adminer](https://www.adminer.org/).
+The Docker Compose file, [docker-compose.localdb.yml](/docker-compose.localdb.yml), provides a PostgreSQL database and a database management tool, [Adminer](https://www.adminer.org/).
 
-The local database runs from a MySQL 8.0.28 Docker image. The Docker Compose configuration expects a `.env.localdb` file at the root of the repository, which must include the following variables:
-- **MYSQL_ROOT_PASSWORD**
-- **MYSQL_USER**
-- **MYSQL_PASSWORD**
+The local database runs from a PostgreSQL 17 Docker image. The Docker Compose configuration expects a `.env.localdb` file at the root of the repository, which must include the following variables:
+- **POSTGRES_PASSWORD**
+- **POSTGRES_USER**
 
 The variables are required to launch the database container.
 The contents of the `.env.localdb` file should be similar to the example below:
 
 ```
-MYSQL_ROOT_PASSWORD={MYSQL ROOT USER PASSWORD}
-MYSQL_USER={MYSQL USER IDENTIFIER}
-MYSQL_PASSWORD={MYSQL USER PASSWORD}
+POSTGRES_PASSWORD={POSTGRES USER PASSWORD}
+POSTGRES_USER={POSTGRES USER IDENTIFIER}
 ```
 
 The local database can be launched in two ways:
@@ -68,8 +66,8 @@ Separately from the application settings file, an additional setting should be s
 Running via Docker, the application will set the **ASPNETCORE_ENVIRONMENT** variable to *Development* and use the environment variables defined in the `docker-run-worker: debug` task in the [tasks.json](/.vscode/tasks.json) file.
 
 The keys required for the application settings are the following:
-- **Hub:HubUrl**: URL for the Signal Hub.
-- **Scoreboard:Week**: number for the week in the season schedule.
+- **Hub__HubUrl**: URL for the SignalR Hub.
+- **Scoreboard__Week**: number for the week in the season schedule.
 
 > [!IMPORTANT]
 > The **Scoreboard:Week** setting is used to set the week in the season schedule that will be simulated.
@@ -77,7 +75,7 @@ The keys required for the application settings are the following:
 
 Separately from the environment variables, sensitive settings should be stored in a `.env.worker` file, at the root of the repository:
 - **ASPNETCORE_Kestrel__Certificates__Default__Password**: password for the custom certificate used by the application.
-- **MYSQLCONNSTR_FootballDbConnection**: database connection string.
+- **CUSTOMCONNSTR_FootballDbConnection**: database connection string.
 
 ### Launch the application
 
@@ -104,6 +102,6 @@ dotnet dev-certs https --trust
 
 The {PASSWORD VALUE} is the same value that needs to be set for the **ASPNETCORE_Kestrel__Certificates__Default__Password** enviroment setting in the `.env.worker` file mentioned earlier in the [application settings](#application-settings) section.
 
-Once the certificate is ready, the application can be launched from VSCode via the *Run and Debug* menu, simply select the *Launch Docker: Football Scoreboard API* launch config.
+Once the certificate is ready, the application can be launched from VSCode via the *Run and Debug* menu, simply select the *Launch Docker: Football Scoreboard Worker* launch config.
 
 Once the application starts, it will be available at *https&ZeroWidthSpace;://localhost:5003*, however, there are no other endpoints available. The main output of the application will be sent to the console from the running background service.
