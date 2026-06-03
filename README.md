@@ -25,47 +25,36 @@ In order to run the system, the applications must be launched in the following o
 2. Blazor UI ([Football.Blazor](/src/Hosts/Blazor/))
 3. Web Worker ([Football.Worker](/src/Hosts/Worker/))
 
-For details on how to launch each application, refer to its README file: [Web API](/src/Hosts/Api/README.md), [Blazor UI](/src/Hosts/Blazor/README.md), and the [Web Worker](/src/Hosts/Worker/README.md).
+For details on how to launch each application, refer to their README file:
+- [Web API](/src/Hosts/Api/README.md)
+- [Blazor UI](/src/Hosts/Blazor/README.md)
+- [Web Worker](/src/Hosts/Worker/README.md).
 
 ## How to run the tests
 
 The repository includes unit tests and integration tests. Integration tests require a PostgreSQL test database.
 
-### Preparing the test database
+### Test database
 
-The Docker Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml), provides a test database and a database management tool, [Adminer](https://www.adminer.org/).
+The test database is created via Testcontainers when running the Football.Api.IntegrationTests project.
+Once the tests are completed, the database container is removed.
 
-The test database runs from a PostgreSQL 17 Docker image. Create a `.env.testdb` file at the root of the repository:
+Separately, the database can be launched independently via a Docker Compose file, [docker-compose.testdb.yml](/docker-compose.testdb.yml).
+The Compose file requires a `.env.testdb` file at the root of the repository, with the following data:
 
 ```env
 POSTGRES_PASSWORD=your_password
 POSTGRES_USER=postgres
 ```
 
-> [!IMPORTANT]
-> The test database runs on port **5433** and the database name is `footballscoreboard_db`.
-
-### Starting the test database
-
-Start the database and Adminer:
+Launch the test database:
 
 ```bash
 docker-compose -f docker-compose.testdb.yml up -d
 ```
 
-The database is automatically seeded from [footballscoreboard_testdb.sql](/scripts/testdb/footballscoreboard_testdb.sql). Initial startup takes a few minutes. Adminer is available at http://localhost:8081.
-
-For integration tests, configure the connection string using user secrets:
-
-```bash
-dotnet user-secrets set "ConnectionStrings:FootballDbConnection" "Host=localhost;Port=5433;Database=footballscoreboard_db;Username=postgres;Password=your_password" --project tests/Football.Api.IntegrationTests
-```
-
-Or set the `CUSTOMCONNSTR_FootballDbConnection` environment variable:
-
-```bash
-export CUSTOMCONNSTR_FootballDbConnection="Host=localhost;Port=5433;Database=footballscoreboard_db;Username=postgres;Password=your_password"
-```
+The database is automatically seeded from [footballscoreboard_testdb.sql](/scripts/testdb/footballscoreboard_testdb.sql) and runs on port 5433.
+[Adminer](https://www.adminer.org/) is included in the Compose file, once launched, it is available at http://localhost:8081.
 
 ### Running the tests
 
@@ -82,7 +71,7 @@ With coverage:
 dotnet tool restore
 
 # Run tests with coverage
-dotnet dotnet-coverage collect 'dotnet test --no-restore' -f xml -o 'coverage.xml'
+dotnet dotnet-coverage collect 'dotnet test --no-restore' -f cobertura -o 'coverage.xml'
 
 # Generate HTML report
 dotnet reportgenerator "-reports:coverage.xml" "-reporttypes:Html" "-targetdir:coverage" "-assemblyfilters:+Football.*;-Football.*Tests"

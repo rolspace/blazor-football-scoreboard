@@ -170,7 +170,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/Hosts/AWorkerpi/Football.Worker.csproj",
+                "${workspaceFolder}/src/Hosts/Worker/Football.Worker.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
