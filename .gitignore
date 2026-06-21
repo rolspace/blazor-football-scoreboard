@@ -373,3 +373,6 @@ FodyWeavers.xsd
 
 # TODO files
 *TODO*
+
+# Claude
+.claude/worktrees/
